@@ -18,7 +18,7 @@ PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
-DATABASE_PATH = os.path.join(PROJECT_PATH, 'sortabledb')
+DATABASE_PATH = os.path.join(PROJECT_PATH, 'sortable.db')
 
 print "Settings directory:", SETTINGS_DIR
 print "Project root:", PROJECT_PATH
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'sortable.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'sortabledb'),
+        'NAME': DATABASE_PATH,
     }
 }
 

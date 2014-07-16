@@ -22,20 +22,20 @@ $(function() {
         }                                                                        
      });
 
-    $("#QBs").sortable({                                                    
+    $("#xQBs").sortable({                                                    
         connectWith: ".connectedSortable",
 
         update: function(event, ui){                                             
            var serial = $('#QBs').sortable('serialize');                                                                                                                         
             $.ajax({
                 type: "POST",
-                url: $SCRIPT_ROOT + "/sort/",
+                url: "/", 
                 data: {'content': serial, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
                 });   
             },                                                                        
           });
 
-    $("#RBs").sortable({
+    $("#xRBs").sortable({
         connectWith: ".connectedSortable",
     });
 

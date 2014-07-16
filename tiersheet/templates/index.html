@@ -13,56 +13,75 @@
     <br/>
     <div class="row clearfix" align="center">
 		<div class="col-md-2 column">
-    {% if players %}
+   
             <div class="connectedSortable" id="QBs">
                 QBs
-                    <!-- removed custom | filters -->
-                    {% for player in players %} 
-                    <ul id="player_{{ player.player_id }}">{{ player.name }}, {{ player.bye}} <a href="{{ player.url }}">Link</a></ul>
+                {% if qb_list  %}                 <!-- removed custom | filters -->
+                    {% for player in qb_list %} 
+                       <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} <a href="{{ player.url }}">Link</a></ul>
                     {% endfor %}
+                {% else %}
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
                 </div>
 		</div>
 		<div class="col-md-2 column">
             <div class="connectedSortable" id="RBs">
             RBs
-                    {% for player in players %}
-                    <ul id="player_{{ player.player_id }}">{{ player.name }}, {{ player.bye}}</ul>
+                {% if wr_list %}
+                    {% for player in wr_list %}
+                        <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}}</ul>
                     {% endfor %}
+                {% else %}
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-2 column">
             <div class="sortable" id="WRs">
             WRs
+                {% if players %}
                     <!-- need to check based on position -->
                     {% for player in players %}
-                    <ul data-pid="{{ player.player_id }}">{{ player.name}}, {{ player.bye}}</ul>
-                        {% endfor %}
+                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                    {% endfor %}
+                {% else %}
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
                     </div>
         </div>
         <div class="col-md-2 column">
             <div class="sortable" id="TEs">
             TEs
+                {% if players %}
                     {% for player in players %}
-                    <ul data-pid="{{ player.player_id }}">{{ player.name}}, {{ player.bye}}</ul>
-                        {% endfor %}
-                    </div>
+                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                    {% endfor %}
+                {% else %}
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
+            </div>
 		</div>
 		<div class="col-md-2 column">
 			<div class="sortable" id="DEFs">
                 DEFs
-                   {% for player in players %}
-                   <ul data-pid="{{ player.player_id }}">{{ player.name}}, {{ player.bye}}</ul>
+                {% if players %}
+                    {% for player in players %}
+                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
                    {% endfor %}
+                {% else %}
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
             </div>
 		<div class="sortable" id="Ks">
                 Ks
-                  {% for player in players %}
-                  <ul data-pid="{{ player.player_id }}">{{ player.name}}, {{ player.bye}}</ul>
-                  {% endfor %}
-    {% else %}
-    <ul><em> No entries yet. Add some!</em></ul>
-    {% endif %}
-
+                {% if players %}
+                    {% for player in players %}
+                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                    {% endfor %}
+                {% else %}    
+                    <ul><em> No entries yet. Add some!</em></ul>
+                {% endif %}
                 </div>
 		</div>
 	</div>
