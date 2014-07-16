@@ -38,12 +38,12 @@
             </div>
         </div>
         <div class="col-md-2 column">
-            <div class="sortable" id="WRs">
+            <div class="connectedSortable" id="WRs">
             WRs
                 {% if wr_list %}
                     <!-- need to check based on position -->
                     {% for player in wr_list %}
-                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                        <ul id="player_{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
@@ -51,11 +51,11 @@
                     </div>
         </div>
         <div class="col-md-2 column">
-            <div class="sortable" id="TEs">
+            <div class="connectedSortable" id="TEs">
             TEs
                 {% if te_list %}
                     {% for player in te_list %}
-                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                        <ul id="player_{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
@@ -63,21 +63,21 @@
             </div>
 		</div>
 		<div class="col-md-2 column">
-			<div class="sortable" id="DEFs">
+			<div class="connectedSortable" id="DEFs">
                 DEFs
                 {% if def_list %}
                     {% for player in def_list %}
-                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                        <ul id="player_{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
                    {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
                 {% endif %}
             </div>
-		<div class="sortable" id="Ks">
+		<div class="connectedSortable" id="Ks">
                 Ks
                 {% if k_list %}
                     {% for player in k_list %}
-                        <ul data-pid="{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
+                        <ul id="player_{{ player.id }}">{{ player.name}}, {{ player.bye}}</ul>
                     {% endfor %}
                 {% else %}    
                     <ul><em> No entries yet. Add some!</em></ul>

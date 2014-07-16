@@ -34,23 +34,24 @@
   <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
   <script>
         $(document).ready(function(){
-            $("#QBs, #RBs").sortable({                                                    
+            $("#QBs, #RBs, #WRs, #TEs, #DEFs, #Ks").sortable({                                                    
                 connectWith: ".connectedSortable",
 
                 update: function(event, ui){                                             
-                var serial = $('#QBs').sortable('serialize');                                                                                                                         
-                var serial2 = $('#RBs').sortable('serialize');                                                                                                                         
+                var qb_serial = $('#QBs').sortable('serialize');                                                                                                                         
+                var rb_serial = $('#RBs').sortable('serialize');                                                                                                                         
+                var wr_serial = $('#WRs').sortable('serialize');                                                                                                                         
+                var te_serial = $('#TEs').sortable('serialize');                                                                                                                         
+                var def_serial = $('#DEFs').sortable('serialize');                                                                                                                         
+                var k_serial = $('#Ks').sortable('serialize');                                                                                                                         
                     $.ajax({
                         type: "POST",
                         url: "{% url 'index' %}", 
-                        data: {'content': serial+'&'+serial2, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
+                        data: {'content': qb_serial+'&'+rb_serial+'&'+wr_serial+'&'+te_serial+'&'+def_serial+'&'+k_serial, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
                         });   
                     },                                                                        
                 });
 
-            $("#RBsx").sortable({
-                connectWith: ".connectedSortable",
-            });
         });
   </script>
     </head>
