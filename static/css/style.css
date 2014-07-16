@@ -1,0 +1,48 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+
+#QBs {
+	border: 1px solid silver;
+	}
+
+#QBs ul {
+	margin: 5px;
+	padding: 10px;
+	background: #E1EDFF    
+}
+
+#RBs ul {
+	margin: 5px;
+	padding: 10px;
+	background: #BDD3F2
+}
+#WRs ul {
+	margin: 5px;
+	padding: 10px;
+	background: #90E0CC
+}
+#TEs ul {
+	margin: 5px;
+	padding: 10px;
+	background: #CCB098
+}
+#DEFs ul {
+	margin: 5px;
+	padding: 10px;
+	background: #F2E0BD
+}
+#Ks ul {
+	margin: 5px;
+	padding: 10px;
+	background: #87E585
+}
+.highlighted {
+    box-shadow: 0 0 8px #FFD700;
+    cursor:pointer;
+}
+
