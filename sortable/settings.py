@@ -10,14 +10,31 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+SETTINGS_DIR = os.path.dirname(__file__)
+
+PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
+PROJECT_PATH = os.path.abspath(PROJECT_PATH)
+
+TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
+DATABASE_PATH = os.path.join(PROJECT_PATH, 'sortabledb')
+
+print "Settings directory:", SETTINGS_DIR
+print "Project root:", PROJECT_PATH
+print "Templates:", TEMPLATE_PATH
+print "Static:", STATIC_PATH
+print "DB:", DATABASE_PATH
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'eo7f(69^_8-f=)$)0aksbnv+zy%pcn4g$!)yy+e$_4gw=(+qqd'
+SECRET_KEY = os.environ['SORT_DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,7 +47,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -38,6 +54,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'tiersheet',
     'south',
+    'django.contrib.admin',
+)
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,7 +82,7 @@ WSGI_APPLICATION = 'sortable.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'sortabledb'),
     }
 }
 
