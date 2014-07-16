@@ -14,9 +14,13 @@ def index(request):
             player.order = index
             player.save()
 
-    qb_list = Player.objects.order_by('order')[:2]
-    wr_list = Player.objects.order_by('order')[2:]
+    qb_list  = Player.objects.filter(position="QB")
+    rb_list  = Player.objects.filter(position="RB")
+    wr_list  = Player.objects.filter(position="WR")
+    te_list  = Player.objects.filter(position="TE")
+    def_list = Player.objects.filter(position="DEF")
+    k_list   = Player.objects.filter(position="K")
 
-    context = {'qb_list': qb_list, 'wr_list': wr_list}
+    context = {'qb_list': qb_list, 'rb_list': rb_list, 'wr_list': wr_list, 'te_list': te_list, 'def_list': def_list, 'k_list': k_list}
 
     return render_to_response('index.html', context, context_instance=RequestContext(request))

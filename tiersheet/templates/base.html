@@ -33,24 +33,25 @@
   <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
   <script>
-$(document).ready(function(){
-    $("#QBs").sortable({                                                    
-        connectWith: ".connectedSortable",
+        $(document).ready(function(){
+            $("#QBs, #RBs").sortable({                                                    
+                connectWith: ".connectedSortable",
 
-        update: function(event, ui){                                             
-           var serial = $('#QBs').sortable('serialize');                                                                                                                         
-            $.ajax({
-                type: "POST",
-                url: "{% url 'index' %}", 
-                data: {'content': serial, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
-                });   
-            },                                                                        
-          });
+                update: function(event, ui){                                             
+                var serial = $('#QBs').sortable('serialize');                                                                                                                         
+                var serial2 = $('#RBs').sortable('serialize');                                                                                                                         
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'index' %}", 
+                        data: {'content': serial+'&'+serial2, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
+                        });   
+                    },                                                                        
+                });
 
-    $("#RBs").sortable({
-        connectWith: ".connectedSortable",
-    });
-});
+            $("#RBsx").sortable({
+                connectWith: ".connectedSortable",
+            });
+        });
   </script>
     </head>
 
