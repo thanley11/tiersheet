@@ -32,12 +32,19 @@ print '\n\nYour access token data:', access_token_data
 #print '\n\nExample: All the games the user has competed in:', yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games?format=json').json()
 #Gets all QBs from this season
 #print '\n\nExample: All the games the user has competed in:', yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=QB?format=json').json()
-#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=QB?format=json').json()
-players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players?format=json').json()
-#print json.dumps(qbs, sort_keys=True,indent=4, separators=(',', ': '))
+#RBs
+players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=RB;start=0;count=50?format=json').json()
+#24 Players
+#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players?format=json').json()
+#My Leagues Id
+#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players?format=json').json()
+#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/game_keys=nfl/players?format=json').json()
+#print json.dumps(players, sort_keys=True,indent=4, separators=(',', ': '))
 #data = json.loads(qbs)
 #print qbs["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]["0"]["player"]
 #print qbs["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]["0"]["player"][0][2]["name"]["full"]
+
+
 myResult = players["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]
 for x in myResult.keys():
     if x == "count":
