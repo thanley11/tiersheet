@@ -33,22 +33,36 @@ print '\n\nYour access token data:', access_token_data
 #Gets all QBs from this season
 #print '\n\nExample: All the games the user has competed in:', yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=QB?format=json').json()
 #RBs
-players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=RB;start=0;count=50?format=json').json()
+#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=RB;start=0;count=50?format=json').json()
+#QBs = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players;position=QB;start=0;count=50?format=json').json()
 #24 Players
 #players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/players?format=json').json()
 #My Leagues Id
-#players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players?format=json').json()
+QBA = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=QB;start=0?format=json').json()
+QBB = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=QB;start=25?format=json').json()
 #players = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/game_keys=nfl/players?format=json').json()
 #print json.dumps(players, sort_keys=True,indent=4, separators=(',', ': '))
-#data = json.loads(qbs)
+#data = json.dumps(QBA, sort_keys=True, indent=4, separators=(',', ': '))
+#datab = json.dumps(QBB, sort_keys=True, indent=4, separators=(',', ': '))
 #print qbs["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]["0"]["player"]
 #print qbs["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]["0"]["player"][0][2]["name"]["full"]
+#print data
+#print datab
 
-
-myResult = players["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]
+#myResult = players["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]
+myResult = QBA["fantasy_content"]["league"][1]["players"]
 for x in myResult.keys():
     if x == "count":
         pass
     else:
         print myResult[x]["player"][0][2]["name"]["full"]
+
+myResult2 = QBB["fantasy_content"]["league"][1]["players"]
+for x in myResult2.keys():
+    if x == "count":
+        pass
+    else:
+        print myResult2[x]["player"][0][2]["name"]["full"]
+
+#print myResult[x]["player"][0][2]["name"]["full"]
 
