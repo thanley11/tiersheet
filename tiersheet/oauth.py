@@ -53,9 +53,10 @@ for x in myResult.keys():
         pass
     else:
         try:
-            print myResult[x]["player"][0][2]["name"]["full"]+", " + myResult[x]["player"][0][7]["bye_weeks"]["week"]
+            print myResult[x]["player"][0][2]["name"]["full"]+", " + myResult[x]["player"][0][7]["bye_weeks"]["week"] + ", http://sports.yahoo.com/nfl/players/" + myResult[x]["player"][0][1]["player_id"] +"/"
         except KeyError:
-            print myResult[x]["player"][0][2]["name"]["full"]+", " + myResult[x]["player"][0][8]["bye_weeks"]["week"]
+            print myResult[x]["player"][0][2]["name"]["full"]+", " + myResult[x]["player"][0][8]["bye_weeks"]["week"] + ", http://sports.yahoo.com/nfl/players/" + myResult[x]["player"][0][1]["player_id"] +"/"
+# +", http://sports.yahoo.com/nfl/players/" + myResult[x]["player"][0][1]["player_id"] +"/"
 
 myResult2 = QBB["fantasy_content"]["league"][1]["players"]
 for x in myResult2.keys():
@@ -63,8 +64,6 @@ for x in myResult2.keys():
         pass
     else:
         try:
-            print myResult2[x]["player"][0][2]["name"]["full"]+", " + myResult2[x]["player"][0][7]["bye_weeks"]["week"]
+            print myResult2[x]["player"][0][2]["name"]["full"]+", " + myResult2[x]["player"][0][7]["bye_weeks"]["week"] + ", http://sports.yahoo.com/nfl/players/" + myResult2[x]["player"][0][1]["player_id"] +"/"
         except KeyError:
-            print myResult2[x]["player"][0][2]["name"]["full"]+", " + myResult2[x]["player"][0][8]["bye_weeks"]["week"]
-
-
+            print myResult2[x]["player"][0][2]["name"]["full"]+", " + myResult2[x]["player"][0][8]["bye_weeks"]["week"] + ", http://sports.yahoo.com/nfl/players/" + myResult2[x]["player"][0][1]["player_id"] +"/"
