@@ -30,7 +30,7 @@
             RBs
                 {% if rb_list %}
                     {% for player in rb_list %}
-                        <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}}</ul>
+                        <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} <a href="{{ player.url }}">Link</a></ul>
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
