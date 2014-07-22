@@ -19,10 +19,13 @@
                 QBs
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
-                    <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} 
+                    <ul id="player_{{ player.id }}">
+                        <li>{{ player.name }}, {{ player.bye}}
                         <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/favicon.ico' %}"/>
+                            <i class="fa fa-yahoo"></i>
+
                         </a>
+                        </li>
                     </ul>
                     {% endfor %}
                 {% else %}
@@ -37,7 +40,7 @@
                     {% for player in rb_list %}
                     <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} 
                         <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/favicon.ico' %}"/>
+                            <i class="fa fa-yahoo"></i>
                         </a>
                     </ul>
 
@@ -53,10 +56,13 @@
                 {% if wr_list %}
                     <!-- need to check based on position -->
                     {% for player in wr_list %}
-                    <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} 
-                        <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/favicon.ico' %}"/>
+                     <ul id="player_{{ player.id }}">
+                         <li>{{ player.name }}, {{ player.bye}} 
+                       
+                         <a href ="{{player.url }}" target="_blank">
+                            <i class="fa fa-yahoo"></i>
                         </a>
+                        </li>
                     </ul>
 
                     {% endfor %}
@@ -72,7 +78,7 @@
                     {% for player in te_list %}
                     <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} 
                         <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/favicon.ico' %}"/>
+                            <i class="fa fa-yahoo"></i>
                         </a>
                     </ul>
 
@@ -101,7 +107,7 @@
                     {% for player in k_list %}
                    <ul id="player_{{ player.id }}">{{ player.name }}, {{ player.bye}} 
                         <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/favicon.ico' %}"/>
+                            <i class="fa fa-yahoo"></i>
                         </a>
                     </ul>
 

@@ -48,4 +48,14 @@
 .connectedSortable img
 {
     float:right;
+    width: 24px;
+}
+
+.connectedSortable ul {
+    list-style-type: none;
 } 
+
+.fa {
+    float:right;
+}
+
