@@ -1,6 +1,7 @@
 import os
 from requests_oauthlib import OAuth1Session
 from itertools import chain
+import json
 
 def populate():
     key = os.environ['YAHOO_CONSUMER_KEY']
@@ -37,8 +38,18 @@ def populate():
     WR1 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=WR;sort=OR;start=0?format=json').json()
     WR2 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=WR;sort=OR;start=25?format=json').json()
     WR3 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=WR;sort=OR;start=50?format=json').json()
+    WR4 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=WR;sort=OR;start=75?format=json').json()
+    TE1 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=TE;sort=OR;start=0?format=json').json()
+    TE2 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=TE;sort=OR;start=25?format=json').json()
+#DEF1 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/teams;start=0?format=json').json()
+#DEF2 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/teams;start=25?format=json').json()
+    K1 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=K;sort=OR;start=0?format=json').json()
+    K2 = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/league/331.l.249215/players;position=K;sort=OR;start=25?format=json').json()
+    TEAMS = yahoo.get('http://fantasysports.yahooapis.com/fantasy/v2/users;use_login=1/games;game_keys=nfl/teams?format=json').json()
 
-
+    data = json.dumps(TEAMS, sort_keys=True, indent=4, separators=(',', ': '))
+    print data
+# SELECT * FROM fantasysports.players WHERE league_key="331.l.249215" and sort="AR" and sort_type="season" and sort_season="2014"
     myResult = QB1["fantasy_content"]["league"][1]["players"]
     for x in myResult.keys():
         if x == "count":
@@ -113,6 +124,188 @@ def populate():
                 bye  = myResult4[x]["player"][0][8]["bye_weeks"]["week"]
                 url  = "http://sports.yahoo.com/nfl/players/" + myResult4[x]["player"][0][1]["player_id"] +"/"
                 add_player(name, position, bye, url)
+    myResult5 = WR1["fantasy_content"]["league"][1]["players"]
+    for x in myResult5.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult5[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult5[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult5[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult5[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult5[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult5[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult6 = WR2["fantasy_content"]["league"][1]["players"]
+    for x in myResult6.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult6[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult6[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult6[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult6[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult6[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult6[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult7 = WR3["fantasy_content"]["league"][1]["players"]
+    for x in myResult7.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult7[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult7[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult7[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult7[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult7[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult7[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult8 = TE1["fantasy_content"]["league"][1]["players"]
+    for x in myResult8.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult8[x]["player"][0][2]["name"]["full"]
+                position = "TE"
+                bye  = myResult8[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult8[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult8[x]["player"][0][2]["name"]["full"]
+                position = "TE"
+                bye  = myResult8[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult8[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult9 = TE2["fantasy_content"]["league"][1]["players"]
+    for x in myResult9.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult9[x]["player"][0][2]["name"]["full"]
+                position = "TE"
+                bye  = myResult9[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult9[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult9[x]["player"][0][2]["name"]["full"]
+                position = "TE"
+                bye  = myResult9[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult9[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult10 = WR4["fantasy_content"]["league"][1]["players"]
+    for x in myResult10.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult10[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult10[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult10[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult10[x]["player"][0][2]["name"]["full"]
+                position = "WR"
+                bye  = myResult10[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult10[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult11 = K1["fantasy_content"]["league"][1]["players"]
+    for x in myResult11.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult11[x]["player"][0][2]["name"]["full"]
+                position = "K"
+                bye  = myResult11[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult11[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult11[x]["player"][0][2]["name"]["full"]
+                position = "K"
+                bye  = myResult11[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult11[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+    myResult12 = K2["fantasy_content"]["league"][1]["players"]
+    for x in myResult12.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult12[x]["player"][0][2]["name"]["full"]
+                position = "K"
+                bye  = myResult12[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult12[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult12[x]["player"][0][2]["name"]["full"]
+                position = "K"
+                bye  = myResult12[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult12[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+
+    myResult13 = QB1["fantasy_content"]["league"][1]["players"]
+    for x in myResult13.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult13[x]["player"][0][5]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult13[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult13[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult13[x]["player"][0][6]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult13[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult13[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
+
+    myResult14 = QB2["fantasy_content"]["league"][1]["players"]
+    for x in myResult14.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult14[x]["player"][0][5]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult14[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
+                add_player(name,position,bye,url)
+
+            except KeyError:
+                name = myResult14[x]["player"][0][6]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult14[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
+                add_player(name, position, bye, url)
 def add_player(name,position,bye,url):
     c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url)
     return c
@@ -137,6 +330,5 @@ if __name__== '__main__':
 #myResult = players["fantasy_content"]["users"]["0"]["user"][1]["games"]["0"]["game"][1]["players"]
 
 
-#data = json.dumps(QBA, sort_keys=True, indent=4, separators=(',', ': '))
-#print data
+
 

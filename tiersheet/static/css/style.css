@@ -45,4 +45,7 @@
     box-shadow: 0 0 8px #FFD700;
     cursor:pointer;
 }
-
+.connectedSortable img
+{
+    float:right;
+} 
