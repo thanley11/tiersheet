@@ -312,27 +312,6 @@ def populate():
                 team = myResult13[x]["player"][0][7]["editorial_team_abbr"]
                 add_player(name, position, bye, url, team)
 
-    myResult14 = QB2["fantasy_content"]["league"][1]["players"]
-    for x in myResult14.keys():
-        if x == "count":
-            pass
-        else:
-            try:
-                name = myResult14[x]["player"][0][5]["editorial_team_full_name"]
-                position = "DEF"
-                bye  = myResult14[x]["player"][0][7]["bye_weeks"]["week"]
-                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
-                team = myResult14[x]["player"][0][6]["editorial_team_abbr"]
-                add_player(name, position, bye, url, team)
-
-            except KeyError:
-                name = myResult14[x]["player"][0][6]["editorial_team_full_name"]
-                position = "DEF"
-                bye  = myResult14[x]["player"][0][8]["bye_weeks"]["week"]
-                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
-                team = myResult14[x]["player"][0][7]["editorial_team_abbr"]
-                add_player(name, position, bye, url, team)
-
     myResult15 = RB3["fantasy_content"]["league"][1]["players"]
     for x in myResult15.keys():
         if x == "count":
@@ -352,6 +331,28 @@ def populate():
                 bye  = myResult15[x]["player"][0][8]["bye_weeks"]["week"]
                 url  = "http://sports.yahoo.com/nfl/players/" + myResult15[x]["player"][0][1]["player_id"] +"/"
                 team = myResult15[x]["player"][0][7]["editorial_team_abbr"]
+                add_player(name, position, bye, url, team)
+
+#Creates IntegrityError bc it is repeating team names that are grabbed from QB
+    myResult14 = QB2["fantasy_content"]["league"][1]["players"]
+    for x in myResult14.keys():
+        if x == "count":
+            pass
+        else:
+            try:
+                name = myResult14[x]["player"][0][5]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult14[x]["player"][0][7]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
+                team = myResult14[x]["player"][0][6]["editorial_team_abbr"]
+                add_player(name, position, bye, url, team)
+
+            except KeyError:
+                name = myResult14[x]["player"][0][6]["editorial_team_full_name"]
+                position = "DEF"
+                bye  = myResult14[x]["player"][0][8]["bye_weeks"]["week"]
+                url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
+                team = myResult14[x]["player"][0][7]["editorial_team_abbr"]
                 add_player(name, position, bye, url, team)
 def add_player(name,position,bye,url,team):
     c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url,team=team)
