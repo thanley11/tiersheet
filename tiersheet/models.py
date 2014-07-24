@@ -17,6 +17,7 @@ class Player(models.Model):
     bye      = models.IntegerField(default=0)
     url      = models.URLField()
     order    = models.IntegerField(default=0)
+    team     = models.CharField(max_length=3, default=None, blank=True)
 
     class Meta:
         ordering = ['order']
