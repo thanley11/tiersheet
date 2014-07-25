@@ -27,6 +27,12 @@ a:hover, a:focus{
 .btn-info:hover{
     background-color:#317083;
 }
+
+.btn-warning{
+   background-color:#EC900D;
+
+}
+
 .highlighted {
     box-shadow: 0 0 8px #FFD700;
     cursor:pointer;
