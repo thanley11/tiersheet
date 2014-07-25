@@ -5,6 +5,9 @@
      -moz-box-sizing: content-box;
           box-sizing: content-box;
 }
+.btn{
+    width:190px;
+}
 
 a{
     color:#FFF;
