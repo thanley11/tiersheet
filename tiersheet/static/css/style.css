@@ -6,54 +6,43 @@
           box-sizing: content-box;
 }
 
-#QBs {
-	border: 1px solid silver;
-	}
 
-#QBs ul {
-	margin: 5px;
-	padding: 10px;
-	background: #E1EDFF    
+.connectedSortable ul {
+	margin: 3px;
+	padding: 4px;
 }
 
-#RBs ul {
-	margin: 5px;
-	padding: 10px;
-	background: #BDD3F2
+.btn-info{
+   background-color:#42879C;
+
 }
-#WRs ul {
-	margin: 5px;
-	padding: 10px;
-	background: #90E0CC
-}
-#TEs ul {
-	margin: 5px;
-	padding: 10px;
-	background: #CCB098
-}
-#DEFs ul {
-	margin: 5px;
-	padding: 10px;
-	background: #F2E0BD
-}
-#Ks ul {
-	margin: 5px;
-	padding: 10px;
-	background: #87E585
+.btn-info:hover{
+    background-color:#317083;
 }
 .highlighted {
     box-shadow: 0 0 8px #FFD700;
     cursor:pointer;
 }
 
-
 .connectedSortable ul {
     list-style-type: none;
     text-align: left;
-    white-space:nowrap;
 } 
 
-.fa {
-    float:right;
+#leftSide{
+   font-size:smaller; 
+
 }
+
+#leftSide em{
+   font-style:normal; 
+   font-size:0.9em;
+}
+
+#rightSide img{
+    position: absolute;
+    float:right;
+    right: 22px;
+}
+
 
