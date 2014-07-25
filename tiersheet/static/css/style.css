@@ -6,10 +6,18 @@
           box-sizing: content-box;
 }
 
+a{
+    color:#FFF;
+}
+a:hover, a:focus{
+    color:#000;
+}
 
 .connectedSortable ul {
-	margin: 3px;
+    list-style-type: none;
+ 	margin: 3px;
 	padding: 4px;
+   text-align: left;
 }
 
 .btn-info{
@@ -23,26 +31,3 @@
     box-shadow: 0 0 8px #FFD700;
     cursor:pointer;
 }
-
-.connectedSortable ul {
-    list-style-type: none;
-    text-align: left;
-} 
-
-#leftSide{
-   font-size:smaller; 
-
-}
-
-#leftSide em{
-   font-style:normal; 
-   font-size:0.9em;
-}
-
-#rightSide img{
-    position: absolute;
-    float:right;
-    right: 22px;
-}
-
-

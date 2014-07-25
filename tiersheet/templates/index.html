@@ -20,21 +20,11 @@
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
                     <ul id="player_{{ player.id }}">
-                        <a href="{{player.url }}" class="btn btn-primary btn-success" target="_blank">
+                        <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                        <!--
-                        <li class="button qb">
-                        <span id="leftSide">
-                        <em></em> 
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                         </span>
-                        <span id="rightSide">
-                        <a href ="{{player.url }}" target="_blank">
-                            <img src="{% static 'img/yahoo-logo-sm.png' %}"/>
-                        </a> 
-                        </span>
-                        </li>
-                        -->
+                           
                     </ul>
                     {% endfor %}
                 {% else %}
@@ -48,10 +38,11 @@
                 {% if rb_list %}
                     {% for player in rb_list %}
                      <ul id="player_{{ player.id }}">
-                        <a href="{{player.url }}" class="btn btn-primary btn-primary" target="_blank">
+                        <span class="btn btn-primary btn-primary">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                    </ul>
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        </span>       
+                    </ul> 
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
@@ -63,11 +54,12 @@
             WRs
                 {% if wr_list %}
                     {% for player in wr_list %}
-                      <ul id="player_{{ player.id }}">
-                        <a href="{{player.url }}" class="btn btn-primary btn-warning" target="_blank">
+                       <ul id="player_{{ player.id }}">
+                        <span class="btn btn-primary btn-warning">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                      </ul>
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        </span>       
+                    </ul> 
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
@@ -79,11 +71,12 @@
             TEs
                 {% if te_list %}
                     {% for player in te_list %}
-                    <ul id="player_{{ player.id }}">
-                     <a href="{{player.url }}" class="btn btn-primary btn-info" target="_blank">
+                     <ul id="player_{{ player.id }}">
+                        <span class="btn btn-primary btn-info">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                      </ul>
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        </span>       
+                    </ul>
                     {% endfor %}
                 {% else %}
                     <ul><em> No entries yet. Add some!</em></ul>
@@ -95,11 +88,12 @@
                 DEFs
                 {% if def_list %}
                     {% for player in def_list %}
-                   <ul id="player_{{ player.id }}">
-                     <a href="{{player.url }}" class="btn btn-primary btn-danger" target="_blank">
+                     <ul id="player_{{ player.id }}">
+                        <span class="btn btn-primary btn-danger">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                      </ul>
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        </span>       
+                    </ul>
 
                     {% endfor %}
                 {% else %}
@@ -110,12 +104,12 @@
                 Ks
                 {% if k_list %}
                     {% for player in k_list %}
-                    <ul id="player_{{ player.id }}">
-                     <a href="{{player.url }}" class="btn btn-primary btn-succes" target="_blank">
+                     <ul id="player_{{ player.id }}">
+                        <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
-                            <span class="glyphicon glyphicon-info-sign"></span></a>
-                      </ul>
- 
+                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                        </span>       
+                    </ul>
                     {% endfor %}
                 {% else %}    
                     <ul><em> No entries yet. Add some!</em></ul>
