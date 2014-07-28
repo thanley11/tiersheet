@@ -9,11 +9,9 @@
     width:190px;
 }
 
-a{
-    color:#FFF;
-}
+
 a:hover, a:focus{
-    color:#000;
+    color:#1667B6;
 }
 
 .connectedSortable ul {
@@ -22,7 +20,16 @@ a:hover, a:focus{
 	padding: 4px;
    text-align: left;
 }
+.btn-success{
+   background-color:#D9E3D9;
+    border-color:#3F4A3F;
+    color: #000;
+}
 
+.btn-success:hover {
+    background-color:#D9E3D9;
+    color:#000;
+}
 .btn-info{
    background-color:#42879C;
 
