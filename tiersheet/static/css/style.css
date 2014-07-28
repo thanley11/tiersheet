@@ -34,7 +34,6 @@ a:hover, a:focus{
 .highlighted span{
     color:#FFF;
     background-color:#000;
-    cursor:pointer;
 }
 
 .highlighted span:hover{
@@ -42,4 +41,6 @@ a:hover, a:focus{
     background-color:#000;
 }
 
-
+.hightlighted a{
+    color:#1667B6;
+}

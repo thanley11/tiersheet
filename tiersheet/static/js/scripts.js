@@ -1,5 +1,5 @@
 $(function() {
-     $(".highlight").click(function(){
+         $(".highlight").dblclick(function(){ 
         $(this).toggleClass('highlighted');
     });
  });
