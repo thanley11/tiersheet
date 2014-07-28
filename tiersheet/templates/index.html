@@ -19,8 +19,8 @@
                 QBs
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
-                    <ul id="player_{{ player.id }}">
-                        <span class="btn btn-primary btn-success">
+                    <ul id="player_{{ player.id }}" class="highlight">
+                        <span class="btn btn-primary btn-success" >
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                         </span>
@@ -37,7 +37,7 @@
             RBs
                 {% if rb_list %}
                     {% for player in rb_list %}
-                     <ul id="player_{{ player.id }}">
+                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -54,7 +54,7 @@
             WRs
                 {% if wr_list %}
                     {% for player in wr_list %}
-                       <ul id="player_{{ player.id }}">
+                       <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -71,7 +71,7 @@
             TEs
                 {% if te_list %}
                     {% for player in te_list %}
-                     <ul id="player_{{ player.id }}">
+                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -88,7 +88,7 @@
                 DEFs
                 {% if def_list %}
                     {% for player in def_list %}
-                     <ul id="player_{{ player.id }}">
+                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} 
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -104,7 +104,7 @@
                 Ks
                 {% if k_list %}
                     {% for player in k_list %}
-                     <ul id="player_{{ player.id }}">
+                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
                             {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
