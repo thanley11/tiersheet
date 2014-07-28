@@ -18,7 +18,7 @@ a:hover, a:focus{
     list-style-type: none;
  	margin: 3px;
 	padding: 4px;
-   text-align: left;
+   text-align: center;
 }
 .btn-success{
    background-color:#D9E3D9;
@@ -29,6 +29,7 @@ a:hover, a:focus{
 .btn-success:hover {
     background-color:#D9E3D9;
     color:#000;
+    border-color: #3F4A3F
 }
 
 .highlighted span{

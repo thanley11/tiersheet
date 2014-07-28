@@ -16,12 +16,12 @@
 		<div class="col-md-2 column">
    
             <div class="connectedSortable" id="QBs">
-                QBs
+                <h5>QBs</h5>
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success" >
-                            {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
+                              {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                         </span>
                            
@@ -34,7 +34,7 @@
 		</div>
 		<div class="col-md-2 column">
             <div class="connectedSortable" id="RBs">
-            RBs
+                <h5>RBs</h5>
                 {% if rb_list %}
                     {% for player in rb_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-2 column">
             <div class="connectedSortable" id="WRs">
-            WRs
+                <h5>WRs</h5>
                 {% if wr_list %}
                     {% for player in wr_list %}
                        <ul id="player_{{ player.id }}" class="highlight">
@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-2 column">
             <div class="connectedSortable" id="TEs">
-            TEs
+                <h5>TEs</h5>
                 {% if te_list %}
                     {% for player in te_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
@@ -85,7 +85,7 @@
 		</div>
 		<div class="col-md-2 column">
 			<div class="connectedSortable" id="DEFs">
-                DEFs
+                <h5>DEFs</h5>
                 {% if def_list %}
                     {% for player in def_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
@@ -101,7 +101,7 @@
                 {% endif %}
             </div>
 		<div class="connectedSortable" id="Ks">
-                Ks
+            <h5>Ks</h5>
                 {% if k_list %}
                     {% for player in k_list %}
                      <ul id="player_{{ player.id }}" class="highlight">

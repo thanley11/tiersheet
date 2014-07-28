@@ -35,7 +35,6 @@
         $(document).ready(function(){
             $("#QBs, #RBs, #WRs, #TEs, #DEFs, #Ks").sortable({                                                    
                 connectWith: ".connectedSortable",
-
                 update: function(event, ui){                                             
                 var qb_serial = $('#QBs').sortable('serialize');                                                                                                                         
                 var rb_serial = $('#RBs').sortable('serialize');                                                                                                                         
@@ -48,7 +47,10 @@
                         url: "{% url 'index' %}", 
                         data: {'content': qb_serial+'&'+rb_serial+'&'+wr_serial+'&'+te_serial+'&'+def_serial+'&'+k_serial, 'csrfmiddlewaretoken': '{{csrf_token}}'} 
                         });   
-                    },                                                                        
+                    },
+                receive: function(event, ui){    
+                    $(ui.sender).sortable('cancel');
+                },
                 });
 
         });
