@@ -20,8 +20,21 @@
                     {% for player in qb_list %} 
                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success" >
-                              {{ player.name }}, {{ player.bye}} ({{ player.team|upper }})
+                              {{ player.name }}
+                              {% if player.team %}
+                                ({{ player.team|upper}})
+                                {% else %}
+                                <!-- None -->
+                                {% endif %}
+                              {% if player.bye %}
+                              {{ player.bye}}
+                              {% else %}
+                              <!-- None -->
+                              {% endif %}
+                              {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                            {% else %}
+                            {% endif %}
                         </span>
                            
                     </ul>

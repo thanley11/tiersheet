@@ -14,10 +14,10 @@ class Player(models.Model):
 
     name     = models.CharField(max_length=64, unique=True)
     position = models.CharField(max_length=3, choices=POSITION_CHOICES)
-    bye      = models.IntegerField(default=0)
-    url      = models.URLField()
+    bye      = models.IntegerField(null=True)
+    url      = models.URLField(null=True,blank=True)
     order    = models.IntegerField(default=0)
-    team     = models.CharField(max_length=3, default=None, blank=True)
+    team     = models.CharField(max_length=3, null=True, default=None, blank=True)
 
     class Meta:
         ordering = ['order']

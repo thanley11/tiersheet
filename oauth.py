@@ -354,6 +354,12 @@ def populate():
                 url  = "http://sports.yahoo.com/nfl/players/" + myResult14[x]["player"][0][1]["player_id"] +"/"
                 team = myResult14[x]["player"][0][7]["editorial_team_abbr"]
                 add_player(name, position, bye, url, team)
+
+#QB Tiers
+#qb_tier1 = add_player("QB Tier 1","QB",None,None,None)
+#qb_tier2 = add_player("QB Tier 2","QB",None,None,None)
+#qb_tier3 = add_player("QB Tier 3","QB",None,None,None)
+#qb_tier4 = add_player("QB Tier 4","QB",None,None,None)
 def add_player(name,position,bye,url,team):
     c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url,team=team)
     return c

@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'sortable.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DATABASE_PATH,
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sortdb',
+        'USER': 'guest',
+        'PASSWORD': 'monkey',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
