@@ -1,0 +1,10 @@
+ngo==1.6.5
+South==1.0
+argparse==1.2.1
+espn-py==0.2
+oauthlib==0.6.3
+psycopg2==2.5.3
+rauth==0.7.0
+requests==2.3.0
+requests-oauthlib==0.4.1
+wsgiref==0.1.2
