@@ -334,6 +334,54 @@ def populate():
                 add_player(name, position, bye, url, team)
 
 #Creates IntegrityError bc it is repeating team names that are grabbed from QB
+
+
+    #QB Tiers
+    qb_tier1 = add_player("QB Tier 1","QB",None,None,None)
+    qb_tier2 = add_player("QB Tier 2","QB",None,None,None)
+    qb_tier3 = add_player("QB Tier 3","QB",None,None,None)
+    qb_tier4 = add_player("QB Tier 4","QB",None,None,None)
+    qb_tier5 = add_player("QB Tier 5","QB",None,None,None)
+    qb_tier6 = add_player("QB Tier 6","QB",None,None,None)
+    qb_tier7 = add_player("QB Tier 7","QB",None,None,None)
+    qb_tier8 = add_player("QB Tier 8","QB",None,None,None)
+    qb_tier9 = add_player("QB Tier 9","QB",None,None,None)
+
+    rb_tier1 = add_player("RB Tier 1","RB",None,None,None)
+    rb_tier2 = add_player("RB Tier 2","RB",None,None,None)
+    rb_tier3 = add_player("RB Tier 3","RB",None,None,None)
+    rb_tier4 = add_player("RB Tier 4","RB",None,None,None)
+    rb_tier5 = add_player("RB Tier 5","RB",None,None,None)
+    rb_tier6 = add_player("RB Tier 6","RB",None,None,None)
+    rb_tier7 = add_player("RB Tier 7","RB",None,None,None)
+    rb_tier8 = add_player("RB Tier 8","RB",None,None,None)
+    rb_tier9 = add_player("RB Tier 9","RB",None,None,None)
+
+    wr_tier1 = add_player("WR Tier 1","WR",None,None,None)
+    wr_tier2 = add_player("WR Tier 2","WR",None,None,None)
+    wr_tier3 = add_player("WR Tier 3","WR",None,None,None)
+    wr_tier4 = add_player("WR Tier 4","WR",None,None,None)
+    wr_tier5 = add_player("WR Tier 5","WR",None,None,None)
+    wr_tier6 = add_player("WR Tier 6","WR",None,None,None)
+    wr_tier7 = add_player("WR Tier 7","WR",None,None,None)
+    wr_tier8 = add_player("WR Tier 8","WR",None,None,None)
+    wr_tier9 = add_player("WR Tier 9","WR",None,None,None)
+
+    te_tier1 = add_player("TE Tier 1","TE",None,None,None)
+    te_tier2 = add_player("TE Tier 2","TE",None,None,None)
+    te_tier3 = add_player("TE Tier 3","TE",None,None,None)
+    te_tier4 = add_player("TE Tier 4","TE",None,None,None)
+    te_tier5 = add_player("TE Tier 5","TE",None,None,None)
+    te_tier6 = add_player("TE Tier 6","TE",None,None,None)
+    te_tier7 = add_player("TE Tier 7","TE",None,None,None)
+
+    def_tier1 = add_player("DEF Tier 1","DEF",None,None,None)
+    def_tier2 = add_player("DEF Tier 2","DEF",None,None,None)
+    def_tier3 = add_player("DEF Tier 3","DEF",None,None,None)
+    k_tier1 = add_player("K Tier 1","K",None,None,None)
+    k_tier2 = add_player("K Tier 2","K",None,None,None)
+    k_tier3 = add_player("K Tier 3","K",None,None,None)
+
     myResult14 = QB2["fantasy_content"]["league"][1]["players"]
     for x in myResult14.keys():
         if x == "count":
@@ -355,51 +403,6 @@ def populate():
                 team = myResult14[x]["player"][0][7]["editorial_team_abbr"]
                 add_player(name, position, bye, url, team)
 
-#QB Tiers
-qb_tier1 = add_player("QB Tier 1","QB",None,None,None)
-qb_tier2 = add_player("QB Tier 2","QB",None,None,None)
-qb_tier3 = add_player("QB Tier 3","QB",None,None,None)
-qb_tier4 = add_player("QB Tier 4","QB",None,None,None)
-qb_tier5 = add_player("QB Tier 5","QB",None,None,None)
-qb_tier6 = add_player("QB Tier 6","QB",None,None,None)
-qb_tier7 = add_player("QB Tier 7","QB",None,None,None)
-qb_tier8 = add_player("QB Tier 8","QB",None,None,None)
-qb_tier9 = add_player("QB Tier 9","QB",None,None,None)
-
-rb_tier1 = add_player("RB Tier 1","RB",None,None,None)
-rb_tier2 = add_player("RB Tier 2","RB",None,None,None)
-rb_tier3 = add_player("RB Tier 3","RB",None,None,None)
-rb_tier4 = add_player("RB Tier 4","RB",None,None,None)
-rb_tier5 = add_player("RB Tier 5","RB",None,None,None)
-rb_tier6 = add_player("RB Tier 6","RB",None,None,None)
-rb_tier7 = add_player("RB Tier 7","RB",None,None,None)
-rb_tier8 = add_player("RB Tier 8","RB",None,None,None)
-rb_tier9 = add_player("RB Tier 9","RB",None,None,None)
-
-wr_tier1 = add_player("WR Tier 1","WR",None,None,None)
-wr_tier2 = add_player("WR Tier 2","WR",None,None,None)
-wr_tier3 = add_player("WR Tier 3","WR",None,None,None)
-wr_tier4 = add_player("WR Tier 4","WR",None,None,None)
-wr_tier5 = add_player("WR Tier 5","WR",None,None,None)
-wr_tier6 = add_player("WR Tier 6","WR",None,None,None)
-wr_tier7 = add_player("WR Tier 7","WR",None,None,None)
-wr_tier8 = add_player("WR Tier 8","WR",None,None,None)
-wr_tier9 = add_player("WR Tier 9","WR",None,None,None)
-
-te_tier1 = add_player("TE Tier 1","TE",None,None,None)
-te_tier2 = add_player("TE Tier 2","TE",None,None,None)
-te_tier3 = add_player("TE Tier 3","TE",None,None,None)
-te_tier4 = add_player("TE Tier 4","TE",None,None,None)
-te_tier5 = add_player("TE Tier 5","TE",None,None,None)
-te_tier6 = add_player("TE Tier 6","TE",None,None,None)
-te_tier7 = add_player("TE Tier 7","TE",None,None,None)
-
-def_tier1 = add_player("DEF Tier 1","DEF",None,None,None)
-def_tier2 = add_player("DEF Tier 2","DEF",None,None,None)
-def_tier3 = add_player("DEF Tier 3","DEF",None,None,None)
-k_tier1 = add_player("K Tier 1","K",None,None,None)
-k_tier2 = add_player("K Tier 2","K",None,None,None)
-k_tier3 = add_player("K Tier 3","K",None,None,None)
 def add_player(name,position,bye,url,team):
     c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url,team=team)
     return c
