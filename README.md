@@ -13,4 +13,4 @@ You can also "blackout" players by double clicking on them to denote that they h
 
 There are also "info" links that allow you to view the player's stats or recent news in order to make a quick decision during your draft.
 
-Each player module shows <Player Name> (<Team Name>) <Bye Week>  <Info Link>
+Each player module shows [Player Name (Team Name) Bye Week  Info Link]
