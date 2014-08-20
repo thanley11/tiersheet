@@ -41,7 +41,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['blog.tcharleshanley.com']
+ALLOWED_HOSTS = ['www.tcharleshanley.com']
 
 
 # Application definition
