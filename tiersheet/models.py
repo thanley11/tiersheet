@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class Player(models.Model):
 
     POSITION_CHOICES = (
@@ -27,3 +27,10 @@ class Player(models.Model):
         return self.name
 
 
+class Rotoworld_Url(models.Model):
+
+    name     = models.CharField(max_length=64, unique=True)
+    roto_url = models.URLField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
