@@ -4,7 +4,6 @@ from os.path import join, getsize
 from bs4 import BeautifulSoup
 from django.db import IntegrityError
 
-player_list ="player_list.txt"
 html_to_parse = ""
 html_dir ="/home/thanley/python/tiersheet/rotoworld/"
 
