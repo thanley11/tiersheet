@@ -3,7 +3,7 @@ import urllib2
 from bs4 import BeautifulSoup
 
 def loop_dir():
-    rootdir = '/rotoworld/'
+    rootdir = '/parse_urls/'
     for file in os.walk(rootdir):
         print file
         scraped = BeautifulSoup(file)
