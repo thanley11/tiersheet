@@ -6,7 +6,8 @@ from django.db import IntegrityError
 
 html_to_parse = ""
 html_dir ="/home/thanley/python/tiersheet/rotoworld/"
-positions = ['qb','rb','wr','te','k','dst']
+#positions = ['qb','rb','wr','te','k','dst']
+positions = ['k','dst']
 fantasypros_url = "http://www.fantasypros.com/nfl/rankings/"
 #+ position +"-cheatsheets.php"
 def loop():

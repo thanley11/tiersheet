@@ -11,7 +11,7 @@ def index(request):
 
         for index, player_id in enumerate(players.getlist('player[]')):
             player = Player.objects.get(id=player_id)
-            player.order = index
+            player.rank = index
             player.save()
 
     qb_list  = Player.objects.filter(position="QB")
@@ -19,7 +19,7 @@ def index(request):
     wr_list  = Player.objects.filter(position="WR")
     te_list  = Player.objects.filter(position="TE")
     def_list = Player.objects.filter(position="DEF")
-    k_list   = Player.objects.filter(position="K")
+    k_list   = Player.objects.filter(position="PK")
 
     context = {'qb_list': qb_list, 'rb_list': rb_list, 'wr_list': wr_list, 'te_list': te_list, 'def_list': def_list, 'k_list': k_list}
 

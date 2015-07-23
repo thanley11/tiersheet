@@ -1,0 +1,18 @@
+** UPDATE RANK **
+
+UPDATE tiersheet_player SET rank = tiersheet_fantasyprorank.rank
+FROM tiersheet_fantasyprorank
+WHERE tiersheet_fantasyprorank.name = tiersheet_player.name;
+
+** UPDATE URL **
+
+UPDATE tiersheet_player
+SET url = tiersheet_rotoworld_url.roto_url
+FROM tiersheet_rotoworld_url
+WHERE tiersheet_rotoworld_url.name = tiersheet_player.name;
+
+
+UPDATE tiersheet_player SET name = 'LeVeon Bell' WHERE name = 'Le''Veon Bell';
+UPDATE tiersheet_player SET name = 'Le''Veon Bell' WHERE name = 'LeVeon Bell';
+UPDATE tiersheet_player SET name = 'C.J. Anderson' WHERE name = 'CJ Anderson';
+UPDATE tiersheet_player SET name = 'Odell Beckham Jr.' WHERE name = 'Odell Beckham Jr';

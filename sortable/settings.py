@@ -79,12 +79,14 @@ WSGI_APPLICATION = 'sortable.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+POSTGRES_SECRET_KEY = os.environ['POSTGRES_SECRET_PASS']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tiersheetdb',
         'USER': 'tom',
-        'PASSWORD': 'monkey',
+        'PASSWORD': POSTGRES_SECRET_KEY,
         'HOST': 'localhost',
         'PORT': '',
     }
