@@ -20,6 +20,7 @@
                     {% for player in qb_list %} 
                     <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success" >
+                            <span class="player_text">
                               {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -31,6 +32,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                             </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
@@ -51,6 +53,7 @@
                     {% for player in rb_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
+                            <span class="player_text">
                            {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -62,6 +65,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                              </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
@@ -81,6 +85,7 @@
                     {% for player in wr_list %}
                        <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
+                            <span class="player_text">
                             {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -92,6 +97,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                            </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
@@ -111,6 +117,7 @@
                     {% for player in te_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
+                            <span class="player_text">
                             {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -122,6 +129,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                            </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
@@ -141,6 +149,7 @@
                     {% for player in def_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
+                            <span class="player_text">
                             {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -152,6 +161,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                            </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
@@ -170,6 +180,7 @@
                     {% for player in k_list %}
                      <ul id="player_{{ player.id }}" class="highlight">
                         <span class="btn btn-primary btn-success">
+                            <span class="player_text">
                         {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -181,6 +192,7 @@
                               {% else %}
                               <!-- None -->
                               {% endif %}
+                            </span>
                               {% if player.url %}
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
