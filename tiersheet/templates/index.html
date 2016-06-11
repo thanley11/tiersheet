@@ -18,7 +18,11 @@
             <div class="connectedSortable" id="QBs">
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
-                    <ul id="player_{{ player.id }}" class="highlight">
+                    {% if player.bye != None %}
+                     <ul id="player_{{ player.id }}" class="highlight">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}
                         <span class="btn btn-primary btn-success" >
                             <span class="player_text">
                               {{ player.name }}
@@ -51,7 +55,11 @@
             <div class="connectedSortable" id="RBs">
                 {% if rb_list %}
                     {% for player in rb_list %}
+                    {% if player.bye != None %}
                      <ul id="player_{{ player.id }}" class="highlight">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}
                         <span class="btn btn-primary btn-success">
                             <span class="player_text">
                            {{ player.name }}
@@ -83,8 +91,11 @@
             <div class="connectedSortable" id="WRs">
                 {% if wr_list %}
                     {% for player in wr_list %}
-                       <ul id="player_{{ player.id }}" class="highlight">
-                        <span class="btn btn-primary btn-success">
+                       {% if player.bye != None %}
+                     <ul id="player_{{ player.id }}" class="highlight">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}                        <span class="btn btn-primary btn-success">
                             <span class="player_text">
                             {{ player.name }}
                               {% if player.team %}
@@ -115,8 +126,11 @@
             <div class="connectedSortable" id="TEs">
                 {% if te_list %}
                     {% for player in te_list %}
+                     {% if player.bye != None %}
                      <ul id="player_{{ player.id }}" class="highlight">
-                        <span class="btn btn-primary btn-success">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}                        <span class="btn btn-primary btn-success">
                             <span class="player_text">
                             {{ player.name }}
                               {% if player.team %}
@@ -147,7 +161,11 @@
             <div class="connectedSortable" id="DEFs">
                 {% if def_list %}
                     {% for player in def_list %}
+                    {% if player.bye != None %}
                      <ul id="player_{{ player.id }}" class="highlight">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}
                         <span class="btn btn-primary btn-success">
                             <span class="player_text">
                             {{ player.name }}
@@ -178,7 +196,11 @@
         <div class="connectedSortable" id="Ks">
                 {% if k_list %}
                     {% for player in k_list %}
+                    {% if player.bye != None %}
                      <ul id="player_{{ player.id }}" class="highlight">
+                    {% else %}
+                     <ul id="player_{{ player.id }}" class="highlighted">
+                    {% endif %}
                         <span class="btn btn-primary btn-success">
                             <span class="player_text">
                         {{ player.name }}

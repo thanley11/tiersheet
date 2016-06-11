@@ -19,7 +19,7 @@ def index(request):
     wr_list  = Player.objects.filter(position="WR")
     te_list  = Player.objects.filter(position="TE")
     def_list = Player.objects.filter(position="DEF")
-    k_list   = Player.objects.filter(position="PK")
+    k_list   = Player.objects.filter(position="K")
 
     context = {'qb_list': qb_list, 'rb_list': rb_list, 'wr_list': wr_list, 'te_list': te_list, 'def_list': def_list, 'k_list': k_list}
 

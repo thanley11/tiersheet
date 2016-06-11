@@ -12,6 +12,7 @@ def populate(position):
     filename = path + position + '.csv'
     with open(filename, 'rb') as players:
         player_reader = csv.reader(players)
+        hello = csv.excel_tab
         try:
             player_reader.next()
             for row in player_reader:
@@ -32,7 +33,7 @@ def add_player(name, position, bye, url, team, rank):
     try:
         c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url,team=team, rank=rank)
     except IntegrityError:
-        return False;
+        return False
     return c
 
 if __name__ == '__main__':

@@ -49,3 +49,7 @@ def k_filter(s):
         return s
     except Exception as e:
         return repr(e)
+
+@register.filter(name='addclass')
+def addclass(value, arg):
+    return value.as_widget(attrs={'class': arg})
