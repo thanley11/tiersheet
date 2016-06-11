@@ -3,3 +3,19 @@
 db.sqlite3
 *.swp
 static-files/
+parse_urls/
+parse_urls/AFC East.html
+parse_urls/AFC North.html
+parse_urls/AFC South.html
+parse_urls/AFC West.html
+parse_urls/csv
+parse_urls/FantasyPros_2016_Preseason_DST_Rankings.xls
+parse_urls/FantasyPros_2016_Preseason_K_Rankings.xls
+parse_urls/FantasyPros_2016_Preseason_QB_Rankings.xls
+parse_urls/FantasyPros_2016_Preseason_RB_Rankings.xls
+parse_urls/FantasyPros_2016_Preseason_TE_Rankings.xls
+parse_urls/FantasyPros_2016_Preseason_WR_Rankings.xls
+parse_urls/NFC East.html
+parse_urls/NFC North.html
+parse_urls/NFC South.html
+parse_urls/NFC West.html

@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from django.db import IntegrityError
 
 html_to_parse = ""
-html_dir ="/home/tom/dev_projects/tiersheet/parse_urls/"
+html_dir ="/home/tom/dev_projects/python/tiersheet/parse_urls/"
 
 def bsoup():
     for root, dirs, files in os.walk(html_dir):
@@ -36,5 +36,7 @@ def add_roto_url(name,roto_url):
 if __name__== '__main__':
     print "Starting populate script"
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'sortable.settings')
+    import django
+    django.setup()
     from tiersheet.models import Rotoworld_Url
     bsoup()

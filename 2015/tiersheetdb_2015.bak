@@ -1,0 +1,4748 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: block(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION block(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'block';
+
+
+ALTER FUNCTION public.block(text, text) OWNER TO tom;
+
+--
+-- Name: block_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION block_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'block_op';
+
+
+ALTER FUNCTION public.block_op(text, text) OWNER TO tom;
+
+--
+-- Name: cosine(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION cosine(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'cosine';
+
+
+ALTER FUNCTION public.cosine(text, text) OWNER TO tom;
+
+--
+-- Name: cosine_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION cosine_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'cosine_op';
+
+
+ALTER FUNCTION public.cosine_op(text, text) OWNER TO tom;
+
+--
+-- Name: dice(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION dice(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'dice';
+
+
+ALTER FUNCTION public.dice(text, text) OWNER TO tom;
+
+--
+-- Name: dice_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION dice_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'dice_op';
+
+
+ALTER FUNCTION public.dice_op(text, text) OWNER TO tom;
+
+--
+-- Name: euclidean(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION euclidean(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'euclidean';
+
+
+ALTER FUNCTION public.euclidean(text, text) OWNER TO tom;
+
+--
+-- Name: euclidean_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION euclidean_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'euclidean_op';
+
+
+ALTER FUNCTION public.euclidean_op(text, text) OWNER TO tom;
+
+--
+-- Name: get_isnormalized(text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION get_isnormalized(text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'get_isnormalized';
+
+
+ALTER FUNCTION public.get_isnormalized(text) OWNER TO tom;
+
+--
+-- Name: get_threshold(text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION get_threshold(text) RETURNS real
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'get_threshold';
+
+
+ALTER FUNCTION public.get_threshold(text) OWNER TO tom;
+
+--
+-- Name: get_tokenizer(text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION get_tokenizer(text) RETURNS integer
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'get_tokenizer';
+
+
+ALTER FUNCTION public.get_tokenizer(text) OWNER TO tom;
+
+--
+-- Name: hamming(bit varying, bit varying); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION hamming(bit varying, bit varying) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'hamming';
+
+
+ALTER FUNCTION public.hamming(bit varying, bit varying) OWNER TO tom;
+
+--
+-- Name: hamming_op(bit varying, bit varying); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION hamming_op(bit varying, bit varying) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'hamming_op';
+
+
+ALTER FUNCTION public.hamming_op(bit varying, bit varying) OWNER TO tom;
+
+--
+-- Name: jaccard(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jaccard(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'jaccard';
+
+
+ALTER FUNCTION public.jaccard(text, text) OWNER TO tom;
+
+--
+-- Name: jaccard_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jaccard_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'jaccard_op';
+
+
+ALTER FUNCTION public.jaccard_op(text, text) OWNER TO tom;
+
+--
+-- Name: jaro(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jaro(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'jaro';
+
+
+ALTER FUNCTION public.jaro(text, text) OWNER TO tom;
+
+--
+-- Name: jaro_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jaro_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'jaro_op';
+
+
+ALTER FUNCTION public.jaro_op(text, text) OWNER TO tom;
+
+--
+-- Name: jarowinkler(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jarowinkler(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'jarowinkler';
+
+
+ALTER FUNCTION public.jarowinkler(text, text) OWNER TO tom;
+
+--
+-- Name: jarowinkler_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION jarowinkler_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'jarowinkler_op';
+
+
+ALTER FUNCTION public.jarowinkler_op(text, text) OWNER TO tom;
+
+--
+-- Name: lev(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION lev(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'lev';
+
+
+ALTER FUNCTION public.lev(text, text) OWNER TO tom;
+
+--
+-- Name: lev_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION lev_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'lev_op';
+
+
+ALTER FUNCTION public.lev_op(text, text) OWNER TO tom;
+
+--
+-- Name: levslow(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION levslow(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'levslow';
+
+
+ALTER FUNCTION public.levslow(text, text) OWNER TO tom;
+
+--
+-- Name: levslow_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION levslow_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'levslow_op';
+
+
+ALTER FUNCTION public.levslow_op(text, text) OWNER TO tom;
+
+--
+-- Name: matchingcoefficient(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION matchingcoefficient(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'matchingcoefficient';
+
+
+ALTER FUNCTION public.matchingcoefficient(text, text) OWNER TO tom;
+
+--
+-- Name: matchingcoefficient_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION matchingcoefficient_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'matchingcoefficient_op';
+
+
+ALTER FUNCTION public.matchingcoefficient_op(text, text) OWNER TO tom;
+
+--
+-- Name: mongeelkan(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION mongeelkan(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'mongeelkan';
+
+
+ALTER FUNCTION public.mongeelkan(text, text) OWNER TO tom;
+
+--
+-- Name: mongeelkan_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION mongeelkan_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'mongeelkan_op';
+
+
+ALTER FUNCTION public.mongeelkan_op(text, text) OWNER TO tom;
+
+--
+-- Name: needlemanwunsch(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION needlemanwunsch(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'needlemanwunsch';
+
+
+ALTER FUNCTION public.needlemanwunsch(text, text) OWNER TO tom;
+
+--
+-- Name: needlemanwunsch_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION needlemanwunsch_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'needlemanwunsch_op';
+
+
+ALTER FUNCTION public.needlemanwunsch_op(text, text) OWNER TO tom;
+
+--
+-- Name: overlapcoefficient(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION overlapcoefficient(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'overlapcoefficient';
+
+
+ALTER FUNCTION public.overlapcoefficient(text, text) OWNER TO tom;
+
+--
+-- Name: overlapcoefficient_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION overlapcoefficient_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'overlapcoefficient_op';
+
+
+ALTER FUNCTION public.overlapcoefficient_op(text, text) OWNER TO tom;
+
+--
+-- Name: qgram(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION qgram(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'qgram';
+
+
+ALTER FUNCTION public.qgram(text, text) OWNER TO tom;
+
+--
+-- Name: qgram_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION qgram_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'qgram_op';
+
+
+ALTER FUNCTION public.qgram_op(text, text) OWNER TO tom;
+
+--
+-- Name: set_isnormalized(text, boolean); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION set_isnormalized(text, boolean) RETURNS boolean
+    LANGUAGE c STRICT
+    AS '$libdir/pg_similarity', 'set_isnormalized';
+
+
+ALTER FUNCTION public.set_isnormalized(text, boolean) OWNER TO tom;
+
+--
+-- Name: set_threshold(text, real); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION set_threshold(text, real) RETURNS real
+    LANGUAGE c STRICT
+    AS '$libdir/pg_similarity', 'set_threshold';
+
+
+ALTER FUNCTION public.set_threshold(text, real) OWNER TO tom;
+
+--
+-- Name: set_tokenizer(text, integer); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION set_tokenizer(text, integer) RETURNS integer
+    LANGUAGE c STRICT
+    AS '$libdir/pg_similarity', 'set_tokenizer';
+
+
+ALTER FUNCTION public.set_tokenizer(text, integer) OWNER TO tom;
+
+--
+-- Name: smithwaterman(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION smithwaterman(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'smithwaterman';
+
+
+ALTER FUNCTION public.smithwaterman(text, text) OWNER TO tom;
+
+--
+-- Name: smithwaterman_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION smithwaterman_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'smithwaterman_op';
+
+
+ALTER FUNCTION public.smithwaterman_op(text, text) OWNER TO tom;
+
+--
+-- Name: smithwatermangotoh(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION smithwatermangotoh(text, text) RETURNS real
+    LANGUAGE c IMMUTABLE STRICT
+    AS '$libdir/pg_similarity', 'smithwatermangotoh';
+
+
+ALTER FUNCTION public.smithwatermangotoh(text, text) OWNER TO tom;
+
+--
+-- Name: smithwatermangotoh_op(text, text); Type: FUNCTION; Schema: public; Owner: tom
+--
+
+CREATE FUNCTION smithwatermangotoh_op(text, text) RETURNS boolean
+    LANGUAGE c STABLE STRICT
+    AS '$libdir/pg_similarity', 'smithwatermangotoh_op';
+
+
+ALTER FUNCTION public.smithwatermangotoh_op(text, text) OWNER TO tom;
+
+--
+-- Name: ~##; Type: OPERATOR; Schema: public; Owner: tom
+--
+
+CREATE OPERATOR ~## (
+    PROCEDURE = cosine_op,
+    LEFTARG = text,
+    RIGHTARG = text,
+    COMMUTATOR = ~##,
+    JOIN = contjoinsel
+);
+
+
+ALTER OPERATOR public.~## (text, text) OWNER TO tom;
+
+--
+-- Name: ~%%; Type: OPERATOR; Schema: public; Owner: tom
+--
+
+CREATE OPERATOR ~%% (
+    PROCEDURE = jaro_op,
+    LEFTARG = text,
+    RIGHTARG = text,
+    COMMUTATOR = ~%%,
+    JOIN = contjoinsel
+);
+
+
+ALTER OPERATOR public.~%% (text, text) OWNER TO tom;
+
+--
+-- Name: ~==; Type: OPERATOR; Schema: public; Owner: tom
+--
+
+CREATE OPERATOR ~== (
+    PROCEDURE = lev_op,
+    LEFTARG = text,
+    RIGHTARG = text,
+    COMMUTATOR = ~==,
+    JOIN = contjoinsel
+);
+
+
+ALTER OPERATOR public.~== (text, text) OWNER TO tom;
+
+--
+-- Name: ~@@; Type: OPERATOR; Schema: public; Owner: tom
+--
+
+CREATE OPERATOR ~@@ (
+    PROCEDURE = jarowinkler_op,
+    LEFTARG = text,
+    RIGHTARG = text,
+    COMMUTATOR = ~@@,
+    JOIN = contjoinsel
+);
+
+
+ALTER OPERATOR public.~@@ (text, text) OWNER TO tom;
+
+--
+-- Name: ~~~; Type: OPERATOR; Schema: public; Owner: tom
+--
+
+CREATE OPERATOR ~~~ (
+    PROCEDURE = qgram_op,
+    LEFTARG = text,
+    RIGHTARG = text,
+    COMMUTATOR = ~~~,
+    JOIN = contjoinsel
+);
+
+
+ALTER OPERATOR public.~~~ (text, text) OWNER TO tom;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: api_fantasyprorank; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE api_fantasyprorank (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    rank integer
+);
+
+
+ALTER TABLE api_fantasyprorank OWNER TO tom;
+
+--
+-- Name: api_fantasyprorank_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE api_fantasyprorank_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE api_fantasyprorank_id_seq OWNER TO tom;
+
+--
+-- Name: api_fantasyprorank_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE api_fantasyprorank_id_seq OWNED BY api_fantasyprorank.id;
+
+
+--
+-- Name: api_player; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE api_player (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    "position" character varying(3) NOT NULL,
+    bye integer,
+    url character varying(200),
+    rank integer NOT NULL,
+    team character varying(3)
+);
+
+
+ALTER TABLE api_player OWNER TO tom;
+
+--
+-- Name: api_player_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE api_player_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE api_player_id_seq OWNER TO tom;
+
+--
+-- Name: api_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE api_player_id_seq OWNED BY api_player.id;
+
+
+--
+-- Name: api_rotoworld_url; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE api_rotoworld_url (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    roto_url character varying(200)
+);
+
+
+ALTER TABLE api_rotoworld_url OWNER TO tom;
+
+--
+-- Name: api_rotoworld_url_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE api_rotoworld_url_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE api_rotoworld_url_id_seq OWNER TO tom;
+
+--
+-- Name: api_rotoworld_url_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE api_rotoworld_url_id_seq OWNED BY api_rotoworld_url.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE auth_group OWNER TO tom;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_id_seq OWNER TO tom;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_group_permissions OWNER TO tom;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_permissions_id_seq OWNER TO tom;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE auth_permission OWNER TO tom;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_permission_id_seq OWNER TO tom;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE auth_user OWNER TO tom;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_groups OWNER TO tom;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_groups_id_seq OWNER TO tom;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_id_seq OWNER TO tom;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_user_permissions OWNER TO tom;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_user_permissions_id_seq OWNER TO tom;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    user_id integer NOT NULL,
+    content_type_id integer,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE django_admin_log OWNER TO tom;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_admin_log_id_seq OWNER TO tom;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE django_content_type OWNER TO tom;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_content_type_id_seq OWNER TO tom;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_migrations OWNER TO tom;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_migrations_id_seq OWNER TO tom;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE django_migrations_id_seq OWNED BY django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_session OWNER TO tom;
+
+--
+-- Name: south_migrationhistory; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE south_migrationhistory (
+    id integer NOT NULL,
+    app_name character varying(255) NOT NULL,
+    migration character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE south_migrationhistory OWNER TO tom;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE south_migrationhistory_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE south_migrationhistory_id_seq OWNER TO tom;
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE south_migrationhistory_id_seq OWNED BY south_migrationhistory.id;
+
+
+--
+-- Name: tiersheet_fantasyprorank; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE tiersheet_fantasyprorank (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    rank integer
+);
+
+
+ALTER TABLE tiersheet_fantasyprorank OWNER TO tom;
+
+--
+-- Name: tiersheet_fantasyprorank_2015; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tiersheet_fantasyprorank_2015 (
+    id integer,
+    name character varying(64),
+    rank integer
+);
+
+
+ALTER TABLE tiersheet_fantasyprorank_2015 OWNER TO postgres;
+
+--
+-- Name: tiersheet_fantasyprorank_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE tiersheet_fantasyprorank_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tiersheet_fantasyprorank_id_seq OWNER TO tom;
+
+--
+-- Name: tiersheet_fantasyprorank_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE tiersheet_fantasyprorank_id_seq OWNED BY tiersheet_fantasyprorank.id;
+
+
+--
+-- Name: tiersheet_player; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE tiersheet_player (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    "position" character varying(3) NOT NULL,
+    bye integer,
+    url character varying(200),
+    team character varying(3),
+    rank integer NOT NULL
+);
+
+
+ALTER TABLE tiersheet_player OWNER TO tom;
+
+--
+-- Name: tiersheet_player_2015; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tiersheet_player_2015 (
+    id integer,
+    name character varying(64),
+    "position" character varying(3),
+    bye integer,
+    url character varying(200),
+    team character varying(3),
+    rank integer
+);
+
+
+ALTER TABLE tiersheet_player_2015 OWNER TO postgres;
+
+--
+-- Name: tiersheet_player_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE tiersheet_player_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tiersheet_player_id_seq OWNER TO tom;
+
+--
+-- Name: tiersheet_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE tiersheet_player_id_seq OWNED BY tiersheet_player.id;
+
+
+--
+-- Name: tiersheet_rotoworld_url; Type: TABLE; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE TABLE tiersheet_rotoworld_url (
+    id integer NOT NULL,
+    name character varying(64) NOT NULL,
+    roto_url character varying(200)
+);
+
+
+ALTER TABLE tiersheet_rotoworld_url OWNER TO tom;
+
+--
+-- Name: tiersheet_rotoworld_url_id_seq; Type: SEQUENCE; Schema: public; Owner: tom
+--
+
+CREATE SEQUENCE tiersheet_rotoworld_url_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tiersheet_rotoworld_url_id_seq OWNER TO tom;
+
+--
+-- Name: tiersheet_rotoworld_url_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tom
+--
+
+ALTER SEQUENCE tiersheet_rotoworld_url_id_seq OWNED BY tiersheet_rotoworld_url.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY api_fantasyprorank ALTER COLUMN id SET DEFAULT nextval('api_fantasyprorank_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY api_player ALTER COLUMN id SET DEFAULT nextval('api_player_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY api_rotoworld_url ALTER COLUMN id SET DEFAULT nextval('api_rotoworld_url_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY django_migrations ALTER COLUMN id SET DEFAULT nextval('django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY south_migrationhistory ALTER COLUMN id SET DEFAULT nextval('south_migrationhistory_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY tiersheet_fantasyprorank ALTER COLUMN id SET DEFAULT nextval('tiersheet_fantasyprorank_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY tiersheet_player ALTER COLUMN id SET DEFAULT nextval('tiersheet_player_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY tiersheet_rotoworld_url ALTER COLUMN id SET DEFAULT nextval('tiersheet_rotoworld_url_id_seq'::regclass);
+
+
+--
+-- Data for Name: api_fantasyprorank; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY api_fantasyprorank (id, name, rank) FROM stdin;
+\.
+
+
+--
+-- Name: api_fantasyprorank_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('api_fantasyprorank_id_seq', 1, false);
+
+
+--
+-- Data for Name: api_player; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY api_player (id, name, "position", bye, url, rank, team) FROM stdin;
+1	Adrian Peterson	RB	5	\N	0	MIN
+2	Jamaal Charles	RB	9	\N	0	KC
+3	Eddie Lacy	RB	7	\N	0	GB
+4	LeVeon Bell	RB	11	\N	0	PIT
+5	Marshawn Lynch	RB	9	\N	0	SEA
+6	Antonio Brown	WR	11	\N	0	PIT
+7	Arian Foster	RB	9	\N	0	HOU
+8	CJ Anderson	RB	7	\N	0	DEN
+9	Dez Bryant	WR	6	\N	0	DAL
+10	LeSean McCoy	RB	8	\N	0	BUF
+11	Matt Forte	RB	7	\N	0	CHI
+12	Odell Beckham Jr	WR	11	\N	0	NYG
+13	Julio Jones	WR	10	\N	0	ATL
+14	Demaryius Thomas	WR	7	\N	0	DEN
+15	DeMarco Murray	RB	8	\N	0	PHI
+16	Andrew Luck	QB	10	\N	0	IND
+17	Calvin Johnson	WR	9	\N	0	DET
+18	Rob Gronkowski	TE	4	\N	0	NE
+19	Jeremy Hill	RB	7	\N	0	CIN
+20	Aaron Rodgers	QB	7	\N	0	GB
+21	Jordy Nelson	WR	7	\N	0	GB
+22	A.J. Green	WR	7	\N	0	CIN
+23	Justin Forsett	RB	9	\N	0	BAL
+24	Randall Cobb	WR	7	\N	0	GB
+25	Alshon Jeffery	WR	7	\N	0	CHI
+26	Melvin Gordon	RB	10	\N	0	SD
+27	Mike Evans	WR	6	\N	0	TB
+28	T.Y. Hilton	WR	10	\N	0	IND
+29	Frank Gore	RB	10	\N	0	IND
+30	Jimmy Graham	TE	9	\N	0	SEA
+31	Alfred Morris	RB	8	\N	0	WAS
+32	Emmanuel Sanders	WR	7	\N	0	DEN
+33	Mark Ingram	RB	11	\N	0	NO
+34	Lamar Miller	RB	5	\N	0	MIA
+35	DeAndre Hopkins	WR	9	\N	0	HOU
+36	Kelvin Benjamin	WR	5	\N	0	CAR
+37	Brandin Cooks	WR	11	\N	0	NO
+38	Peyton Manning	QB	7	\N	0	DEN
+39	Latavius Murray	RB	6	\N	0	OAK
+40	Joseph Randle	RB	6	\N	0	DAL
+41	Carlos Hyde	RB	10	\N	0	SF
+42	Jordan Matthews	WR	8	\N	0	PHI
+43	Andre Johnson	WR	10	\N	0	IND
+44	Jonathan Stewart	RB	5	\N	0	CAR
+45	Todd Gurley	RB	6	\N	0	STL
+46	Andre Ellington	RB	9	\N	0	ARI
+47	Martavis Bryant	WR	11	\N	0	PIT
+48	Russell Wilson	QB	9	\N	0	SEA
+49	C.J. Spiller	RB	11	\N	0	NO
+50	Amari Cooper	WR	6	\N	0	OAK
+51	Drew Brees	QB	11	\N	0	NO
+52	Sammy Watkins	WR	8	\N	0	BUF
+53	TJ Yeldon	RB	8	\N	0	JAC
+54	Golden Tate	WR	9	\N	0	DET
+55	Travis Kelce	TE	9	\N	0	KC
+56	Brandon Marshall	WR	5	\N	0	NYJ
+57	Keenan Allen	WR	10	\N	0	SD
+58	LeGarrette Blount	RB	4	\N	0	NE
+59	Julian Edelman	WR	4	\N	0	NE
+60	Joique Bell	RB	9	\N	0	DET
+61	Greg Olsen	TE	5	\N	0	CAR
+62	DeSean Jackson	WR	8	\N	0	WAS
+63	Rashad Jennings	RB	11	\N	0	NYG
+64	Ben Roethlisberger	QB	11	\N	0	PIT
+65	Ameer Abdullah	RB	9	\N	0	DET
+66	Jeremy Maclin	WR	9	\N	0	KC
+67	Giovani Bernard	RB	7	\N	0	CIN
+68	Allen Robinson	WR	8	\N	0	JAC
+69	Tevin Coleman	RB	10	\N	0	ATL
+70	Jarvis Landry	WR	5	\N	0	MIA
+71	Cam Newton	QB	5	\N	0	CAR
+72	Doug Martin	RB	6	\N	0	TB
+73	Vincent Jackson	WR	6	\N	0	TB
+74	Victor Cruz	WR	11	\N	0	NYG
+75	Julius Thomas	TE	8	\N	0	JAC
+76	Matt Ryan	QB	10	\N	0	ATL
+77	Martellus Bennett	TE	7	\N	0	CHI
+78	Nelson Agholor	WR	8	\N	0	PHI
+79	Isaiah Crowell	RB	11	\N	0	CLE
+80	Tony Romo	QB	6	\N	0	DAL
+81	Shane Vereen	RB	11	\N	0	NYG
+82	Darren McFadden	RB	6	\N	0	DAL
+83	Kevin White	WR	7	\N	0	CHI
+84	Tre Mason	RB	6	\N	0	STL
+85	Charles Johnson	WR	5	\N	0	MIN
+86	Tom Brady	QB	4	\N	0	NE
+87	Chris Ivory	RB	5	\N	0	NYJ
+88	Mike Wallace	WR	5	\N	0	MIN
+89	Zach Ertz	TE	8	\N	0	PHI
+90	Matthew Stafford	QB	9	\N	0	DET
+91	Roddy White	WR	10	\N	0	ATL
+92	Michael Floyd	WR	9	\N	0	ARI
+93	Owen Daniels	TE	7	\N	0	DEN
+94	Ryan Mathews	RB	8	\N	0	PHI
+95	Davante Adams	WR	7	\N	0	GB
+96	Devonta Freeman	RB	10	\N	0	ATL
+97	Seattle Defense	DEF	9	\N	0	SEA
+98	Steve Smith	WR	9	\N	0	BAL
+99	Duke Johnson	RB	11	\N	0	CLE
+100	Jordan Cameron	TE	5	\N	0	MIA
+101	Eli Manning	QB	11	\N	0	NYG
+102	Larry Fitzgerald	WR	9	\N	0	ARI
+103	David Johnson	RB	9	\N	0	ARI
+104	Ryan Tannehill	QB	5	\N	0	MIA
+105	David Cobb	RB	4	\N	0	TEN
+106	Brandon LaFell	WR	4	\N	0	NE
+107	John Brown	WR	9	\N	0	ARI
+108	Bishop Sankey	RB	4	\N	0	TEN
+109	Breshad Perriman	WR	9	\N	0	BAL
+110	Buffalo Defense	DEF	8	\N	0	BUF
+111	Pierre Garcon	WR	8	\N	0	WAS
+112	Torrey Smith	WR	10	\N	0	SF
+113	Knile Davis	RB	9	\N	0	KC
+114	Philip Rivers	QB	10	\N	0	SD
+115	Houston Defense	DEF	9	\N	0	HOU
+116	Josh Hill	TE	11	\N	0	NO
+117	Terrance Williams	WR	6	\N	0	DAL
+118	Reggie Bush	RB	10	\N	0	SF
+119	Charles Sims	RB	6	\N	0	TB
+120	NY Jets Defense	DEF	5	\N	0	NYJ
+121	Jason Witten	TE	6	\N	0	DAL
+122	DeAngelo Williams	RB	11	\N	0	PIT
+123	Marques Colston	WR	11	\N	0	NO
+124	DeVante Parker	WR	5	\N	0	MIA
+125	Delanie Walker	TE	4	\N	0	TEN
+126	Teddy Bridgewater	QB	5	\N	0	MIN
+127	Anquan Boldin	WR	10	\N	0	SF
+128	Percy Harvin	WR	8	\N	0	BUF
+129	Montee Ball	RB	7	\N	0	DEN
+130	Eric Decker	WR	5	\N	0	NYJ
+131	St. Louis Defense	DEF	6	\N	0	STL
+132	Carson Palmer	QB	9	\N	0	ARI
+133	Sam Bradford	QB	8	\N	0	PHI
+134	Jay Ajayi	RB	5	\N	0	MIA
+135	Danny Woodhead	RB	10	\N	0	SD
+136	Miami Defense	DEF	5	\N	0	MIA
+137	Dorial Green-Beckham	WR	4	\N	0	TEN
+138	Darren Sproles	RB	8	\N	0	PHI
+139	Brian Quick	WR	6	\N	0	STL
+140	Cody Latimer	WR	7	\N	0	DEN
+141	Dwayne Allen	TE	10	\N	0	IND
+142	Arizona Defense	DEF	9	\N	0	ARI
+143	Colin Kaepernick	QB	10	\N	0	SF
+144	Rueben Randle	WR	11	\N	0	NYG
+145	Alfred Blue	RB	9	\N	0	HOU
+146	Stephen Gostkowski	PK	4	\N	0	NE
+147	Denver Defense	DEF	7	\N	0	DEN
+148	Joe Flacco	QB	9	\N	0	BAL
+149	Marvin Jones	WR	7	\N	0	CIN
+150	Cameron Artis-Payne	RB	5	\N	0	CAR
+151	Vernon Davis	TE	10	\N	0	SF
+152	Kenny Stills	WR	5	\N	0	MIA
+153	Antonio Gates	TE	10	\N	0	SD
+154	Adam Vinatieri	PK	10	\N	0	IND
+155	Kendall Wright	WR	4	\N	0	TEN
+156	Ladarius Green	TE	10	\N	0	SD
+157	Jameis Winston	QB	6	\N	0	TB
+158	Kyle Rudolph	TE	5	\N	0	MIN
+159	Jay Cutler	QB	7	\N	0	CHI
+160	Markus Wheaton	WR	11	\N	0	PIT
+161	Tyler Eifert	TE	7	\N	0	CIN
+162	Fred Jackson	RB	8	\N	0	BUF
+163	Coby Fleener	TE	10	\N	0	IND
+164	Cordarrelle Patterson	WR	5	\N	0	MIN
+165	Denard Robinson	RB	8	\N	0	JAC
+166	Carolina Defense	DEF	5	\N	0	CAR
+167	Larry Donnell	TE	11	\N	0	NYG
+168	Dan Bailey	PK	6	\N	0	DAL
+169	Devin Funchess	WR	5	\N	0	CAR
+170	Philadelphia Defense	DEF	8	\N	0	PHI
+171	Donte Moncrief	WR	10	\N	0	IND
+172	James Starks	RB	7	\N	0	GB
+173	Steve Johnson	WR	10	\N	0	SD
+174	Stevan Ridley	RB	5	\N	0	NYJ
+175	Dan Herron	RB	10	\N	0	IND
+176	Dwayne Bowe	WR	11	\N	0	CLE
+177	Andre Williams	RB	11	\N	0	NYG
+178	Austin Seferian-Jenkins	TE	6	\N	0	TB
+179	Matt Jones	RB	8	\N	0	WAS
+180	Lance Dunbar	RB	6	\N	0	DAL
+181	Phillip Dorsett	WR	10	\N	0	IND
+182	Steven Hauschka	PK	9	\N	0	SEA
+183	Jerick McKinnon	RB	5	\N	0	MIN
+184	Marcus Mariota	QB	4	\N	0	TEN
+185	Jonas Gray	RB	4	\N	0	NE
+186	Roy Helu	RB	6	\N	0	OAK
+187	Mason Crosby	PK	7	\N	0	GB
+188	Charles Clay	TE	8	\N	0	BUF
+189	Terrance West	RB	11	\N	0	CLE
+190	Dallas Defense	DEF	6	\N	0	DAL
+191	Michael Crabtree	WR	6	\N	0	OAK
+192	Derek Carr	QB	6	\N	0	OAK
+193	Justin Tucker	PK	9	\N	0	BAL
+194	Ronnie Hillman	RB	7	\N	0	DEN
+195	Nick Foles	QB	6	\N	0	STL
+196	Kansas City Defense	DEF	9	\N	0	KC
+197	James White	RB	4	\N	0	NE
+198	Doug Baldwin	WR	9	\N	0	SEA
+199	Robert Griffin III	QB	8	\N	0	WAS
+200	Andy Dalton	QB	7	\N	0	CIN
+201	Eric Ebron	TE	9	\N	0	DET
+202	Maxx Williams	TE	9	\N	0	BAL
+203	Cincinnati Defense	DEF	7	\N	0	CIN
+204	Connor Barth	PK	7	\N	0	DEN
+205	New England Defense	DEF	4	\N	0	NE
+206	Cody Parkey	PK	8	\N	0	PHI
+207	Green Bay Defense	DEF	7	\N	0	GB
+208	Indianapolis Defense	DEF	10	\N	0	IND
+209	Baltimore Defense	DEF	9	\N	0	BAL
+210	Javorius Allen	RB	9	\N	0	BAL
+211	Detroit Defense	DEF	9	\N	0	DET
+212	Nick Toon	WR	11	\N	0	NO
+213	Tyler Lockett	WR	9	\N	0	SEA
+214	Eddie Royal	WR	7	\N	0	CHI
+215	Minnesota Defense	DEF	5	\N	0	MIN
+216	Matt Prater	PK	9	\N	0	DET
+217	Matt Bryant	PK	10	\N	0	ATL
+218	Jaelen Strong	WR	9	\N	0	HOU
+219	Cleveland Defense	DEF	11	\N	0	CLE
+220	Dan Carpenter	PK	8	\N	0	BUF
+221	Blair Walsh	PK	5	\N	0	MIN
+222	Shaun Suisham	PK	11	\N	0	PIT
+223	Greg Zuerlein	PK	6	\N	0	STL
+224	Sebastian Janikowski	PK	6	\N	0	OAK
+225	Chandler Catanzaro	PK	9	\N	0	ARI
+226	Nick Novak	PK	10	\N	0	SD
+\.
+
+
+--
+-- Name: api_player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('api_player_id_seq', 226, true);
+
+
+--
+-- Data for Name: api_rotoworld_url; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY api_rotoworld_url (id, name, roto_url) FROM stdin;
+\.
+
+
+--
+-- Name: api_rotoworld_url_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('api_rotoworld_url_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add permission	1	add_permission
+2	Can change permission	1	change_permission
+3	Can delete permission	1	delete_permission
+4	Can add group	2	add_group
+5	Can change group	2	change_group
+6	Can delete group	2	delete_group
+7	Can add user	3	add_user
+8	Can change user	3	change_user
+9	Can delete user	3	delete_user
+10	Can add content type	4	add_contenttype
+11	Can change content type	4	change_contenttype
+12	Can delete content type	4	delete_contenttype
+13	Can add session	5	add_session
+14	Can change session	5	change_session
+15	Can delete session	5	delete_session
+16	Can add migration history	6	add_migrationhistory
+17	Can change migration history	6	change_migrationhistory
+18	Can delete migration history	6	delete_migrationhistory
+19	Can add log entry	7	add_logentry
+20	Can change log entry	7	change_logentry
+21	Can delete log entry	7	delete_logentry
+22	Can add player	8	add_player
+23	Can change player	8	change_player
+24	Can delete player	8	delete_player
+25	Can add rotoworld_ url	9	add_rotoworld_url
+26	Can change rotoworld_ url	9	change_rotoworld_url
+27	Can delete rotoworld_ url	9	delete_rotoworld_url
+28	Can add fantasy pro rank	10	add_fantasyprorank
+29	Can change fantasy pro rank	10	change_fantasyprorank
+30	Can delete fantasy pro rank	10	delete_fantasyprorank
+31	Can add player	11	add_player
+32	Can change player	11	change_player
+33	Can delete player	11	delete_player
+34	Can add rotoworld_ url	12	add_rotoworld_url
+35	Can change rotoworld_ url	12	change_rotoworld_url
+36	Can delete rotoworld_ url	12	delete_rotoworld_url
+37	Can add fantasy pro rank	13	add_fantasyprorank
+38	Can change fantasy pro rank	13	change_fantasyprorank
+39	Can delete fantasy pro rank	13	delete_fantasyprorank
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 39, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+1	pbkdf2_sha256$12000$fxZtdQlaMrHa$v6s+1tLn4GtHByiYrk6OBDjv5I4xEH6oR6mvygBAwus=	2015-07-15 19:38:04.900376-04	t	tom			thanley11@gmail.com	t	t	2015-07-15 19:38:04.900376-04
+2	pbkdf2_sha256$20000$XGhyHRUOULoU$WFxo9bPkLWTbOO7gXTK/+up5mtU23AiwVNqyjoWdMGQ=	2015-11-04 20:00:51.310776-05	t	thanley			thanley11@gmail.com	t	t	2015-10-13 20:21:08.106279-04
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 2, true);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, object_repr, action_flag, change_message) FROM stdin;
+\.
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('django_admin_log_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY django_content_type (id, app_label, model) FROM stdin;
+1	auth	permission
+2	auth	group
+3	auth	user
+4	contenttypes	contenttype
+5	sessions	session
+6	south	migrationhistory
+7	admin	logentry
+8	tiersheet	player
+9	tiersheet	rotoworld_url
+10	tiersheet	fantasyprorank
+11	api	player
+12	api	rotoworld_url
+13	api	fantasyprorank
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 13, true);
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2015-10-13 20:17:20.613686-04
+2	auth	0001_initial	2015-10-13 20:17:20.626898-04
+3	admin	0001_initial	2015-10-13 20:17:20.637303-04
+4	contenttypes	0002_remove_content_type_name	2015-10-13 20:17:20.673528-04
+5	auth	0002_alter_permission_name_max_length	2015-10-13 20:17:20.689487-04
+6	auth	0003_alter_user_email_max_length	2015-10-13 20:17:20.703766-04
+7	auth	0004_alter_user_username_opts	2015-10-13 20:17:20.714938-04
+8	auth	0005_alter_user_last_login_null	2015-10-13 20:17:20.728306-04
+9	auth	0006_require_contenttypes_0002	2015-10-13 20:17:20.731026-04
+10	sessions	0001_initial	2015-10-13 20:17:20.7367-04
+11	api	0001_initial	2015-11-04 20:20:19.447182-05
+12	admin	0002_logentry_remove_auto_add	2016-06-01 20:34:26.024102-04
+13	auth	0007_alter_validators_add_error_messages	2016-06-01 20:34:26.07643-04
+14	tiersheet	0001_initial	2016-06-01 20:46:13.636778-04
+\.
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('django_migrations_id_seq', 14, true);
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY django_session (session_key, session_data, expire_date) FROM stdin;
+9j1oakor3wunal0pe4oxxd9fedaybink	ODNkNjMwMGQ4NjJlMzRkMzYxYWEyNTZlMDM3ZWEzY2Q5NDgyZTljYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9oYXNoIjoiYmM5MWVhMTkyODRlMmU3NDBhZDFmZWRhODNjNmVmNWU3OTIzZDk2YSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2015-10-27 20:23:03.422072-04
+2ixiwvzagjtagc4rebn4obgrpk3z8fu3	ODNkNjMwMGQ4NjJlMzRkMzYxYWEyNTZlMDM3ZWEzY2Q5NDgyZTljYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9oYXNoIjoiYmM5MWVhMTkyODRlMmU3NDBhZDFmZWRhODNjNmVmNWU3OTIzZDk2YSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2015-11-18 20:00:51.316266-05
+\.
+
+
+--
+-- Data for Name: south_migrationhistory; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY south_migrationhistory (id, app_name, migration, applied) FROM stdin;
+1	tiersheet	0001_initial	2015-07-15 19:38:13.519319-04
+2	tiersheet	0002_auto__add_rotoworld_url	2015-07-15 19:38:13.533678-04
+3	tiersheet	0003_auto__add_fantasyprorank	2015-07-15 19:38:13.549985-04
+4	tiersheet	0004_auto__del_field_player_order__add_field_player_rank	2015-07-15 19:38:13.567268-04
+\.
+
+
+--
+-- Name: south_migrationhistory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('south_migrationhistory_id_seq', 4, true);
+
+
+--
+-- Data for Name: tiersheet_fantasyprorank; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY tiersheet_fantasyprorank (id, name, rank) FROM stdin;
+1	Andrew Luck	1
+2	Aaron Rodgers	2
+3	Russell Wilson	3
+4	Peyton Manning	4
+5	Drew Brees	5
+6	Ben Roethlisberger	6
+7	Cam Newton	7
+8	Matt Ryan	8
+9	Tony Romo	9
+10	Ryan Tannehill	10
+11	Eli Manning	11
+12	Matthew Stafford	12
+13	Tom Brady	13
+14	Philip Rivers	14
+15	Teddy Bridgewater	15
+16	Colin Kaepernick	16
+17	Sam Bradford	17
+18	Jay Cutler	18
+19	Joe Flacco	19
+20	Carson Palmer	20
+21	Andy Dalton	21
+22	Robert Griffin III	22
+23	Jameis Winston	23
+24	Alex Smith	24
+25	Marcus Mariota	25
+26	Derek Carr	26
+27	Blake Bortles	27
+28	Nick Foles	28
+29	Geno Smith	29
+30	Ryan Fitzpatrick	30
+31	Mark Sanchez	31
+32	Jimmy Garoppolo	32
+33	Brian Hoyer	33
+34	E.J. Manuel	34
+35	Josh McCown	35
+36	Tyrod Taylor	36
+37	Matt Cassel	37
+38	Ryan Mallett	38
+39	Johnny Manziel	39
+40	Zach Mettenberger	40
+41	Shaun Hill	41
+42	Colt McCoy	42
+43	Derek Anderson	43
+44	Kirk Cousins	44
+45	Mike Glennon	45
+46	Jimmy Clausen	46
+47	Tim Tebow	47
+48	Chad Henne	48
+49	Brock Osweiler	49
+50	Drew Stanton	50
+51	Austin Davis	51
+52	Matt Hasselbeck	52
+53	Matt Schaub	53
+54	Brett Hundley	54
+55	Matt Moore	55
+56	Brandon Weeden	56
+57	Scott Tolzien	57
+58	Christian Ponder	58
+59	Matt McGloin	59
+60	Bryce Petty	60
+61	Chase Daniel	61
+62	AJ McCarron	62
+63	Garrett Grayson	63
+64	Taylor Yates	64
+65	Tom Savage	65
+66	Sean Mannion	66
+67	Bruce Gradkowski	67
+68	Kellen Clemens	68
+69	Luke McCown	69
+70	Logan Thomas	70
+71	Blaine Gabbert	71
+72	Dan Orlovsky	72
+73	Ryan Nassib	73
+74	B.J. Daniels	74
+75	Charlie Whitehurst	75
+76	Tarvaris Jackson	76
+77	Adrian Peterson	1
+78	Jamaal Charles	2
+79	Eddie Lacy	3
+80	Le'Veon Bell	4
+81	Marshawn Lynch	5
+82	Matt Forte	6
+83	Arian Foster	7
+84	C.J. Anderson	8
+85	DeMarco Murray	9
+86	LeSean McCoy	10
+87	Jeremy Hill	11
+88	Justin Forsett	12
+89	Alfred Morris	13
+90	Frank Gore	14
+91	Mark Ingram	15
+92	Melvin Gordon	16
+93	Lamar Miller	17
+94	Carlos Hyde	18
+95	Jonathan Stewart	19
+96	Latavius Murray	20
+97	Andre Ellington	21
+98	T.J. Yeldon	22
+99	C.J. Spiller	23
+100	Todd Gurley	24
+101	LeGarrette Blount	25
+102	Joique Bell	26
+103	Joseph Randle	27
+104	Giovani Bernard	28
+105	Rashad Jennings	29
+106	Tevin Coleman	30
+107	Isaiah Crowell	31
+108	Ameer Abdullah	32
+110	Doug Martin	34
+111	Devonta Freeman	35
+112	Shane Vereen	36
+113	Ryan Mathews	37
+114	Bishop Sankey	38
+115	Charles Sims	39
+116	Darren McFadden	40
+117	Tre Mason	41
+118	David Cobb	42
+119	Duke Johnson	43
+120	Reggie Bush	44
+121	David Johnson	45
+122	Danny Woodhead	46
+123	Terrance West	47
+124	Roy Helu	48
+125	Knile Davis	49
+126	Jay Ajayi	50
+127	Andre Williams	51
+128	Fred Jackson	52
+129	Darren Sproles	53
+130	DeAngelo Williams	54
+131	Jerick McKinnon	55
+132	Denard Robinson	56
+133	Stevan Ridley	57
+134	Montee Ball	58
+135	Lorenzo Taliaferro	59
+136	Matt Jones	60
+137	Cameron Artis-Payne	61
+138	Alfred Blue	62
+139	Theo Riddick	63
+140	Toby Gerhart	64
+141	Zac Stacy	65
+143	Branden Oliver	67
+144	Ronnie Hillman	68
+145	Javorius Allen	69
+146	Ryan Williams	70
+147	Lance Dunbar	71
+148	Jonas Gray	72
+149	Trent Richardson	73
+150	James Starks	74
+151	Khiry Robinson	75
+152	Brandon Bolden	76
+153	Ben Tate	77
+154	Chris Polk	78
+142	Dan Herron	66
+155	James White	79
+156	Chris Johnson	80
+157	Bilal Powell	81
+158	Steven Jackson	82
+159	Tyler Gaffney	83
+160	Pierre Thomas	84
+161	Josh Robinson	85
+162	Bernard Pierce	86
+163	Travaris Cadet	87
+164	Robert Turbin	88
+165	Antone Smith	89
+166	Christine Michael	90
+167	Benny Cunningham	91
+168	Ahmad Bradshaw	92
+169	Jeremy Langford	93
+170	Anthony Dixon	94
+171	Knowshon Moreno	95
+172	Ka'Deem Carey	96
+173	Dexter McCluster	97
+174	Marcel Reece	98
+175	Silas Redd	99
+176	Mike Tolbert	100
+177	Shonn Greene	101
+178	Mike James	102
+179	Bryce Brown	103
+180	Jerome Smith	104
+181	Mike Davis	105
+182	De'Anthony Thomas	106
+183	Donald Brown	107
+184	Bobby Rainey	108
+185	Thomas Rawls	109
+186	Kendall Hunter	110
+187	Matt Asiata	111
+188	Damien Williams	112
+189	Dri Archer	113
+190	Jonathan Grimes	114
+191	Jacquizz Rodgers	115
+192	Josh Harris	116
+193	Chris Thompson	117
+194	Jordan Todman	118
+195	Darrel Young	119
+196	Kerwynn Williams	120
+197	Vick Ballard	121
+198	Fozzy Whittaker	122
+199	John Crockett	123
+200	Kyle Juszczyk	124
+201	Bruce Miller	125
+202	Erik Lorig	126
+203	Stepfan Taylor	127
+204	Storm Johnson	128
+205	Marion Grice	129
+206	John Kuhn	130
+207	Robert Hughes	131
+208	Anthony Sherman	132
+209	Fitzgerald Toussaint	133
+210	Juwan Thompson	134
+211	Karlos Williams	135
+212	Rex Burkhead	136
+213	Cyrus Gray	137
+214	Daryl Richardson	138
+215	Lache Seastrunk	139
+216	George Winn	140
+217	Trey Watts	141
+218	Orleans Darkwa	142
+219	Antonio Andrews	143
+220	Mike Gillislee	144
+221	Joe Banyard	145
+222	Will Johnson	146
+223	James Develin	147
+224	Cedric Peerman	148
+225	LaMichael James	149
+226	Jeremy Stewart	150
+227	Patrick DiMarco	151
+228	Henry Hynoski	152
+229	Matthew Tucker	153
+230	Jerome Felton	154
+231	Tommy Bohanon	155
+232	Jorvorskie Lane	156
+233	Derrick Coleman	157
+234	Edwin Baker	158
+235	Shaun Draughn	159
+236	Darrin Reaves	160
+237	Jay Prosch	161
+238	Rajion Neal	162
+239	Antonio Brown	1
+240	Dez Bryant	2
+241	Demaryius Thomas	3
+242	Odell Beckham Jr.	4
+243	Julio Jones	5
+244	Calvin Johnson	6
+245	Jordy Nelson	7
+246	A.J. Green	8
+247	Alshon Jeffery	9
+248	Randall Cobb	10
+249	Mike Evans	11
+251	DeAndre Hopkins	13
+252	Emmanuel Sanders	14
+253	Kelvin Benjamin	15
+254	Brandin Cooks	16
+255	Jordan Matthews	17
+256	Andre Johnson	18
+257	Keenan Allen	19
+258	DeSean Jackson	20
+259	Brandon Marshall	21
+260	Julian Edelman	22
+261	Golden Tate	23
+262	Sammy Watkins	24
+263	Amari Cooper	25
+264	Vincent Jackson	26
+265	Martavis Bryant	27
+266	Jeremy Maclin	28
+267	Roddy White	29
+268	Allen Robinson	30
+269	Michael Floyd	31
+270	Eric Decker	32
+271	Larry Fitzgerald	33
+272	Jarvis Landry	34
+273	Brandon LaFell	35
+274	Mike Wallace	36
+275	Steve Smith	37
+276	Torrey Smith	38
+277	Nelson Agholor	39
+278	Charles Johnson	40
+279	Kevin White	41
+280	Anquan Boldin	42
+281	Marques Colston	43
+282	Breshad Perriman	44
+283	Pierre Garcon	45
+284	John Brown	46
+285	Victor Cruz	47
+286	Kendall Wright	48
+287	Kenny Stills	49
+288	Percy Harvin	50
+289	Davante Adams	51
+291	Rueben Randle	53
+292	Terrance Williams	54
+293	Brian Quick	55
+294	Dwayne Bowe	56
+295	Doug Baldwin	57
+296	Marvin Jones	58
+297	Michael Crabtree	59
+298	Cody Latimer	60
+299	Donte Moncrief	61
+300	Malcom Floyd	62
+301	Steve Johnson	63
+302	Dorial Green-Beckham	64
+303	Kenny Britt	65
+304	Devin Funchess	66
+305	Stedman Bailey	67
+306	Marqise Lee	68
+307	Phillip Dorsett	69
+308	Cecil Shorts	70
+250	T.Y. Hilton	12
+309	Justin Hunter	71
+310	Jaelen Strong	72
+311	Cordarrelle Patterson	73
+312	Greg Jennings	74
+313	Andrew Hawkins	75
+314	Reggie Wayne	76
+315	Nick Toon	77
+316	Josh Huff	78
+317	Wes Welker	79
+318	Eddie Royal	80
+319	Cole Beasley	81
+320	Jermaine Kearse	82
+321	Allen Hurns	83
+322	Marquess Wilson	84
+323	Harry Douglas	85
+324	Mohamed Sanu	86
+325	Riley Cooper	87
+326	Nate Washington	88
+327	Hakeem Nicks	89
+328	Taylor Gabriel	90
+329	Markus Wheaton	91
+330	Chris Conley	92
+331	Brian Hartline	93
+332	Robert Woods	94
+333	Devin Smith	95
+334	Danny Amendola	96
+335	Jarrett Boykin	97
+336	Tyler Lockett	98
+337	Chris Matthews	99
+338	Jarius Wright	100
+339	Rod Streater	101
+340	Tavon Austin	102
+341	Marlon Brown	103
+342	Jeremy Kerley	104
+343	Devin Hester	105
+344	Albert Wilson	106
+345	Ty Montgomery	107
+346	Aaron Dobson	108
+347	Kamar Aiken	109
+348	Sammie Coates	110
+349	Justin Blackmon	111
+350	James Jones	112
+351	Justin Hardy	113
+352	Andre Holmes	114
+353	Ricardo Lockette	115
+354	Paul Richardson	116
+355	Louis Murphy	117
+356	Duron Carter	118
+357	Leonard Hankerson	119
+358	Andre Roberts	120
+359	Dontrelle Inman	121
+360	Stephen Hill	122
+361	Jeff Janis	123
+362	Philly Brown	124
+363	Corey Fuller	125
+364	Jerricho Cotchery	126
+365	Jaron Brown	127
+367	Rob Gronkowski	1
+368	Jimmy Graham	2
+369	Greg Olsen	3
+370	Travis Kelce	4
+371	Martellus Bennett	5
+372	Zach Ertz	6
+373	Jordan Cameron	7
+374	Julius Thomas	8
+375	Jason Witten	9
+376	Delanie Walker	10
+377	Josh Hill	11
+378	Antonio Gates	12
+379	Dwayne Allen	13
+380	Owen Daniels	14
+381	Kyle Rudolph	15
+382	Tyler Eifert	16
+383	Larry Donnell	17
+384	Austin Seferian-Jenkins	18
+385	Heath Miller	19
+386	Coby Fleener	20
+387	Ladarius Green	21
+388	Vernon Davis	22
+389	Jordan Reed	23
+390	Charles Clay	24
+391	Eric Ebron	25
+392	Mychal Rivera	26
+393	Maxx Williams	27
+394	Rob Housler	28
+395	Jace Amaro	29
+396	Jared Cook	30
+397	Niles Paul	31
+398	Jacob Tamme	32
+399	Richard Rodgers	33
+400	Dennis Pitta	34
+401	Troy Niklas	35
+402	Scott Chandler	36
+403	Virgil Green	37
+404	Gavin Escobar	38
+405	Garrett Graham	39
+406	Brent Celek	40
+407	Clive Walford	41
+408	Lance Kendricks	42
+409	Dion Sims	43
+410	Tim Wright	44
+411	Crockett Gillmore	45
+412	Jermaine Gresham	46
+413	Benjamin Watson	47
+414	Tony Moeaki	48
+415	Andrew Quarless	49
+416	C.J. Fiedorowicz	50
+417	Fred Davis	51
+418	Darren Fells	52
+419	Luke Willson	53
+420	Chase Ford	54
+421	Marcedes Lewis	55
+422	Levine Toilolo	56
+423	Joseph Fauria	57
+424	Anthony Fasano	58
+425	Jeff Cumberland	59
+426	Daniel Fells	60
+427	Ed Dickson	61
+428	MyCole Pruitt	62
+429	Jack Doyle	63
+430	James Casey	64
+431	Brandon Myers	65
+432	Jesse James	66
+433	MarQueis Gray	67
+434	Gary Barnidge	68
+435	Cooper Helfet	69
+436	Vance McDonald	70
+437	Demetrius Harris	71
+438	Jim Dray	72
+439	Logan Paulsen	73
+440	Rhett Ellison	74
+441	Dante Rosario	75
+442	Brandon Pettigrew	76
+443	Chris Gragg	77
+444	Ryan Griffin	78
+445	Tyler Kroft	79
+446	Clay Harbor	80
+447	Phillip Supernaw	81
+448	Luke Stocker	82
+449	Matt Spaeth	83
+450	Lee Smith	84
+451	James O'Shaughnessy	85
+452	Gerald Christian	86
+453	Nick O'Leary	87
+454	Blake Bell	88
+455	Orson Charles	89
+456	Adrien Robinson	90
+457	Michael Hoomanawanui	91
+458	Derek Carrier	92
+459	John Phillips	93
+460	C.J. Uzomah	94
+461	Brandon Williams	95
+462	Trey Burton	96
+463	Kennard Backman	97
+464	Bear Pascoe	98
+465	Stephen Gostkowski	1
+466	Steven Hauschka	2
+467	Justin Tucker	3
+468	Adam Vinatieri	4
+469	Mason Crosby	5
+470	Dan Bailey	6
+471	Cody Parkey	7
+472	Connor Barth	8
+473	Matt Bryant	9
+474	Nick Novak	10
+475	Blair Walsh	11
+476	Matt Prater	12
+477	Shaun Suisham	13
+478	Dan Carpenter	14
+479	Phil Dawson	15
+480	Caleb Sturgis	16
+481	Chandler Catanzaro	17
+482	Greg Zuerlein	18
+483	Robbie Gould	19
+484	Randy Bullock	20
+485	Dustin Hopkins	21
+486	Shayne Graham	22
+487	Graham Gano	23
+488	Josh Brown	24
+489	Mike Nugent	25
+490	Sebastian Janikowski	26
+491	Cairo Santos	27
+492	Kai Forbath	28
+493	Nick Folk	29
+494	Patrick Murray	30
+495	Josh Scobee	31
+496	Travis Coons	32
+497	Ryan Succop	33
+498	Garrett Hartley	34
+499	Seattle Seahawks	1
+500	Buffalo Bills	2
+501	St. Louis Rams	3
+502	Houston Texans	4
+503	Arizona Cardinals	5
+504	Denver Broncos	6
+505	New England Patriots	7
+506	Carolina Panthers	8
+507	Green Bay Packers	9
+508	Baltimore Ravens	10
+509	Miami Dolphins	11
+510	New York Jets	12
+511	Cincinnati Bengals	13
+512	Kansas City Chiefs	14
+513	San Francisco 49ers	15
+514	Detroit Lions	16
+515	Philadelphia Eagles	17
+516	Cleveland Browns	18
+517	Pittsburgh Steelers	19
+518	Minnesota Vikings	20
+519	Dallas Cowboys	21
+520	Indianapolis Colts	22
+521	Jacksonville Jaguars	23
+522	New York Giants	24
+523	Tampa Bay Buccaneers	25
+524	San Diego Chargers	26
+525	New Orleans Saints	27
+526	Chicago Bears	28
+527	Washington Redskins	29
+528	Atlanta Falcons	30
+529	Tennessee Titans	31
+530	Oakland Raiders	32
+109	Chris Ivory	33
+290	DeVante Parker	52
+\.
+
+
+--
+-- Data for Name: tiersheet_fantasyprorank_2015; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tiersheet_fantasyprorank_2015 (id, name, rank) FROM stdin;
+1	Andrew Luck	1
+2	Aaron Rodgers	2
+3	Russell Wilson	3
+4	Peyton Manning	4
+5	Drew Brees	5
+6	Ben Roethlisberger	6
+7	Cam Newton	7
+8	Matt Ryan	8
+9	Tony Romo	9
+10	Ryan Tannehill	10
+11	Eli Manning	11
+12	Matthew Stafford	12
+13	Tom Brady	13
+14	Philip Rivers	14
+15	Teddy Bridgewater	15
+16	Colin Kaepernick	16
+17	Sam Bradford	17
+18	Jay Cutler	18
+19	Joe Flacco	19
+20	Carson Palmer	20
+21	Andy Dalton	21
+22	Robert Griffin III	22
+23	Jameis Winston	23
+24	Alex Smith	24
+25	Marcus Mariota	25
+26	Derek Carr	26
+27	Blake Bortles	27
+28	Nick Foles	28
+29	Geno Smith	29
+30	Ryan Fitzpatrick	30
+31	Mark Sanchez	31
+32	Jimmy Garoppolo	32
+33	Brian Hoyer	33
+34	E.J. Manuel	34
+35	Josh McCown	35
+36	Tyrod Taylor	36
+37	Matt Cassel	37
+38	Ryan Mallett	38
+39	Johnny Manziel	39
+40	Zach Mettenberger	40
+41	Shaun Hill	41
+42	Colt McCoy	42
+43	Derek Anderson	43
+44	Kirk Cousins	44
+45	Mike Glennon	45
+46	Jimmy Clausen	46
+47	Tim Tebow	47
+48	Chad Henne	48
+49	Brock Osweiler	49
+50	Drew Stanton	50
+51	Austin Davis	51
+52	Matt Hasselbeck	52
+53	Matt Schaub	53
+54	Brett Hundley	54
+55	Matt Moore	55
+56	Brandon Weeden	56
+57	Scott Tolzien	57
+58	Christian Ponder	58
+59	Matt McGloin	59
+60	Bryce Petty	60
+61	Chase Daniel	61
+62	AJ McCarron	62
+63	Garrett Grayson	63
+64	Taylor Yates	64
+65	Tom Savage	65
+66	Sean Mannion	66
+67	Bruce Gradkowski	67
+68	Kellen Clemens	68
+69	Luke McCown	69
+70	Logan Thomas	70
+71	Blaine Gabbert	71
+72	Dan Orlovsky	72
+73	Ryan Nassib	73
+74	B.J. Daniels	74
+75	Charlie Whitehurst	75
+76	Tarvaris Jackson	76
+77	Adrian Peterson	1
+78	Jamaal Charles	2
+79	Eddie Lacy	3
+80	Le'Veon Bell	4
+81	Marshawn Lynch	5
+82	Matt Forte	6
+83	Arian Foster	7
+84	C.J. Anderson	8
+85	DeMarco Murray	9
+86	LeSean McCoy	10
+87	Jeremy Hill	11
+88	Justin Forsett	12
+89	Alfred Morris	13
+90	Frank Gore	14
+91	Mark Ingram	15
+92	Melvin Gordon	16
+93	Lamar Miller	17
+94	Carlos Hyde	18
+95	Jonathan Stewart	19
+96	Latavius Murray	20
+97	Andre Ellington	21
+98	T.J. Yeldon	22
+99	C.J. Spiller	23
+100	Todd Gurley	24
+101	LeGarrette Blount	25
+102	Joique Bell	26
+103	Joseph Randle	27
+104	Giovani Bernard	28
+105	Rashad Jennings	29
+106	Tevin Coleman	30
+107	Isaiah Crowell	31
+108	Ameer Abdullah	32
+110	Doug Martin	34
+111	Devonta Freeman	35
+112	Shane Vereen	36
+113	Ryan Mathews	37
+114	Bishop Sankey	38
+115	Charles Sims	39
+116	Darren McFadden	40
+117	Tre Mason	41
+118	David Cobb	42
+119	Duke Johnson	43
+120	Reggie Bush	44
+121	David Johnson	45
+122	Danny Woodhead	46
+123	Terrance West	47
+124	Roy Helu	48
+125	Knile Davis	49
+126	Jay Ajayi	50
+127	Andre Williams	51
+128	Fred Jackson	52
+129	Darren Sproles	53
+130	DeAngelo Williams	54
+131	Jerick McKinnon	55
+132	Denard Robinson	56
+133	Stevan Ridley	57
+134	Montee Ball	58
+135	Lorenzo Taliaferro	59
+136	Matt Jones	60
+137	Cameron Artis-Payne	61
+138	Alfred Blue	62
+139	Theo Riddick	63
+140	Toby Gerhart	64
+141	Zac Stacy	65
+143	Branden Oliver	67
+144	Ronnie Hillman	68
+145	Javorius Allen	69
+146	Ryan Williams	70
+147	Lance Dunbar	71
+148	Jonas Gray	72
+149	Trent Richardson	73
+150	James Starks	74
+151	Khiry Robinson	75
+152	Brandon Bolden	76
+153	Ben Tate	77
+154	Chris Polk	78
+142	Dan Herron	66
+155	James White	79
+156	Chris Johnson	80
+157	Bilal Powell	81
+158	Steven Jackson	82
+159	Tyler Gaffney	83
+160	Pierre Thomas	84
+161	Josh Robinson	85
+162	Bernard Pierce	86
+163	Travaris Cadet	87
+164	Robert Turbin	88
+165	Antone Smith	89
+166	Christine Michael	90
+167	Benny Cunningham	91
+168	Ahmad Bradshaw	92
+169	Jeremy Langford	93
+170	Anthony Dixon	94
+171	Knowshon Moreno	95
+172	Ka'Deem Carey	96
+173	Dexter McCluster	97
+174	Marcel Reece	98
+175	Silas Redd	99
+176	Mike Tolbert	100
+177	Shonn Greene	101
+178	Mike James	102
+179	Bryce Brown	103
+180	Jerome Smith	104
+181	Mike Davis	105
+182	De'Anthony Thomas	106
+183	Donald Brown	107
+184	Bobby Rainey	108
+185	Thomas Rawls	109
+186	Kendall Hunter	110
+187	Matt Asiata	111
+188	Damien Williams	112
+189	Dri Archer	113
+190	Jonathan Grimes	114
+191	Jacquizz Rodgers	115
+192	Josh Harris	116
+193	Chris Thompson	117
+194	Jordan Todman	118
+195	Darrel Young	119
+196	Kerwynn Williams	120
+197	Vick Ballard	121
+198	Fozzy Whittaker	122
+199	John Crockett	123
+200	Kyle Juszczyk	124
+201	Bruce Miller	125
+202	Erik Lorig	126
+203	Stepfan Taylor	127
+204	Storm Johnson	128
+205	Marion Grice	129
+206	John Kuhn	130
+207	Robert Hughes	131
+208	Anthony Sherman	132
+209	Fitzgerald Toussaint	133
+210	Juwan Thompson	134
+211	Karlos Williams	135
+212	Rex Burkhead	136
+213	Cyrus Gray	137
+214	Daryl Richardson	138
+215	Lache Seastrunk	139
+216	George Winn	140
+217	Trey Watts	141
+218	Orleans Darkwa	142
+219	Antonio Andrews	143
+220	Mike Gillislee	144
+221	Joe Banyard	145
+222	Will Johnson	146
+223	James Develin	147
+224	Cedric Peerman	148
+225	LaMichael James	149
+226	Jeremy Stewart	150
+227	Patrick DiMarco	151
+228	Henry Hynoski	152
+229	Matthew Tucker	153
+230	Jerome Felton	154
+231	Tommy Bohanon	155
+232	Jorvorskie Lane	156
+233	Derrick Coleman	157
+234	Edwin Baker	158
+235	Shaun Draughn	159
+236	Darrin Reaves	160
+237	Jay Prosch	161
+238	Rajion Neal	162
+239	Antonio Brown	1
+240	Dez Bryant	2
+241	Demaryius Thomas	3
+242	Odell Beckham Jr.	4
+243	Julio Jones	5
+244	Calvin Johnson	6
+245	Jordy Nelson	7
+246	A.J. Green	8
+247	Alshon Jeffery	9
+248	Randall Cobb	10
+249	Mike Evans	11
+251	DeAndre Hopkins	13
+252	Emmanuel Sanders	14
+253	Kelvin Benjamin	15
+254	Brandin Cooks	16
+255	Jordan Matthews	17
+256	Andre Johnson	18
+257	Keenan Allen	19
+258	DeSean Jackson	20
+259	Brandon Marshall	21
+260	Julian Edelman	22
+261	Golden Tate	23
+262	Sammy Watkins	24
+263	Amari Cooper	25
+264	Vincent Jackson	26
+265	Martavis Bryant	27
+266	Jeremy Maclin	28
+267	Roddy White	29
+268	Allen Robinson	30
+269	Michael Floyd	31
+270	Eric Decker	32
+271	Larry Fitzgerald	33
+272	Jarvis Landry	34
+273	Brandon LaFell	35
+274	Mike Wallace	36
+275	Steve Smith	37
+276	Torrey Smith	38
+277	Nelson Agholor	39
+278	Charles Johnson	40
+279	Kevin White	41
+280	Anquan Boldin	42
+281	Marques Colston	43
+282	Breshad Perriman	44
+283	Pierre Garcon	45
+284	John Brown	46
+285	Victor Cruz	47
+286	Kendall Wright	48
+287	Kenny Stills	49
+288	Percy Harvin	50
+289	Davante Adams	51
+291	Rueben Randle	53
+292	Terrance Williams	54
+293	Brian Quick	55
+294	Dwayne Bowe	56
+295	Doug Baldwin	57
+296	Marvin Jones	58
+297	Michael Crabtree	59
+298	Cody Latimer	60
+299	Donte Moncrief	61
+300	Malcom Floyd	62
+301	Steve Johnson	63
+302	Dorial Green-Beckham	64
+303	Kenny Britt	65
+304	Devin Funchess	66
+305	Stedman Bailey	67
+306	Marqise Lee	68
+307	Phillip Dorsett	69
+308	Cecil Shorts	70
+250	T.Y. Hilton	12
+309	Justin Hunter	71
+310	Jaelen Strong	72
+311	Cordarrelle Patterson	73
+312	Greg Jennings	74
+313	Andrew Hawkins	75
+314	Reggie Wayne	76
+315	Nick Toon	77
+316	Josh Huff	78
+317	Wes Welker	79
+318	Eddie Royal	80
+319	Cole Beasley	81
+320	Jermaine Kearse	82
+321	Allen Hurns	83
+322	Marquess Wilson	84
+323	Harry Douglas	85
+324	Mohamed Sanu	86
+325	Riley Cooper	87
+326	Nate Washington	88
+327	Hakeem Nicks	89
+328	Taylor Gabriel	90
+329	Markus Wheaton	91
+330	Chris Conley	92
+331	Brian Hartline	93
+332	Robert Woods	94
+333	Devin Smith	95
+334	Danny Amendola	96
+335	Jarrett Boykin	97
+336	Tyler Lockett	98
+337	Chris Matthews	99
+338	Jarius Wright	100
+339	Rod Streater	101
+340	Tavon Austin	102
+341	Marlon Brown	103
+342	Jeremy Kerley	104
+343	Devin Hester	105
+344	Albert Wilson	106
+345	Ty Montgomery	107
+346	Aaron Dobson	108
+347	Kamar Aiken	109
+348	Sammie Coates	110
+349	Justin Blackmon	111
+350	James Jones	112
+351	Justin Hardy	113
+352	Andre Holmes	114
+353	Ricardo Lockette	115
+354	Paul Richardson	116
+355	Louis Murphy	117
+356	Duron Carter	118
+357	Leonard Hankerson	119
+358	Andre Roberts	120
+359	Dontrelle Inman	121
+360	Stephen Hill	122
+361	Jeff Janis	123
+362	Philly Brown	124
+363	Corey Fuller	125
+364	Jerricho Cotchery	126
+365	Jaron Brown	127
+367	Rob Gronkowski	1
+368	Jimmy Graham	2
+369	Greg Olsen	3
+370	Travis Kelce	4
+371	Martellus Bennett	5
+372	Zach Ertz	6
+373	Jordan Cameron	7
+374	Julius Thomas	8
+375	Jason Witten	9
+376	Delanie Walker	10
+377	Josh Hill	11
+378	Antonio Gates	12
+379	Dwayne Allen	13
+380	Owen Daniels	14
+381	Kyle Rudolph	15
+382	Tyler Eifert	16
+383	Larry Donnell	17
+384	Austin Seferian-Jenkins	18
+385	Heath Miller	19
+386	Coby Fleener	20
+387	Ladarius Green	21
+388	Vernon Davis	22
+389	Jordan Reed	23
+390	Charles Clay	24
+391	Eric Ebron	25
+392	Mychal Rivera	26
+393	Maxx Williams	27
+394	Rob Housler	28
+395	Jace Amaro	29
+396	Jared Cook	30
+397	Niles Paul	31
+398	Jacob Tamme	32
+399	Richard Rodgers	33
+400	Dennis Pitta	34
+401	Troy Niklas	35
+402	Scott Chandler	36
+403	Virgil Green	37
+404	Gavin Escobar	38
+405	Garrett Graham	39
+406	Brent Celek	40
+407	Clive Walford	41
+408	Lance Kendricks	42
+409	Dion Sims	43
+410	Tim Wright	44
+411	Crockett Gillmore	45
+412	Jermaine Gresham	46
+413	Benjamin Watson	47
+414	Tony Moeaki	48
+415	Andrew Quarless	49
+416	C.J. Fiedorowicz	50
+417	Fred Davis	51
+418	Darren Fells	52
+419	Luke Willson	53
+420	Chase Ford	54
+421	Marcedes Lewis	55
+422	Levine Toilolo	56
+423	Joseph Fauria	57
+424	Anthony Fasano	58
+425	Jeff Cumberland	59
+426	Daniel Fells	60
+427	Ed Dickson	61
+428	MyCole Pruitt	62
+429	Jack Doyle	63
+430	James Casey	64
+431	Brandon Myers	65
+432	Jesse James	66
+433	MarQueis Gray	67
+434	Gary Barnidge	68
+435	Cooper Helfet	69
+436	Vance McDonald	70
+437	Demetrius Harris	71
+438	Jim Dray	72
+439	Logan Paulsen	73
+440	Rhett Ellison	74
+441	Dante Rosario	75
+442	Brandon Pettigrew	76
+443	Chris Gragg	77
+444	Ryan Griffin	78
+445	Tyler Kroft	79
+446	Clay Harbor	80
+447	Phillip Supernaw	81
+448	Luke Stocker	82
+449	Matt Spaeth	83
+450	Lee Smith	84
+451	James O'Shaughnessy	85
+452	Gerald Christian	86
+453	Nick O'Leary	87
+454	Blake Bell	88
+455	Orson Charles	89
+456	Adrien Robinson	90
+457	Michael Hoomanawanui	91
+458	Derek Carrier	92
+459	John Phillips	93
+460	C.J. Uzomah	94
+461	Brandon Williams	95
+462	Trey Burton	96
+463	Kennard Backman	97
+464	Bear Pascoe	98
+465	Stephen Gostkowski	1
+466	Steven Hauschka	2
+467	Justin Tucker	3
+468	Adam Vinatieri	4
+469	Mason Crosby	5
+470	Dan Bailey	6
+471	Cody Parkey	7
+472	Connor Barth	8
+473	Matt Bryant	9
+474	Nick Novak	10
+475	Blair Walsh	11
+476	Matt Prater	12
+477	Shaun Suisham	13
+478	Dan Carpenter	14
+479	Phil Dawson	15
+480	Caleb Sturgis	16
+481	Chandler Catanzaro	17
+482	Greg Zuerlein	18
+483	Robbie Gould	19
+484	Randy Bullock	20
+485	Dustin Hopkins	21
+486	Shayne Graham	22
+487	Graham Gano	23
+488	Josh Brown	24
+489	Mike Nugent	25
+490	Sebastian Janikowski	26
+491	Cairo Santos	27
+492	Kai Forbath	28
+493	Nick Folk	29
+494	Patrick Murray	30
+495	Josh Scobee	31
+496	Travis Coons	32
+497	Ryan Succop	33
+498	Garrett Hartley	34
+499	Seattle Seahawks	1
+500	Buffalo Bills	2
+501	St. Louis Rams	3
+502	Houston Texans	4
+503	Arizona Cardinals	5
+504	Denver Broncos	6
+505	New England Patriots	7
+506	Carolina Panthers	8
+507	Green Bay Packers	9
+508	Baltimore Ravens	10
+509	Miami Dolphins	11
+510	New York Jets	12
+511	Cincinnati Bengals	13
+512	Kansas City Chiefs	14
+513	San Francisco 49ers	15
+514	Detroit Lions	16
+515	Philadelphia Eagles	17
+516	Cleveland Browns	18
+517	Pittsburgh Steelers	19
+518	Minnesota Vikings	20
+519	Dallas Cowboys	21
+520	Indianapolis Colts	22
+521	Jacksonville Jaguars	23
+522	New York Giants	24
+523	Tampa Bay Buccaneers	25
+524	San Diego Chargers	26
+525	New Orleans Saints	27
+526	Chicago Bears	28
+527	Washington Redskins	29
+528	Atlanta Falcons	30
+529	Tennessee Titans	31
+530	Oakland Raiders	32
+109	Chris Ivory	33
+290	DeVante Parker	52
+\.
+
+
+--
+-- Name: tiersheet_fantasyprorank_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('tiersheet_fantasyprorank_id_seq', 532, true);
+
+
+--
+-- Data for Name: tiersheet_player; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY tiersheet_player (id, name, "position", bye, url, team, rank) FROM stdin;
+311	Owen Daniels	TE	7	http://www.rotoworld.com/player/nfl/3733/owen-daniels	DEN	215
+493	Chris Polk	RB	9	http://www.rotoworld.com/player/nfl/7424/chris-polk	HOU	98
+371	Antonio Gates	TE	10	http://www.rotoworld.com/player/nfl/611/antonio-gates	SD	216
+315	Seattle Defense	DEF	9	\N	SEA	229
+226	C.J. Anderson	RB	7	http://www.rotoworld.com/player/nfl/8694/cj-anderson	DEN	40
+358	Cody Latimer	WR	7	http://www.rotoworld.com/player/nfl/9535/cody-latimer	DEN	183
+382	Cordarrelle Patterson	WR	5	http://www.rotoworld.com/player/nfl/8327/cordarrelle-patterson	MIN	189
+430	Nick Toon	WR	11	http://www.rotoworld.com/player/nfl/7458/nick-toon	NO	197
+347	Montee Ball	RB	7	http://www.rotoworld.com/player/nfl/7407/montee-ball	DEN	108
+233	DeMarco Murray	RB	8	http://www.rotoworld.com/player/nfl/6585/demarco-murray	PHI	45
+368	Cameron Artis-Payne	RB	5	http://www.rotoworld.com/player/nfl/10364/cameron-artis-payne	CAR	109
+428	Buck Allen	RB	9	http://www.rotoworld.com/player/nfl/10314/buck-allen	BAL	111
+236	Rob Gronkowski	TE	4	http://www.rotoworld.com/player/nfl/5729/rob-gronkowski	NE	199
+248	Jimmy Graham	TE	9	http://www.rotoworld.com/player/nfl/5842/jimmy-graham	SEA	201
+328	Buffalo Defense	DEF	8	\N	BUF	230
+333	Houston Defense	DEF	9	\N	HOU	232
+338	NY Jets Defense	DEF	5	\N	NYJ	240
+251	Mark Ingram	RB	11	http://www.rotoworld.com/player/nfl/6471/mark-ingram	NO	50
+403	Jonas Gray	RB	4	http://www.rotoworld.com/player/nfl/7695/jonas-gray	NE	112
+262	Jonathan Stewart	RB	5	http://www.rotoworld.com/player/nfl/4650/jonathan-stewart	CAR	55
+249	Alfred Morris	RB	8	http://www.rotoworld.com/player/nfl/7618/alfred-morris	WAS	56
+283	Ameer Abdullah	RB	9	http://www.rotoworld.com/player/nfl/10338/ameer-abdullah	DET	58
+390	James Starks	RB	7	http://www.rotoworld.com/player/nfl/5823/james-starks	GB	113
+415	James White	RB	4	http://www.rotoworld.com/player/nfl/9426/james-white	NE	114
+224	Antonio Brown	WR	11	http://www.rotoworld.com/player/nfl/5698/antonio-brown	PIT	116
+278	Joique Bell	RB	9	http://www.rotoworld.com/player/nfl/5986/joique-bell	DET	73
+387	Devin Funchess	WR	5	http://www.rotoworld.com/player/nfl/10391/devin-funchess	CAR	161
+279	Greg Olsen	TE	5	http://www.rotoworld.com/player/nfl/4190/greg-olsen	CAR	202
+482	RB Tier 8	RB	\N	\N	\N	79
+312	Ryan Mathews	RB	8	http://www.rotoworld.com/player/nfl/5603/ryan-mathews	PHI	81
+356	Darren Sproles	RB	8	http://www.rotoworld.com/player/nfl/3221/darren-sproles	PHI	83
+273	Travis Kelce	TE	9	http://www.rotoworld.com/player/nfl/8411/travis-kelce	KC	203
+397	Matt Jones	RB	8	http://www.rotoworld.com/player/nfl/10493/matt-jones	WAS	89
+295	Martellus Bennett	TE	7	http://www.rotoworld.com/player/nfl/4639/martellus-bennett	CHI	204
+318	Jordan Cameron	TE	5	http://www.rotoworld.com/player/nfl/6572/jordan-cameron	MIA	206
+379	Tyler Eifert	TE	7	http://www.rotoworld.com/player/nfl/8408/tyler-eifert	CIN	209
+432	Eddie Royal	WR	7	http://www.rotoworld.com/player/nfl/4853/eddie-royal	CHI	163
+391	Steve Johnson	WR	10	http://www.rotoworld.com/player/nfl/4962/stevie-johnson	SD	170
+409	Michael Crabtree	WR	6	http://www.rotoworld.com/player/nfl/5135/michael-crabtree	OAK	175
+282	Ben Roethlisberger	QB	11	http://www.rotoworld.com/player/nfl/1181/ben-roethlisberger	PIT	7
+483	RB Tier 9	RB	\N	\N	\N	91
+361	Colin Kaepernick	QB	10	http://www.rotoworld.com/player/nfl/6530/colin-kaepernick	SF	20
+376	Kyle Rudolph	TE	5	http://www.rotoworld.com/player/nfl/6459/kyle-rudolph	MIN	211
+355	Dorial Green-Beckham	WR	4	http://www.rotoworld.com/player/nfl/10395/dorial-green-beckham	TEN	179
+412	Ronnie Hillman	RB	7	http://www.rotoworld.com/player/nfl/7440/ronnie-hillman	DEN	93
+307	Zach Ertz	TE	8	http://www.rotoworld.com/player/nfl/8409/zach-ertz	PHI	212
+334	Josh Hill	TE	11	http://www.rotoworld.com/player/nfl/8764/josh-hill	NO	214
+484	RB Tier 10	RB	\N	\N	\N	94
+222	Le'Veon Bell	RB	11	http://www.rotoworld.com/player/nfl/8390/leveon-bell	PIT	36
+229	Matt Forte	RB	7	http://www.rotoworld.com/player/nfl/4685/matt-forte	CHI	39
+366	Joe Flacco	QB	9	http://www.rotoworld.com/player/nfl/4677/joe-flacco	BAL	23
+418	Andy Dalton	QB	7	http://www.rotoworld.com/player/nfl/6493/andy-dalton	CIN	28
+413	Nick Foles	QB	6	http://www.rotoworld.com/player/nfl/7475/nick-foles	STL	33
+223	Marshawn Lynch	RB	9	http://www.rotoworld.com/player/nfl/4186/marshawn-lynch	SEA	41
+237	Jeremy Hill	RB	7	http://www.rotoworld.com/player/nfl/9409/jeremy-hill	CIN	44
+228	LeSean McCoy	RB	8	http://www.rotoworld.com/player/nfl/5168/lesean-mccoy	BUF	46
+485	RB Tier 11	RB	\N	\N	\N	102
+486	RB Tier 12	RB	\N	\N	\N	106
+232	Demaryius Thomas	WR	7	http://www.rotoworld.com/player/nfl/5700/demaryius-thomas	DEN	118
+230	Odell Beckham Jr.	WR	11	http://www.rotoworld.com/player/nfl/9403/odell-beckham	NYG	121
+235	Calvin Johnson	WR	9	http://www.rotoworld.com/player/nfl/4153/calvin-johnson	DET	122
+240	A.J. Green	WR	7	http://www.rotoworld.com/player/nfl/6438/aj-green	CIN	123
+242	Randall Cobb	WR	7	http://www.rotoworld.com/player/nfl/6497/randall-cobb	GB	124
+243	Alshon Jeffery	WR	7	http://www.rotoworld.com/player/nfl/7441/alshon-jeffery	CHI	125
+255	Brandin Cooks	WR	11	http://www.rotoworld.com/player/nfl/9404/brandin-cooks	NO	127
+250	Emmanuel Sanders	WR	7	http://www.rotoworld.com/player/nfl/5885/emmanuel-sanders	DEN	133
+254	Kelvin Benjamin	WR	5	http://www.rotoworld.com/player/nfl/9321/kelvin-benjamin	CAR	192
+239	Jordy Nelson	WR	7	http://www.rotoworld.com/player/nfl/4731/jordy-nelson	GB	196
+349	St. Louis Defense	DEF	6	\N	STL	231
+360	Arizona Defense	DEF	9	\N	ARI	233
+365	Denver Defense	DEF	7	\N	DEN	234
+423	New England Defense	DEF	4	\N	NE	235
+384	Carolina Defense	DEF	5	\N	CAR	236
+425	Green Bay Defense	DEF	7	\N	GB	237
+427	Baltimore Defense	DEF	9	\N	BAL	238
+354	Miami Defense	DEF	5	\N	MIA	239
+421	Cincinnati Defense	DEF	7	\N	CIN	241
+414	Kansas City Defense	DEF	9	\N	KC	242
+429	Detroit Defense	DEF	9	\N	DET	243
+388	Philadelphia Defense	DEF	8	\N	PHI	244
+437	Cleveland Defense	DEF	11	\N	CLE	245
+433	Minnesota Defense	DEF	5	\N	MIN	246
+408	Dallas Defense	DEF	6	\N	DAL	247
+426	Indianapolis Defense	DEF	10	\N	IND	248
+266	Russell Wilson	QB	9	http://www.rotoworld.com/player/nfl/7460/russell-wilson	SEA	4
+322	Ryan Tannehill	QB	5	http://www.rotoworld.com/player/nfl/7417/ryan-tannehill	MIA	13
+350	Carson Palmer	QB	9	http://www.rotoworld.com/player/nfl/2550/carson-palmer	ARI	22
+260	Jordan Matthews	WR	8	http://www.rotoworld.com/player/nfl/9420/jordan-matthews	PHI	130
+277	Julian Edelman	WR	4	http://www.rotoworld.com/player/nfl/5440/julian-edelman	NE	134
+275	Keenan Allen	WR	10	http://www.rotoworld.com/player/nfl/8379/keenan-allen	SD	136
+268	Amari Cooper	WR	6	http://www.rotoworld.com/player/nfl/10310/amari-cooper	OAK	137
+274	Brandon Marshall	WR	5	http://www.rotoworld.com/player/nfl/3653/brandon-marshall	NYJ	138
+272	Golden Tate	WR	9	http://www.rotoworld.com/player/nfl/5583/golden-tate	DET	139
+284	Jeremy Maclin	WR	9	http://www.rotoworld.com/player/nfl/5169/jeremy-maclin	KC	142
+313	Davante Adams	WR	7	http://www.rotoworld.com/player/nfl/9273/davante-adams	GB	143
+270	Sammy Watkins	WR	8	http://www.rotoworld.com/player/nfl/9388/sammy-watkins	BUF	145
+291	Vincent Jackson	WR	6	http://www.rotoworld.com/player/nfl/3202/vincent-jackson	TB	146
+280	DeSean Jackson	WR	8	http://www.rotoworld.com/player/nfl/4659/desean-jackson	WAS	147
+316	Steve Smith	WR	9	http://www.rotoworld.com/player/nfl/2386/steve-smith-sr	BAL	149
+296	Nelson Agholor	WR	8	http://www.rotoworld.com/player/nfl/10360/nelson-agholor	PHI	154
+303	Charles Johnson	WR	5	http://www.rotoworld.com/player/nfl/8615/charles-johnson	MIN	155
+306	Mike Wallace	WR	5	http://www.rotoworld.com/player/nfl/5329/mike-wallace	MIN	157
+329	Pierre Garcon	WR	8	http://www.rotoworld.com/player/nfl/4945/pierre-garcon	WAS	159
+341	Marques Colston	WR	11	http://www.rotoworld.com/player/nfl/4032/marques-colston	NO	160
+310	Michael Floyd	WR	9	http://www.rotoworld.com/player/nfl/6759/michael-floyd	ARI	164
+265	Martavis Bryant	WR	11	http://www.rotoworld.com/player/nfl/9416/martavis-bryant	PIT	165
+362	Rueben Randle	WR	11	http://www.rotoworld.com/player/nfl/7468/rueben-randle	NYG	171
+487	WR Tier 8	WR	\N	\N	\N	174
+335	Terrance Williams	WR	6	http://www.rotoworld.com/player/nfl/8401/terrance-williams	DAL	176
+488	WR Tier 9	WR	\N	\N	\N	178
+489	WR Tier 10	WR	\N	\N	\N	185
+490	WR Tier 11	WR	\N	\N	\N	188
+491	WR Tier 12	WR	\N	\N	\N	190
+301	Kevin White	WR	7	http://www.rotoworld.com/player/nfl/10427/kevin-white	CHI	193
+470	WR Tier 3	WR	\N	\N	\N	126
+471	WR Tier 4	WR	\N	\N	\N	132
+321	David Johnson	RB	9	http://www.rotoworld.com/player/nfl/10404/david-johnson	ARI	86
+472	WR Tier 5	WR	\N	\N	\N	144
+294	Matt Ryan	QB	10	http://www.rotoworld.com/player/nfl/4637/matt-ryan	ATL	9
+457	QB Tier 4	QB	\N	\N	\N	12
+331	Knile Davis	RB	9	http://www.rotoworld.com/player/nfl/8467/knile-davis	KC	95
+380	Fred Jackson	RB	8	http://www.rotoworld.com/player/nfl/4506/fred-jackson	BUF	96
+458	QB Tier 5	QB	\N	\N	\N	18
+344	Teddy Bridgewater	QB	5	http://www.rotoworld.com/player/nfl/9274/teddy-bridgewater	MIN	21
+459	QB Tier 6	QB	\N	\N	\N	24
+460	QB Tier 7	QB	\N	\N	\N	26
+492	QB Tier 8	QB	\N	\N	\N	30
+461	RB Tier 1	RB	\N	\N	\N	34
+219	Adrian Peterson	RB	5	http://www.rotoworld.com/player/nfl/4169/adrian-peterson	MIN	35
+465	RB Tier 5	RB	\N	\N	\N	59
+466	RB Tier 6	RB	\N	\N	\N	64
+462	RB Tier 2	RB	\N	\N	\N	42
+285	Giovani Bernard	RB	7	http://www.rotoworld.com/player/nfl/8389/giovani-bernard	CIN	65
+263	Todd Gurley	RB	6	http://www.rotoworld.com/player/nfl/10288/todd-gurley	STL	66
+259	Carlos Hyde	RB	10	http://www.rotoworld.com/player/nfl/9381/carlos-hyde	SF	68
+276	LeGarrette Blount	RB	4	http://www.rotoworld.com/player/nfl/5854/legarrette-blount	NE	69
+467	RB Tier 7	RB	\N	\N	\N	70
+353	Danny Woodhead	RB	10	http://www.rotoworld.com/player/nfl/5297/danny-woodhead	SD	74
+407	Terrance West	RB	11	http://www.rotoworld.com/player/nfl/9406/terrance-west	CLE	99
+352	Jay Ajayi	RB	5	http://www.rotoworld.com/player/nfl/10361/jay-ajayi	MIA	100
+336	Reggie Bush	RB	10	http://www.rotoworld.com/player/nfl/3600/reggie-bush	SF	101
+340	DeAngelo Williams	RB	11	http://www.rotoworld.com/player/nfl/3611/deangelo-williams	PIT	103
+401	Jerick McKinnon	RB	5	http://www.rotoworld.com/player/nfl/9651/jerick-mckinnon	MIN	104
+383	Denard Robinson	RB	8	http://www.rotoworld.com/player/nfl/8457/denard-robinson	JAC	105
+392	Stevan Ridley	RB	5	http://www.rotoworld.com/player/nfl/6487/stevan-ridley	NYJ	107
+468	WR Tier 1	WR	\N	\N	\N	115
+241	Justin Forsett	RB	9	http://www.rotoworld.com/player/nfl/4819/justin-forsett	BAL	43
+463	RB Tier 3	RB	\N	\N	\N	47
+231	Julio Jones	WR	10	http://www.rotoworld.com/player/nfl/6475/julio-jones	ATL	117
+469	WR Tier 2	WR	\N	\N	\N	120
+309	Roddy White	WR	10	http://www.rotoworld.com/player/nfl/3161/roddy-white	ATL	151
+252	Lamar Miller	RB	5	http://www.rotoworld.com/player/nfl/7408/lamar-miller	MIA	48
+473	WR Tier 6	WR	\N	\N	\N	152
+474	WR Tier 7	WR	\N	\N	\N	167
+475	TE Tier 1	TE	\N	\N	\N	198
+264	Andre Ellington	RB	9	http://www.rotoworld.com/player/nfl/8388/andre-ellington	ARI	51
+464	RB Tier 4	RB	\N	\N	\N	53
+287	Tevin Coleman	RB	10	http://www.rotoworld.com/player/nfl/10359/tevin-coleman	ATL	75
+297	Isaiah Crowell	RB	11	http://www.rotoworld.com/player/nfl/9401/isaiah-crowell	CLE	76
+314	Devonta Freeman	RB	10	http://www.rotoworld.com/player/nfl/9423/devonta-freeman	ATL	77
+476	TE Tier 2	TE	\N	\N	\N	200
+477	TE Tier 3	TE	\N	\N	\N	205
+257	Latavius Murray	RB	6	http://www.rotoworld.com/player/nfl/8585/latavius-murray	OAK	54
+244	Melvin Gordon	RB	10	http://www.rotoworld.com/player/nfl/10284/melvin-gordon	SD	57
+317	Duke Johnson	RB	11	http://www.rotoworld.com/player/nfl/10358/duke-johnson	CLE	78
+478	TE Tier 4	TE	\N	\N	\N	210
+385	Larry Donnell	TE	11	http://www.rotoworld.com/player/nfl/7512/larry-donnell	NYG	218
+404	Roy Helu	RB	6	http://www.rotoworld.com/player/nfl/6593/roy-helu	OAK	84
+302	Tre Mason	RB	6	http://www.rotoworld.com/player/nfl/9318/tre-mason	STL	85
+479	TE Tier 5	TE	\N	\N	\N	219
+396	Austin Seferian-Jenkins	TE	6	http://www.rotoworld.com/player/nfl/9400/austin-seferian-jenkins	TB	220
+374	Ladarius Green	TE	10	http://www.rotoworld.com/player/nfl/7568/ladarius-green	SD	222
+480	TE Tier 6	TE	\N	\N	\N	223
+481	TE Tier 7	TE	\N	\N	\N	227
+454	QB Tier 1	QB	\N	\N	\N	0
+455	QB Tier 2	QB	\N	\N	\N	3
+456	QB Tier 3	QB	\N	\N	\N	8
+245	Mike Evans	WR	6	http://www.rotoworld.com/player/nfl/9296/mike-evans	TB	128
+424	Cody Parkey	PK	8	http://www.rotoworld.com/player/nfl/9893/cody-parkey	PHI	255
+288	Jarvis Landry	WR	5	http://www.rotoworld.com/player/nfl/9405/jarvis-landry	MIA	141
+298	Tony Romo	QB	6	http://www.rotoworld.com/player/nfl/2730/tony-romo	DAL	10
+319	Eli Manning	QB	11	http://www.rotoworld.com/player/nfl/1657/eli-manning	NYG	14
+320	Larry Fitzgerald	WR	9	http://www.rotoworld.com/player/nfl/1661/larry-fitzgerald	ARI	148
+345	Anquan Boldin	WR	10	http://www.rotoworld.com/player/nfl/2078/anquan-boldin	SF	150
+330	Torrey Smith	WR	10	http://www.rotoworld.com/player/nfl/6442/torrey-smith	SF	162
+422	Connor Barth	PK	7	http://www.rotoworld.com/player/nfl/5048/connor-barth	DEN	256
+435	Matt Bryant	PK	10	http://www.rotoworld.com/player/nfl/978/matt-bryant	ATL	257
+444	Nick Novak	PK	10	http://www.rotoworld.com/player/nfl/3504/nick-novak	SD	258
+324	Brandon LaFell	WR	4	http://www.rotoworld.com/player/nfl/5188/brandon-lafell	NE	194
+439	Blair Walsh	PK	5	http://www.rotoworld.com/player/nfl/7620/blair-walsh	MIN	259
+375	Jameis Winston	QB	6	http://www.rotoworld.com/player/nfl/9376/jameis-winston	TB	29
+339	Jason Witten	TE	6	http://www.rotoworld.com/player/nfl/1990/jason-witten	DAL	207
+434	Matt Prater	PK	9	http://www.rotoworld.com/player/nfl/4502/matt-prater	DET	260
+267	C.J. Spiller	RB	11	http://www.rotoworld.com/player/nfl/5566/cj-spiller	NO	52
+343	Delanie Walker	TE	4	http://www.rotoworld.com/player/nfl/3976/delanie-walker	TEN	208
+290	Doug Martin	RB	6	http://www.rotoworld.com/player/nfl/7426/doug-martin	TB	60
+258	Joseph Randle	RB	6	http://www.rotoworld.com/player/nfl/8395/joseph-randle	DAL	63
+369	Vernon Davis	TE	10	http://www.rotoworld.com/player/nfl/3638/vernon-davis	SF	224
+299	Shane Vereen	RB	11	http://www.rotoworld.com/player/nfl/6445/shane-vereen	NYG	71
+281	Rashad Jennings	RB	11	http://www.rotoworld.com/player/nfl/5273/rashad-jennings	NYG	72
+440	Shaun Suisham	PK	11	http://www.rotoworld.com/player/nfl/3529/shaun-suisham	PIT	261
+438	Dan Carpenter	PK	8	http://www.rotoworld.com/player/nfl/5007/dan-carpenter	BUF	262
+443	Chandler Catanzaro	PK	9	http://www.rotoworld.com/player/nfl/10045/chandler-catanzaro	ARI	263
+406	Charles Clay	TE	8	http://www.rotoworld.com/player/nfl/6681/charles-clay	BUF	225
+326	Bishop Sankey	RB	4	http://www.rotoworld.com/player/nfl/9408/bishop-sankey	TEN	80
+419	Eric Ebron	TE	9	http://www.rotoworld.com/player/nfl/9390/eric-ebron	DET	226
+420	Maxx Williams	TE	9	http://www.rotoworld.com/player/nfl/10298/maxx-williams	BAL	228
+300	Darren McFadden	RB	6	http://www.rotoworld.com/player/nfl/4649/darren-mcfadden	DAL	82
+337	Charles Sims	RB	6	http://www.rotoworld.com/player/nfl/9425/charles-sims	TB	87
+441	Greg Zuerlein	PK	6	http://www.rotoworld.com/player/nfl/7616/greg-zuerlein	STL	264
+323	David Cobb	RB	4	http://www.rotoworld.com/player/nfl/10369/david-cobb	TEN	90
+442	Sebastian Janikowski	PK	6	http://www.rotoworld.com/player/nfl/819/sebastian-janikowski	OAK	265
+395	Andre Williams	RB	11	http://www.rotoworld.com/player/nfl/9407/andre-williams	NYG	92
+398	Lance Dunbar	RB	6	http://www.rotoworld.com/player/nfl/7798/lance-dunbar	DAL	97
+364	Stephen Gostkowski	PK	4	http://www.rotoworld.com/player/nfl/3937/stephen-gostkowski	NE	249
+227	Dez Bryant	WR	6	http://www.rotoworld.com/player/nfl/5558/dez-bryant	DAL	119
+400	Steven Hauschka	PK	9	http://www.rotoworld.com/player/nfl/5030/steven-hauschka	SEA	250
+411	Justin Tucker	PK	9	http://www.rotoworld.com/player/nfl/8241/justin-tucker	BAL	251
+405	Mason Crosby	PK	7	http://www.rotoworld.com/player/nfl/4182/mason-crosby	GB	253
+386	Dan Bailey	PK	6	http://www.rotoworld.com/player/nfl/7144/dan-bailey	DAL	254
+348	Eric Decker	WR	5	http://www.rotoworld.com/player/nfl/5819/eric-decker	NYJ	153
+325	John Brown	WR	9	http://www.rotoworld.com/player/nfl/9649/john-brown	ARI	156
+373	Kendall Wright	WR	4	http://www.rotoworld.com/player/nfl/7425/kendall-wright	TEN	158
+292	Victor Cruz	WR	11	http://www.rotoworld.com/player/nfl/6313/victor-cruz	NYG	166
+378	Markus Wheaton	WR	11	http://www.rotoworld.com/player/nfl/8406/markus-wheaton	PIT	168
+357	Brian Quick	WR	6	http://www.rotoworld.com/player/nfl/7477/brian-quick	STL	169
+327	Breshad Perriman	WR	9	http://www.rotoworld.com/player/nfl/10357/breshad-perriman	BAL	173
+416	Doug Baldwin	WR	9	http://www.rotoworld.com/player/nfl/6825/doug-baldwin	SEA	177
+346	Percy Harvin	WR	8	http://www.rotoworld.com/player/nfl/5197/percy-harvin	BUF	180
+394	Dwayne Bowe	WR	11	http://www.rotoworld.com/player/nfl/4184/dwayne-bowe	CLE	181
+367	Marvin Jones	WR	7	http://www.rotoworld.com/player/nfl/7503/marvin-jones	CIN	182
+389	Donte Moncrief	WR	10	http://www.rotoworld.com/player/nfl/9427/donte-moncrief	IND	184
+399	Phillip Dorsett	WR	10	http://www.rotoworld.com/player/nfl/10381/phillip-dorsett	IND	186
+436	Jaelen Strong	WR	9	http://www.rotoworld.com/player/nfl/10287/jaelen-strong	HOU	187
+431	Tyler Lockett	WR	9	http://www.rotoworld.com/player/nfl/10408/tyler-lockett	SEA	191
+370	Kenny Stills	WR	5	http://www.rotoworld.com/player/nfl/8482/kenny-stills	MIA	195
+293	Julius Thomas	TE	8	http://www.rotoworld.com/player/nfl/6598/julius-thomas	JAC	213
+359	Dwayne Allen	TE	10	http://www.rotoworld.com/player/nfl/7452/dwayne-allen	IND	217
+381	Coby Fleener	TE	10	http://www.rotoworld.com/player/nfl/7418/coby-fleener	IND	221
+372	Adam Vinatieri	PK	10	http://www.rotoworld.com/player/nfl/1152/adam-vinatieri	IND	252
+234	Andrew Luck	QB	10	http://www.rotoworld.com/player/nfl/6439/andrew-luck	IND	1
+402	Marcus Mariota	QB	4	http://www.rotoworld.com/player/nfl/9385/marcus-mariota	TEN	31
+247	Frank Gore	RB	10	http://www.rotoworld.com/player/nfl/3205/frank-gore	IND	49
+271	T.J. Yeldon	RB	8	http://www.rotoworld.com/player/nfl/10311/tj-yeldon	JAC	61
+225	Arian Foster	RB	9	http://www.rotoworld.com/player/nfl/5469/arian-foster	HOU	67
+363	Alfred Blue	RB	9	http://www.rotoworld.com/player/nfl/9685/alfred-blue	HOU	88
+393	Dan Herron	RB	10	http://www.rotoworld.com/player/nfl/7634/dan-herron	IND	110
+246	T.Y. Hilton	WR	10	http://www.rotoworld.com/player/nfl/7558/ty-hilton	IND	129
+253	DeAndre Hopkins	WR	9	http://www.rotoworld.com/player/nfl/8404/deandre-hopkins	HOU	131
+261	Andre Johnson	WR	10	http://www.rotoworld.com/player/nfl/1575/andre-johnson	IND	135
+286	Allen Robinson	WR	8	http://www.rotoworld.com/player/nfl/9297/allen-robinson	JAC	140
+238	Aaron Rodgers	QB	7	http://www.rotoworld.com/player/nfl/3118/aaron-rodgers	GB	2
+256	Peyton Manning	QB	7	http://www.rotoworld.com/player/nfl/1493/peyton-manning	DEN	5
+269	Drew Brees	QB	11	http://www.rotoworld.com/player/nfl/591/drew-brees	NO	6
+304	Tom Brady	QB	4	http://www.rotoworld.com/player/nfl/1163/tom-brady	NE	11
+289	Cam Newton	QB	5	http://www.rotoworld.com/player/nfl/6491/cam-newton	CAR	15
+308	Matthew Stafford	QB	9	http://www.rotoworld.com/player/nfl/5132/matthew-stafford	DET	16
+332	Philip Rivers	QB	10	http://www.rotoworld.com/player/nfl/1813/philip-rivers	SD	17
+351	Sam Bradford	QB	8	http://www.rotoworld.com/player/nfl/5161/sam-bradford	PHI	19
+377	Jay Cutler	QB	7	http://www.rotoworld.com/player/nfl/3608/jay-cutler	CHI	25
+417	Robert Griffin III	QB	8	http://www.rotoworld.com/player/nfl/7406/robert-griffin-iii	WAS	27
+410	Derek Carr	QB	6	http://www.rotoworld.com/player/nfl/9349/derek-carr	OAK	32
+220	Jamaal Charles	RB	9	http://www.rotoworld.com/player/nfl/4617/jamaal-charles	KC	37
+221	Eddie Lacy	RB	7	http://www.rotoworld.com/player/nfl/8382/eddie-lacy	GB	38
+305	Chris Ivory	RB	5	http://www.rotoworld.com/player/nfl/6168/chris-ivory	NYJ	62
+342	DeVante Parker	WR	5	http://www.rotoworld.com/player/nfl/10415/devante-parker	MIA	172
+\.
+
+
+--
+-- Data for Name: tiersheet_player_2015; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tiersheet_player_2015 (id, name, "position", bye, url, team, rank) FROM stdin;
+432	Eddie Royal	WR	7	http://www.rotoworld.com/player/nfl/4853/eddie-royal	CHI	163
+391	Steve Johnson	WR	10	http://www.rotoworld.com/player/nfl/4962/stevie-johnson	SD	170
+409	Michael Crabtree	WR	6	http://www.rotoworld.com/player/nfl/5135/michael-crabtree	OAK	175
+355	Dorial Green-Beckham	WR	4	http://www.rotoworld.com/player/nfl/10395/dorial-green-beckham	TEN	179
+318	Jordan Cameron	TE	5	http://www.rotoworld.com/player/nfl/6572/jordan-cameron	MIA	206
+379	Tyler Eifert	TE	7	http://www.rotoworld.com/player/nfl/8408/tyler-eifert	CIN	209
+376	Kyle Rudolph	TE	5	http://www.rotoworld.com/player/nfl/6459/kyle-rudolph	MIN	211
+307	Zach Ertz	TE	8	http://www.rotoworld.com/player/nfl/8409/zach-ertz	PHI	212
+282	Ben Roethlisberger	QB	11	http://www.rotoworld.com/player/nfl/1181/ben-roethlisberger	PIT	7
+361	Colin Kaepernick	QB	10	http://www.rotoworld.com/player/nfl/6530/colin-kaepernick	SF	20
+222	Le'Veon Bell	RB	11	http://www.rotoworld.com/player/nfl/8390/leveon-bell	PIT	36
+356	Darren Sproles	RB	8	http://www.rotoworld.com/player/nfl/3221/darren-sproles	PHI	83
+397	Matt Jones	RB	8	http://www.rotoworld.com/player/nfl/10493/matt-jones	WAS	89
+483	RB Tier 9	RB	\N	\N	\N	91
+412	Ronnie Hillman	RB	7	http://www.rotoworld.com/player/nfl/7440/ronnie-hillman	DEN	93
+358	Cody Latimer	WR	7	http://www.rotoworld.com/player/nfl/9535/cody-latimer	DEN	183
+229	Matt Forte	RB	7	http://www.rotoworld.com/player/nfl/4685/matt-forte	CHI	39
+484	RB Tier 10	RB	\N	\N	\N	94
+334	Josh Hill	TE	11	http://www.rotoworld.com/player/nfl/8764/josh-hill	NO	214
+226	C.J. Anderson	RB	7	http://www.rotoworld.com/player/nfl/8694/cj-anderson	DEN	40
+233	DeMarco Murray	RB	8	http://www.rotoworld.com/player/nfl/6585/demarco-murray	PHI	45
+251	Mark Ingram	RB	11	http://www.rotoworld.com/player/nfl/6471/mark-ingram	NO	50
+262	Jonathan Stewart	RB	5	http://www.rotoworld.com/player/nfl/4650/jonathan-stewart	CAR	55
+249	Alfred Morris	RB	8	http://www.rotoworld.com/player/nfl/7618/alfred-morris	WAS	56
+493	Chris Polk	RB	9	http://www.rotoworld.com/player/nfl/7424/chris-polk	HOU	98
+311	Owen Daniels	TE	7	http://www.rotoworld.com/player/nfl/3733/owen-daniels	DEN	215
+371	Antonio Gates	TE	10	http://www.rotoworld.com/player/nfl/611/antonio-gates	SD	216
+315	Seattle Defense	DEF	9	\N	SEA	229
+328	Buffalo Defense	DEF	8	\N	BUF	230
+333	Houston Defense	DEF	9	\N	HOU	232
+283	Ameer Abdullah	RB	9	http://www.rotoworld.com/player/nfl/10338/ameer-abdullah	DET	58
+278	Joique Bell	RB	9	http://www.rotoworld.com/player/nfl/5986/joique-bell	DET	73
+347	Montee Ball	RB	7	http://www.rotoworld.com/player/nfl/7407/montee-ball	DEN	108
+368	Cameron Artis-Payne	RB	5	http://www.rotoworld.com/player/nfl/10364/cameron-artis-payne	CAR	109
+428	Buck Allen	RB	9	http://www.rotoworld.com/player/nfl/10314/buck-allen	BAL	111
+403	Jonas Gray	RB	4	http://www.rotoworld.com/player/nfl/7695/jonas-gray	NE	112
+390	James Starks	RB	7	http://www.rotoworld.com/player/nfl/5823/james-starks	GB	113
+382	Cordarrelle Patterson	WR	5	http://www.rotoworld.com/player/nfl/8327/cordarrelle-patterson	MIN	189
+430	Nick Toon	WR	11	http://www.rotoworld.com/player/nfl/7458/nick-toon	NO	197
+236	Rob Gronkowski	TE	4	http://www.rotoworld.com/player/nfl/5729/rob-gronkowski	NE	199
+248	Jimmy Graham	TE	9	http://www.rotoworld.com/player/nfl/5842/jimmy-graham	SEA	201
+338	NY Jets Defense	DEF	5	\N	NYJ	240
+279	Greg Olsen	TE	5	http://www.rotoworld.com/player/nfl/4190/greg-olsen	CAR	202
+273	Travis Kelce	TE	9	http://www.rotoworld.com/player/nfl/8411/travis-kelce	KC	203
+415	James White	RB	4	http://www.rotoworld.com/player/nfl/9426/james-white	NE	114
+482	RB Tier 8	RB	\N	\N	\N	79
+312	Ryan Mathews	RB	8	http://www.rotoworld.com/player/nfl/5603/ryan-mathews	PHI	81
+224	Antonio Brown	WR	11	http://www.rotoworld.com/player/nfl/5698/antonio-brown	PIT	116
+387	Devin Funchess	WR	5	http://www.rotoworld.com/player/nfl/10391/devin-funchess	CAR	161
+295	Martellus Bennett	TE	7	http://www.rotoworld.com/player/nfl/4639/martellus-bennett	CHI	204
+433	Minnesota Defense	DEF	5	\N	MIN	246
+408	Dallas Defense	DEF	6	\N	DAL	247
+426	Indianapolis Defense	DEF	10	\N	IND	248
+266	Russell Wilson	QB	9	http://www.rotoworld.com/player/nfl/7460/russell-wilson	SEA	4
+322	Ryan Tannehill	QB	5	http://www.rotoworld.com/player/nfl/7417/ryan-tannehill	MIA	13
+350	Carson Palmer	QB	9	http://www.rotoworld.com/player/nfl/2550/carson-palmer	ARI	22
+366	Joe Flacco	QB	9	http://www.rotoworld.com/player/nfl/4677/joe-flacco	BAL	23
+418	Andy Dalton	QB	7	http://www.rotoworld.com/player/nfl/6493/andy-dalton	CIN	28
+413	Nick Foles	QB	6	http://www.rotoworld.com/player/nfl/7475/nick-foles	STL	33
+223	Marshawn Lynch	RB	9	http://www.rotoworld.com/player/nfl/4186/marshawn-lynch	SEA	41
+237	Jeremy Hill	RB	7	http://www.rotoworld.com/player/nfl/9409/jeremy-hill	CIN	44
+228	LeSean McCoy	RB	8	http://www.rotoworld.com/player/nfl/5168/lesean-mccoy	BUF	46
+485	RB Tier 11	RB	\N	\N	\N	102
+486	RB Tier 12	RB	\N	\N	\N	106
+232	Demaryius Thomas	WR	7	http://www.rotoworld.com/player/nfl/5700/demaryius-thomas	DEN	118
+230	Odell Beckham Jr.	WR	11	http://www.rotoworld.com/player/nfl/9403/odell-beckham	NYG	121
+235	Calvin Johnson	WR	9	http://www.rotoworld.com/player/nfl/4153/calvin-johnson	DET	122
+240	A.J. Green	WR	7	http://www.rotoworld.com/player/nfl/6438/aj-green	CIN	123
+242	Randall Cobb	WR	7	http://www.rotoworld.com/player/nfl/6497/randall-cobb	GB	124
+243	Alshon Jeffery	WR	7	http://www.rotoworld.com/player/nfl/7441/alshon-jeffery	CHI	125
+255	Brandin Cooks	WR	11	http://www.rotoworld.com/player/nfl/9404/brandin-cooks	NO	127
+250	Emmanuel Sanders	WR	7	http://www.rotoworld.com/player/nfl/5885/emmanuel-sanders	DEN	133
+254	Kelvin Benjamin	WR	5	http://www.rotoworld.com/player/nfl/9321/kelvin-benjamin	CAR	192
+239	Jordy Nelson	WR	7	http://www.rotoworld.com/player/nfl/4731/jordy-nelson	GB	196
+349	St. Louis Defense	DEF	6	\N	STL	231
+360	Arizona Defense	DEF	9	\N	ARI	233
+365	Denver Defense	DEF	7	\N	DEN	234
+423	New England Defense	DEF	4	\N	NE	235
+384	Carolina Defense	DEF	5	\N	CAR	236
+425	Green Bay Defense	DEF	7	\N	GB	237
+427	Baltimore Defense	DEF	9	\N	BAL	238
+354	Miami Defense	DEF	5	\N	MIA	239
+421	Cincinnati Defense	DEF	7	\N	CIN	241
+414	Kansas City Defense	DEF	9	\N	KC	242
+429	Detroit Defense	DEF	9	\N	DET	243
+388	Philadelphia Defense	DEF	8	\N	PHI	244
+437	Cleveland Defense	DEF	11	\N	CLE	245
+260	Jordan Matthews	WR	8	http://www.rotoworld.com/player/nfl/9420/jordan-matthews	PHI	130
+277	Julian Edelman	WR	4	http://www.rotoworld.com/player/nfl/5440/julian-edelman	NE	134
+275	Keenan Allen	WR	10	http://www.rotoworld.com/player/nfl/8379/keenan-allen	SD	136
+268	Amari Cooper	WR	6	http://www.rotoworld.com/player/nfl/10310/amari-cooper	OAK	137
+274	Brandon Marshall	WR	5	http://www.rotoworld.com/player/nfl/3653/brandon-marshall	NYJ	138
+272	Golden Tate	WR	9	http://www.rotoworld.com/player/nfl/5583/golden-tate	DET	139
+284	Jeremy Maclin	WR	9	http://www.rotoworld.com/player/nfl/5169/jeremy-maclin	KC	142
+313	Davante Adams	WR	7	http://www.rotoworld.com/player/nfl/9273/davante-adams	GB	143
+270	Sammy Watkins	WR	8	http://www.rotoworld.com/player/nfl/9388/sammy-watkins	BUF	145
+291	Vincent Jackson	WR	6	http://www.rotoworld.com/player/nfl/3202/vincent-jackson	TB	146
+280	DeSean Jackson	WR	8	http://www.rotoworld.com/player/nfl/4659/desean-jackson	WAS	147
+316	Steve Smith	WR	9	http://www.rotoworld.com/player/nfl/2386/steve-smith-sr	BAL	149
+296	Nelson Agholor	WR	8	http://www.rotoworld.com/player/nfl/10360/nelson-agholor	PHI	154
+303	Charles Johnson	WR	5	http://www.rotoworld.com/player/nfl/8615/charles-johnson	MIN	155
+306	Mike Wallace	WR	5	http://www.rotoworld.com/player/nfl/5329/mike-wallace	MIN	157
+329	Pierre Garcon	WR	8	http://www.rotoworld.com/player/nfl/4945/pierre-garcon	WAS	159
+341	Marques Colston	WR	11	http://www.rotoworld.com/player/nfl/4032/marques-colston	NO	160
+310	Michael Floyd	WR	9	http://www.rotoworld.com/player/nfl/6759/michael-floyd	ARI	164
+265	Martavis Bryant	WR	11	http://www.rotoworld.com/player/nfl/9416/martavis-bryant	PIT	165
+362	Rueben Randle	WR	11	http://www.rotoworld.com/player/nfl/7468/rueben-randle	NYG	171
+487	WR Tier 8	WR	\N	\N	\N	174
+335	Terrance Williams	WR	6	http://www.rotoworld.com/player/nfl/8401/terrance-williams	DAL	176
+488	WR Tier 9	WR	\N	\N	\N	178
+489	WR Tier 10	WR	\N	\N	\N	185
+490	WR Tier 11	WR	\N	\N	\N	188
+491	WR Tier 12	WR	\N	\N	\N	190
+301	Kevin White	WR	7	http://www.rotoworld.com/player/nfl/10427/kevin-white	CHI	193
+479	TE Tier 5	TE	\N	\N	\N	219
+336	Reggie Bush	RB	10	http://www.rotoworld.com/player/nfl/3600/reggie-bush	SF	101
+219	Adrian Peterson	RB	5	http://www.rotoworld.com/player/nfl/4169/adrian-peterson	MIN	35
+467	RB Tier 7	RB	\N	\N	\N	70
+340	DeAngelo Williams	RB	11	http://www.rotoworld.com/player/nfl/3611/deangelo-williams	PIT	103
+396	Austin Seferian-Jenkins	TE	6	http://www.rotoworld.com/player/nfl/9400/austin-seferian-jenkins	TB	220
+462	RB Tier 2	RB	\N	\N	\N	42
+353	Danny Woodhead	RB	10	http://www.rotoworld.com/player/nfl/5297/danny-woodhead	SD	74
+374	Ladarius Green	TE	10	http://www.rotoworld.com/player/nfl/7568/ladarius-green	SD	222
+480	TE Tier 6	TE	\N	\N	\N	223
+241	Justin Forsett	RB	9	http://www.rotoworld.com/player/nfl/4819/justin-forsett	BAL	43
+463	RB Tier 3	RB	\N	\N	\N	47
+252	Lamar Miller	RB	5	http://www.rotoworld.com/player/nfl/7408/lamar-miller	MIA	48
+264	Andre Ellington	RB	9	http://www.rotoworld.com/player/nfl/8388/andre-ellington	ARI	51
+464	RB Tier 4	RB	\N	\N	\N	53
+257	Latavius Murray	RB	6	http://www.rotoworld.com/player/nfl/8585/latavius-murray	OAK	54
+287	Tevin Coleman	RB	10	http://www.rotoworld.com/player/nfl/10359/tevin-coleman	ATL	75
+297	Isaiah Crowell	RB	11	http://www.rotoworld.com/player/nfl/9401/isaiah-crowell	CLE	76
+314	Devonta Freeman	RB	10	http://www.rotoworld.com/player/nfl/9423/devonta-freeman	ATL	77
+317	Duke Johnson	RB	11	http://www.rotoworld.com/player/nfl/10358/duke-johnson	CLE	78
+404	Roy Helu	RB	6	http://www.rotoworld.com/player/nfl/6593/roy-helu	OAK	84
+302	Tre Mason	RB	6	http://www.rotoworld.com/player/nfl/9318/tre-mason	STL	85
+321	David Johnson	RB	9	http://www.rotoworld.com/player/nfl/10404/david-johnson	ARI	86
+401	Jerick McKinnon	RB	5	http://www.rotoworld.com/player/nfl/9651/jerick-mckinnon	MIN	104
+383	Denard Robinson	RB	8	http://www.rotoworld.com/player/nfl/8457/denard-robinson	JAC	105
+392	Stevan Ridley	RB	5	http://www.rotoworld.com/player/nfl/6487/stevan-ridley	NYJ	107
+468	WR Tier 1	WR	\N	\N	\N	115
+231	Julio Jones	WR	10	http://www.rotoworld.com/player/nfl/6475/julio-jones	ATL	117
+469	WR Tier 2	WR	\N	\N	\N	120
+470	WR Tier 3	WR	\N	\N	\N	126
+471	WR Tier 4	WR	\N	\N	\N	132
+472	WR Tier 5	WR	\N	\N	\N	144
+309	Roddy White	WR	10	http://www.rotoworld.com/player/nfl/3161/roddy-white	ATL	151
+481	TE Tier 7	TE	\N	\N	\N	227
+454	QB Tier 1	QB	\N	\N	\N	0
+455	QB Tier 2	QB	\N	\N	\N	3
+244	Melvin Gordon	RB	10	http://www.rotoworld.com/player/nfl/10284/melvin-gordon	SD	57
+465	RB Tier 5	RB	\N	\N	\N	59
+466	RB Tier 6	RB	\N	\N	\N	64
+285	Giovani Bernard	RB	7	http://www.rotoworld.com/player/nfl/8389/giovani-bernard	CIN	65
+263	Todd Gurley	RB	6	http://www.rotoworld.com/player/nfl/10288/todd-gurley	STL	66
+259	Carlos Hyde	RB	10	http://www.rotoworld.com/player/nfl/9381/carlos-hyde	SF	68
+331	Knile Davis	RB	9	http://www.rotoworld.com/player/nfl/8467/knile-davis	KC	95
+456	QB Tier 3	QB	\N	\N	\N	8
+380	Fred Jackson	RB	8	http://www.rotoworld.com/player/nfl/4506/fred-jackson	BUF	96
+407	Terrance West	RB	11	http://www.rotoworld.com/player/nfl/9406/terrance-west	CLE	99
+473	WR Tier 6	WR	\N	\N	\N	152
+294	Matt Ryan	QB	10	http://www.rotoworld.com/player/nfl/4637/matt-ryan	ATL	9
+457	QB Tier 4	QB	\N	\N	\N	12
+458	QB Tier 5	QB	\N	\N	\N	18
+344	Teddy Bridgewater	QB	5	http://www.rotoworld.com/player/nfl/9274/teddy-bridgewater	MIN	21
+276	LeGarrette Blount	RB	4	http://www.rotoworld.com/player/nfl/5854/legarrette-blount	NE	69
+352	Jay Ajayi	RB	5	http://www.rotoworld.com/player/nfl/10361/jay-ajayi	MIA	100
+474	WR Tier 7	WR	\N	\N	\N	167
+475	TE Tier 1	TE	\N	\N	\N	198
+476	TE Tier 2	TE	\N	\N	\N	200
+477	TE Tier 3	TE	\N	\N	\N	205
+478	TE Tier 4	TE	\N	\N	\N	210
+385	Larry Donnell	TE	11	http://www.rotoworld.com/player/nfl/7512/larry-donnell	NYG	218
+459	QB Tier 6	QB	\N	\N	\N	24
+460	QB Tier 7	QB	\N	\N	\N	26
+492	QB Tier 8	QB	\N	\N	\N	30
+461	RB Tier 1	RB	\N	\N	\N	34
+298	Tony Romo	QB	6	http://www.rotoworld.com/player/nfl/2730/tony-romo	DAL	10
+320	Larry Fitzgerald	WR	9	http://www.rotoworld.com/player/nfl/1661/larry-fitzgerald	ARI	148
+435	Matt Bryant	PK	10	http://www.rotoworld.com/player/nfl/978/matt-bryant	ATL	257
+444	Nick Novak	PK	10	http://www.rotoworld.com/player/nfl/3504/nick-novak	SD	258
+345	Anquan Boldin	WR	10	http://www.rotoworld.com/player/nfl/2078/anquan-boldin	SF	150
+330	Torrey Smith	WR	10	http://www.rotoworld.com/player/nfl/6442/torrey-smith	SF	162
+324	Brandon LaFell	WR	4	http://www.rotoworld.com/player/nfl/5188/brandon-lafell	NE	194
+439	Blair Walsh	PK	5	http://www.rotoworld.com/player/nfl/7620/blair-walsh	MIN	259
+434	Matt Prater	PK	9	http://www.rotoworld.com/player/nfl/4502/matt-prater	DET	260
+319	Eli Manning	QB	11	http://www.rotoworld.com/player/nfl/1657/eli-manning	NYG	14
+375	Jameis Winston	QB	6	http://www.rotoworld.com/player/nfl/9376/jameis-winston	TB	29
+267	C.J. Spiller	RB	11	http://www.rotoworld.com/player/nfl/5566/cj-spiller	NO	52
+290	Doug Martin	RB	6	http://www.rotoworld.com/player/nfl/7426/doug-martin	TB	60
+440	Shaun Suisham	PK	11	http://www.rotoworld.com/player/nfl/3529/shaun-suisham	PIT	261
+438	Dan Carpenter	PK	8	http://www.rotoworld.com/player/nfl/5007/dan-carpenter	BUF	262
+443	Chandler Catanzaro	PK	9	http://www.rotoworld.com/player/nfl/10045/chandler-catanzaro	ARI	263
+258	Joseph Randle	RB	6	http://www.rotoworld.com/player/nfl/8395/joseph-randle	DAL	63
+299	Shane Vereen	RB	11	http://www.rotoworld.com/player/nfl/6445/shane-vereen	NYG	71
+339	Jason Witten	TE	6	http://www.rotoworld.com/player/nfl/1990/jason-witten	DAL	207
+281	Rashad Jennings	RB	11	http://www.rotoworld.com/player/nfl/5273/rashad-jennings	NYG	72
+343	Delanie Walker	TE	4	http://www.rotoworld.com/player/nfl/3976/delanie-walker	TEN	208
+369	Vernon Davis	TE	10	http://www.rotoworld.com/player/nfl/3638/vernon-davis	SF	224
+406	Charles Clay	TE	8	http://www.rotoworld.com/player/nfl/6681/charles-clay	BUF	225
+441	Greg Zuerlein	PK	6	http://www.rotoworld.com/player/nfl/7616/greg-zuerlein	STL	264
+419	Eric Ebron	TE	9	http://www.rotoworld.com/player/nfl/9390/eric-ebron	DET	226
+326	Bishop Sankey	RB	4	http://www.rotoworld.com/player/nfl/9408/bishop-sankey	TEN	80
+300	Darren McFadden	RB	6	http://www.rotoworld.com/player/nfl/4649/darren-mcfadden	DAL	82
+337	Charles Sims	RB	6	http://www.rotoworld.com/player/nfl/9425/charles-sims	TB	87
+323	David Cobb	RB	4	http://www.rotoworld.com/player/nfl/10369/david-cobb	TEN	90
+420	Maxx Williams	TE	9	http://www.rotoworld.com/player/nfl/10298/maxx-williams	BAL	228
+364	Stephen Gostkowski	PK	4	http://www.rotoworld.com/player/nfl/3937/stephen-gostkowski	NE	249
+400	Steven Hauschka	PK	9	http://www.rotoworld.com/player/nfl/5030/steven-hauschka	SEA	250
+442	Sebastian Janikowski	PK	6	http://www.rotoworld.com/player/nfl/819/sebastian-janikowski	OAK	265
+395	Andre Williams	RB	11	http://www.rotoworld.com/player/nfl/9407/andre-williams	NYG	92
+411	Justin Tucker	PK	9	http://www.rotoworld.com/player/nfl/8241/justin-tucker	BAL	251
+405	Mason Crosby	PK	7	http://www.rotoworld.com/player/nfl/4182/mason-crosby	GB	253
+386	Dan Bailey	PK	6	http://www.rotoworld.com/player/nfl/7144/dan-bailey	DAL	254
+424	Cody Parkey	PK	8	http://www.rotoworld.com/player/nfl/9893/cody-parkey	PHI	255
+422	Connor Barth	PK	7	http://www.rotoworld.com/player/nfl/5048/connor-barth	DEN	256
+398	Lance Dunbar	RB	6	http://www.rotoworld.com/player/nfl/7798/lance-dunbar	DAL	97
+227	Dez Bryant	WR	6	http://www.rotoworld.com/player/nfl/5558/dez-bryant	DAL	119
+245	Mike Evans	WR	6	http://www.rotoworld.com/player/nfl/9296/mike-evans	TB	128
+288	Jarvis Landry	WR	5	http://www.rotoworld.com/player/nfl/9405/jarvis-landry	MIA	141
+378	Markus Wheaton	WR	11	http://www.rotoworld.com/player/nfl/8406/markus-wheaton	PIT	168
+357	Brian Quick	WR	6	http://www.rotoworld.com/player/nfl/7477/brian-quick	STL	169
+327	Breshad Perriman	WR	9	http://www.rotoworld.com/player/nfl/10357/breshad-perriman	BAL	173
+416	Doug Baldwin	WR	9	http://www.rotoworld.com/player/nfl/6825/doug-baldwin	SEA	177
+346	Percy Harvin	WR	8	http://www.rotoworld.com/player/nfl/5197/percy-harvin	BUF	180
+394	Dwayne Bowe	WR	11	http://www.rotoworld.com/player/nfl/4184/dwayne-bowe	CLE	181
+367	Marvin Jones	WR	7	http://www.rotoworld.com/player/nfl/7503/marvin-jones	CIN	182
+389	Donte Moncrief	WR	10	http://www.rotoworld.com/player/nfl/9427/donte-moncrief	IND	184
+399	Phillip Dorsett	WR	10	http://www.rotoworld.com/player/nfl/10381/phillip-dorsett	IND	186
+234	Andrew Luck	QB	10	http://www.rotoworld.com/player/nfl/6439/andrew-luck	IND	1
+402	Marcus Mariota	QB	4	http://www.rotoworld.com/player/nfl/9385/marcus-mariota	TEN	31
+247	Frank Gore	RB	10	http://www.rotoworld.com/player/nfl/3205/frank-gore	IND	49
+436	Jaelen Strong	WR	9	http://www.rotoworld.com/player/nfl/10287/jaelen-strong	HOU	187
+431	Tyler Lockett	WR	9	http://www.rotoworld.com/player/nfl/10408/tyler-lockett	SEA	191
+370	Kenny Stills	WR	5	http://www.rotoworld.com/player/nfl/8482/kenny-stills	MIA	195
+293	Julius Thomas	TE	8	http://www.rotoworld.com/player/nfl/6598/julius-thomas	JAC	213
+359	Dwayne Allen	TE	10	http://www.rotoworld.com/player/nfl/7452/dwayne-allen	IND	217
+381	Coby Fleener	TE	10	http://www.rotoworld.com/player/nfl/7418/coby-fleener	IND	221
+372	Adam Vinatieri	PK	10	http://www.rotoworld.com/player/nfl/1152/adam-vinatieri	IND	252
+271	T.J. Yeldon	RB	8	http://www.rotoworld.com/player/nfl/10311/tj-yeldon	JAC	61
+225	Arian Foster	RB	9	http://www.rotoworld.com/player/nfl/5469/arian-foster	HOU	67
+363	Alfred Blue	RB	9	http://www.rotoworld.com/player/nfl/9685/alfred-blue	HOU	88
+393	Dan Herron	RB	10	http://www.rotoworld.com/player/nfl/7634/dan-herron	IND	110
+246	T.Y. Hilton	WR	10	http://www.rotoworld.com/player/nfl/7558/ty-hilton	IND	129
+253	DeAndre Hopkins	WR	9	http://www.rotoworld.com/player/nfl/8404/deandre-hopkins	HOU	131
+261	Andre Johnson	WR	10	http://www.rotoworld.com/player/nfl/1575/andre-johnson	IND	135
+286	Allen Robinson	WR	8	http://www.rotoworld.com/player/nfl/9297/allen-robinson	JAC	140
+348	Eric Decker	WR	5	http://www.rotoworld.com/player/nfl/5819/eric-decker	NYJ	153
+325	John Brown	WR	9	http://www.rotoworld.com/player/nfl/9649/john-brown	ARI	156
+373	Kendall Wright	WR	4	http://www.rotoworld.com/player/nfl/7425/kendall-wright	TEN	158
+292	Victor Cruz	WR	11	http://www.rotoworld.com/player/nfl/6313/victor-cruz	NYG	166
+308	Matthew Stafford	QB	9	http://www.rotoworld.com/player/nfl/5132/matthew-stafford	DET	16
+332	Philip Rivers	QB	10	http://www.rotoworld.com/player/nfl/1813/philip-rivers	SD	17
+351	Sam Bradford	QB	8	http://www.rotoworld.com/player/nfl/5161/sam-bradford	PHI	19
+377	Jay Cutler	QB	7	http://www.rotoworld.com/player/nfl/3608/jay-cutler	CHI	25
+417	Robert Griffin III	QB	8	http://www.rotoworld.com/player/nfl/7406/robert-griffin-iii	WAS	27
+410	Derek Carr	QB	6	http://www.rotoworld.com/player/nfl/9349/derek-carr	OAK	32
+220	Jamaal Charles	RB	9	http://www.rotoworld.com/player/nfl/4617/jamaal-charles	KC	37
+221	Eddie Lacy	RB	7	http://www.rotoworld.com/player/nfl/8382/eddie-lacy	GB	38
+305	Chris Ivory	RB	5	http://www.rotoworld.com/player/nfl/6168/chris-ivory	NYJ	62
+342	DeVante Parker	WR	5	http://www.rotoworld.com/player/nfl/10415/devante-parker	MIA	172
+238	Aaron Rodgers	QB	7	http://www.rotoworld.com/player/nfl/3118/aaron-rodgers	GB	2
+256	Peyton Manning	QB	7	http://www.rotoworld.com/player/nfl/1493/peyton-manning	DEN	5
+269	Drew Brees	QB	11	http://www.rotoworld.com/player/nfl/591/drew-brees	NO	6
+304	Tom Brady	QB	4	http://www.rotoworld.com/player/nfl/1163/tom-brady	NE	11
+289	Cam Newton	QB	5	http://www.rotoworld.com/player/nfl/6491/cam-newton	CAR	15
+\.
+
+
+--
+-- Name: tiersheet_player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('tiersheet_player_id_seq', 493, true);
+
+
+--
+-- Data for Name: tiersheet_rotoworld_url; Type: TABLE DATA; Schema: public; Owner: tom
+--
+
+COPY tiersheet_rotoworld_url (id, name, roto_url) FROM stdin;
+1	Carson Palmer	http://www.rotoworld.com/player/nfl/2550/carson-palmer
+2	Drew Stanton	http://www.rotoworld.com/player/nfl/4179/drew-stanton
+3	Logan Thomas	http://www.rotoworld.com/player/nfl/9354/logan-thomas
+4	Chandler Harnish	http://www.rotoworld.com/player/nfl/7692/chandler-harnish
+5	Phillip Sims	http://www.rotoworld.com/player/nfl/10843/phillip-sims
+6	Andre Ellington	http://www.rotoworld.com/player/nfl/8388/andre-ellington
+7	David Johnson	http://www.rotoworld.com/player/nfl/10404/david-johnson
+8	Kerwynn Williams	http://www.rotoworld.com/player/nfl/8486/kerwynn-williams
+9	Stepfan Taylor	http://www.rotoworld.com/player/nfl/8397/stepfan-taylor
+10	Marion Grice	http://www.rotoworld.com/player/nfl/9626/marion-grice
+11	Robert Hughes	http://www.rotoworld.com/player/nfl/6798/robert-hughes
+12	Larry Fitzgerald	http://www.rotoworld.com/player/nfl/1661/larry-fitzgerald
+13	John Brown	http://www.rotoworld.com/player/nfl/9649/john-brown
+14	J.J. Nelson	http://www.rotoworld.com/player/nfl/10536/jj-nelson
+15	Ryan Spadola	http://www.rotoworld.com/player/nfl/8800/ryan-spadola
+16	Damond Powell	http://www.rotoworld.com/player/nfl/10881/damond-powell
+17	Michael Floyd	http://www.rotoworld.com/player/nfl/6759/michael-floyd
+18	Jaron Brown	http://www.rotoworld.com/player/nfl/8869/jaron-brown
+19	Brittan Golden	http://www.rotoworld.com/player/nfl/7708/brittan-golden
+20	Jaxon Shipley	http://www.rotoworld.com/player/nfl/10733/jaxon-shipley
+21	Trevor Harman	http://www.rotoworld.com/player/nfl/10879/trevor-harman
+22	Darren Fells	http://www.rotoworld.com/player/nfl/8472/darren-fells
+23	Troy Niklas	http://www.rotoworld.com/player/nfl/9319/troy-niklas
+24	Gerald Christian	http://www.rotoworld.com/player/nfl/10627/gerald-christian
+25	Ted Bolser	http://www.rotoworld.com/player/nfl/9703/ted-bolser
+26	Ifeanyi Momah	http://www.rotoworld.com/player/nfl/8488/ifeanyi-momah
+27	Chandler Catanzaro	http://www.rotoworld.com/player/nfl/10045/chandler-catanzaro
+28	Russell Wilson	http://www.rotoworld.com/player/nfl/7460/russell-wilson
+29	B.J. Daniels	http://www.rotoworld.com/player/nfl/8630/bj-daniels
+30	R.J. Archer	http://www.rotoworld.com/player/nfl/6299/rj-archer
+31	Marshawn Lynch	http://www.rotoworld.com/player/nfl/4186/marshawn-lynch
+32	Robert Turbin	http://www.rotoworld.com/player/nfl/7423/robert-turbin
+33	Christine Michael	http://www.rotoworld.com/player/nfl/8469/christine-michael
+34	Thomas Rawls	http://www.rotoworld.com/player/nfl/10420/thomas-rawls
+35	Rod Smith	http://www.rotoworld.com/player/nfl/10784/rod-smith
+36	Derrick Coleman	http://www.rotoworld.com/player/nfl/8019/derrick-coleman
+37	Will Tukuafu	http://www.rotoworld.com/player/nfl/6437/will-tukuafu
+38	Brandon Cottom	http://www.rotoworld.com/player/nfl/11100/brandon-cottom
+39	Doug Baldwin	http://www.rotoworld.com/player/nfl/6825/doug-baldwin
+40	Ricardo Lockette	http://www.rotoworld.com/player/nfl/6826/ricardo-lockette
+41	Kevin Norwood	http://www.rotoworld.com/player/nfl/9660/kevin-norwood
+42	Douglas McNeil	http://www.rotoworld.com/player/nfl/10352/douglas-mcneil
+43	Kasen Williams	http://www.rotoworld.com/player/nfl/10717/kasen-williams
+44	Jermaine Kearse	http://www.rotoworld.com/player/nfl/7727/jermaine-kearse
+45	Tyler Lockett	http://www.rotoworld.com/player/nfl/10408/tyler-lockett
+46	Chris Matthews	http://www.rotoworld.com/player/nfl/7304/chris-matthews
+47	Paul Richardson	http://www.rotoworld.com/player/nfl/9545/paul-richardson
+48	Kevin Smith	http://www.rotoworld.com/player/nfl/10055/kevin-smith
+49	Jimmy Graham	http://www.rotoworld.com/player/nfl/5842/jimmy-graham
+50	Luke Willson	http://www.rotoworld.com/player/nfl/8567/luke-willson
+51	Cooper Helfet	http://www.rotoworld.com/player/nfl/8239/cooper-helfet
+52	Rashaun Allen	http://www.rotoworld.com/player/nfl/10180/rashaun-allen
+53	Anthony McCoy	http://www.rotoworld.com/player/nfl/5604/anthony-mccoy
+54	Steven Hauschka	http://www.rotoworld.com/player/nfl/5030/steven-hauschka
+55	Colin Kaepernick	http://www.rotoworld.com/player/nfl/6530/colin-kaepernick
+56	Blaine Gabbert	http://www.rotoworld.com/player/nfl/6451/blaine-gabbert
+57	Dylan Thompson	http://www.rotoworld.com/player/nfl/10628/dylan-thompson
+58	Carlos Hyde	http://www.rotoworld.com/player/nfl/9381/carlos-hyde
+59	Reggie Bush	http://www.rotoworld.com/player/nfl/3600/reggie-bush
+60	Kendall Hunter	http://www.rotoworld.com/player/nfl/6540/kendall-hunter
+61	Mike Davis	http://www.rotoworld.com/player/nfl/10378/mike-davis
+62	Kendall Gaskins	http://www.rotoworld.com/player/nfl/8807/kendall-gaskins
+63	Bruce Miller	http://www.rotoworld.com/player/nfl/6713/bruce-miller
+64	Trey Millard	http://www.rotoworld.com/player/nfl/9727/trey-millard
+65	Anquan Boldin	http://www.rotoworld.com/player/nfl/2078/anquan-boldin
+66	Bruce Ellington	http://www.rotoworld.com/player/nfl/9608/bruce-ellington
+67	DeAndre Smelter	http://www.rotoworld.com/player/nfl/10430/deandre-smelter
+68	Dres Anderson	http://www.rotoworld.com/player/nfl/10677/dres-anderson
+69	Darius Davis	http://www.rotoworld.com/player/nfl/10684/darius-davis
+70	Torrey Smith	http://www.rotoworld.com/player/nfl/6442/torrey-smith
+71	Quinton Patton	http://www.rotoworld.com/player/nfl/8403/quinton-patton
+72	Jerome Simpson	http://www.rotoworld.com/player/nfl/4859/jerome-simpson
+73	Chuck Jacobs	http://www.rotoworld.com/player/nfl/9061/chuck-jacobs
+74	DeAndrew White	http://www.rotoworld.com/player/nfl/10695/deandrew-white
+75	Vernon Davis	http://www.rotoworld.com/player/nfl/3638/vernon-davis
+76	Vance McDonald	http://www.rotoworld.com/player/nfl/8413/vance-mcdonald
+77	Derek Carrier	http://www.rotoworld.com/player/nfl/7527/derek-carrier
+78	Garrett Celek	http://www.rotoworld.com/player/nfl/7982/garrett-celek
+79	Blake Bell	http://www.rotoworld.com/player/nfl/10366/blake-bell
+80	Phil Dawson	http://www.rotoworld.com/player/nfl/2631/phil-dawson
+81	Nick Foles	http://www.rotoworld.com/player/nfl/7475/nick-foles
+82	Austin Davis	http://www.rotoworld.com/player/nfl/8069/austin-davis
+83	Case Keenum	http://www.rotoworld.com/player/nfl/7696/case-keenum
+84	Sean Mannion	http://www.rotoworld.com/player/nfl/10409/sean-mannion
+85	Tre Mason	http://www.rotoworld.com/player/nfl/9318/tre-mason
+86	Todd Gurley	http://www.rotoworld.com/player/nfl/10288/todd-gurley
+87	Benny Cunningham	http://www.rotoworld.com/player/nfl/8953/benny-cunningham
+88	Chase Reynolds	http://www.rotoworld.com/player/nfl/7364/chase-reynolds
+89	Malcolm Brown	http://www.rotoworld.com/player/nfl/10674/malcolm-brown
+90	Cory Harkey	http://www.rotoworld.com/player/nfl/8070/cory-harkey
+91	Brad Smelley	http://www.rotoworld.com/player/nfl/7686/brad-smelley
+92	Zach Laskey	http://www.rotoworld.com/player/nfl/11019/zach-laskey
+93	Brian Quick	http://www.rotoworld.com/player/nfl/7477/brian-quick
+94	Tavon Austin	http://www.rotoworld.com/player/nfl/8402/tavon-austin
+95	Chris Givens	http://www.rotoworld.com/player/nfl/7430/chris-givens
+96	Damian Williams	http://www.rotoworld.com/player/nfl/5702/damian-williams
+97	Bud Sasser	http://www.rotoworld.com/player/nfl/10575/bud-sasser
+98	Kenny Britt	http://www.rotoworld.com/player/nfl/5130/kenny-britt
+99	Stedman Bailey	http://www.rotoworld.com/player/nfl/8380/stedman-bailey
+100	Emory Blake	http://www.rotoworld.com/player/nfl/8976/emory-blake
+101	Devon Wylie	http://www.rotoworld.com/player/nfl/7566/devon-wylie
+102	Isiah Ferguson	http://www.rotoworld.com/player/nfl/11014/isiah-ferguson
+103	Jared Cook	http://www.rotoworld.com/player/nfl/5165/jared-cook
+104	Lance Kendricks	http://www.rotoworld.com/player/nfl/6614/lance-kendricks
+105	Justice Cunningham	http://www.rotoworld.com/player/nfl/8643/justice-cunningham
+106	Alex Bayer	http://www.rotoworld.com/player/nfl/9932/alex-bayer
+107	Greg Zuerlein	http://www.rotoworld.com/player/nfl/7616/greg-zuerlein
+108	Michael Palardy	http://www.rotoworld.com/player/nfl/10218/michael-palardy
+109	Joe Flacco	http://www.rotoworld.com/player/nfl/4677/joe-flacco
+110	Matt Schaub	http://www.rotoworld.com/player/nfl/16/matt-schaub
+111	Bryn Renner	http://www.rotoworld.com/player/nfl/9745/bryn-renner
+112	Jerry Lovelocke	http://www.rotoworld.com/player/nfl/10660/jerry-lovelocke
+113	Justin Forsett	http://www.rotoworld.com/player/nfl/4819/justin-forsett
+114	Buck Allen	http://www.rotoworld.com/player/nfl/10314/buck-allen
+115	Lorenzo Taliaferro	http://www.rotoworld.com/player/nfl/9560/lorenzo-taliaferro
+116	Fitzgerald Toussaint	http://www.rotoworld.com/player/nfl/10209/fitzgerald-toussaint
+117	Terrence Magee	http://www.rotoworld.com/player/nfl/10666/terrence-magee
+118	Kyle Juszczyk	http://www.rotoworld.com/player/nfl/8548/kyle-juszczyk
+119	Kiero Small	http://www.rotoworld.com/player/nfl/9711/kiero-small
+121	Marlon Brown	http://www.rotoworld.com/player/nfl/9189/marlon-brown
+122	Michael Campanaro	http://www.rotoworld.com/player/nfl/9594/michael-campanaro
+123	Aldrick Robinson	http://www.rotoworld.com/player/nfl/6685/aldrick-robinson
+124	DeAndre Carter	http://www.rotoworld.com/player/nfl/10738/deandre-carter
+125	Breshad Perriman	http://www.rotoworld.com/player/nfl/10357/breshad-perriman
+126	Kamar Aiken	http://www.rotoworld.com/player/nfl/7097/kamar-aiken
+127	Darren Waller	http://www.rotoworld.com/player/nfl/10433/darren-waller
+128	Jeremy Butler	http://www.rotoworld.com/player/nfl/9947/jeremy-butler
+129	Cam Worthy	http://www.rotoworld.com/player/nfl/10886/cam-worthy
+130	Maxx Williams	http://www.rotoworld.com/player/nfl/10298/maxx-williams
+131	Crockett Gillmore	http://www.rotoworld.com/player/nfl/9625/crockett-gillmore
+132	Allen Reisner	http://www.rotoworld.com/player/nfl/6950/allen-reisner
+133	Nick Boyle	http://www.rotoworld.com/player/nfl/10547/nick-boyle
+134	Konrad Reuland	http://www.rotoworld.com/player/nfl/6944/konrad-reuland
+135	Justin Tucker	http://www.rotoworld.com/player/nfl/8241/justin-tucker
+136	Justin Manton	http://www.rotoworld.com/player/nfl/10680/justin-manton
+137	Andy Dalton	http://www.rotoworld.com/player/nfl/6493/andy-dalton
+138	A.J. McCarron	http://www.rotoworld.com/player/nfl/9290/aj-mccarron
+139	Josh Johnson	http://www.rotoworld.com/player/nfl/4706/josh-johnson
+140	Terrelle Pryor	http://www.rotoworld.com/player/nfl/6757/terrelle-pryor
+141	Jeremy Hill	http://www.rotoworld.com/player/nfl/9409/jeremy-hill
+142	Giovani Bernard	http://www.rotoworld.com/player/nfl/8389/giovani-bernard
+143	Rex Burkhead	http://www.rotoworld.com/player/nfl/8466/rex-burkhead
+144	Cedric Peerman	http://www.rotoworld.com/player/nfl/5399/cedric-peerman
+145	James Wilder Jr.	http://www.rotoworld.com/player/nfl/9763/james-wilder-jr
+146	Ryan Hewitt	http://www.rotoworld.com/player/nfl/9985/ryan-hewitt
+147	A.J. Green	http://www.rotoworld.com/player/nfl/6438/aj-green
+148	James Wright	http://www.rotoworld.com/player/nfl/9721/james-wright
+149	Denarius Moore	http://www.rotoworld.com/player/nfl/6658/denarius-moore
+150	Cobi Hamilton	http://www.rotoworld.com/player/nfl/8597/cobi-hamilton
+151	Tevin Reese	http://www.rotoworld.com/player/nfl/9722/tevin-reese
+152	Marvin Jones	http://www.rotoworld.com/player/nfl/7503/marvin-jones
+153	Mohamed Sanu	http://www.rotoworld.com/player/nfl/7433/mohamed-sanu
+154	Brandon Tate	http://www.rotoworld.com/player/nfl/5140/brandon-tate
+155	Mario Alford	http://www.rotoworld.com/player/nfl/10611/mario-alford
+156	Jake Kumerow	http://www.rotoworld.com/player/nfl/10867/jake-kumerow
+157	Tyler Eifert	http://www.rotoworld.com/player/nfl/8408/tyler-eifert
+158	Tyler Kroft	http://www.rotoworld.com/player/nfl/10490/tyler-kroft
+159	C.J. Uzomah	http://www.rotoworld.com/player/nfl/10534/cj-uzomah
+160	Jake Murphy	http://www.rotoworld.com/player/nfl/10141/jake-murphy
+161	Matt Lengel	http://www.rotoworld.com/player/nfl/10868/matt-lengel
+162	Mike Nugent	http://www.rotoworld.com/player/nfl/3160/mike-nugent
+163	Tom Obarski	http://www.rotoworld.com/player/nfl/11009/tom-obarski
+164	Josh McCown	http://www.rotoworld.com/player/nfl/2090/josh-mccown
+165	Johnny Manziel	http://www.rotoworld.com/player/nfl/9271/johnny-manziel
+166	Connor Shaw	http://www.rotoworld.com/player/nfl/9550/connor-shaw
+167	Thad Lewis	http://www.rotoworld.com/player/nfl/6083/thad-lewis
+168	Isaiah Crowell	http://www.rotoworld.com/player/nfl/9401/isaiah-crowell
+169	Terrance West	http://www.rotoworld.com/player/nfl/9406/terrance-west
+170	Duke Johnson	http://www.rotoworld.com/player/nfl/10358/duke-johnson
+171	Shaun Draughn	http://www.rotoworld.com/player/nfl/7197/shaun-draughn
+172	Glenn Winston	http://www.rotoworld.com/player/nfl/10268/glenn-winston
+173	Dwayne Bowe	http://www.rotoworld.com/player/nfl/4184/dwayne-bowe
+174	Taylor Gabriel	http://www.rotoworld.com/player/nfl/10162/taylor-gabriel
+175	Vince Mayle	http://www.rotoworld.com/player/nfl/10412/vince-mayle
+176	Marlon Moore	http://www.rotoworld.com/player/nfl/6056/marlon-moore
+177	Kevin Cone	http://www.rotoworld.com/player/nfl/7372/kevin-cone
+178	Brian Hartline	http://www.rotoworld.com/player/nfl/5191/brian-hartline
+179	Andrew Hawkins	http://www.rotoworld.com/player/nfl/6505/andrew-hawkins
+180	Travis Benjamin	http://www.rotoworld.com/player/nfl/7562/travis-benjamin
+181	Josh Lenz	http://www.rotoworld.com/player/nfl/8701/josh-lenz
+182	Paul Browning	http://www.rotoworld.com/player/nfl/11043/paul-browning
+183	Rob Housler	http://www.rotoworld.com/player/nfl/6621/rob-housler
+184	Jim Dray	http://www.rotoworld.com/player/nfl/5981/jim-dray
+185	Gary Barnidge	http://www.rotoworld.com/player/nfl/4894/gary-barnidge
+186	Malcolm Johnson	http://www.rotoworld.com/player/nfl/10569/malcolm-johnson
+187	Randall Telfer	http://www.rotoworld.com/player/nfl/10572/randall-telfer
+188	Travis Coons	http://www.rotoworld.com/player/nfl/9931/travis-coons
+189	Carey Spear	http://www.rotoworld.com/player/nfl/9808/carey-spear
+190	Ben Roethlisberger	http://www.rotoworld.com/player/nfl/1181/ben-roethlisberger
+191	Bruce Gradkowski	http://www.rotoworld.com/player/nfl/3634/bruce-gradkowski
+192	Landry Jones	http://www.rotoworld.com/player/nfl/7446/landry-jones
+193	Tajh Boyd	http://www.rotoworld.com/player/nfl/9350/tajh-boyd
+194	Le'Veon Bell	http://www.rotoworld.com/player/nfl/8390/leveon-bell
+195	DeAngelo Williams	http://www.rotoworld.com/player/nfl/3611/deangelo-williams
+196	Dri Archer	http://www.rotoworld.com/player/nfl/9413/dri-archer
+197	Josh Harris	http://www.rotoworld.com/player/nfl/10256/josh-harris
+198	Ross Scheuerman	http://www.rotoworld.com/player/nfl/10702/ross-scheuerman
+199	Will Johnson	http://www.rotoworld.com/player/nfl/7516/will-johnson
+200	Roosevelt Nix	http://www.rotoworld.com/player/nfl/10021/roosevelt-nix
+201	Antonio Brown	http://www.rotoworld.com/player/nfl/5698/antonio-brown
+202	Darrius Heyward-Bey	http://www.rotoworld.com/player/nfl/5093/darrius-heyward-bey
+203	Brelan Chancellor	http://www.rotoworld.com/player/nfl/9841/brelan-chancellor
+204	Eli Rogers	http://www.rotoworld.com/player/nfl/10753/eli-rogers
+205	Devin Gardner	http://www.rotoworld.com/player/nfl/10392/devin-gardner
+206	Martavis Bryant	http://www.rotoworld.com/player/nfl/9416/martavis-bryant
+207	Markus Wheaton	http://www.rotoworld.com/player/nfl/8406/markus-wheaton
+208	Sammie Coates	http://www.rotoworld.com/player/nfl/10285/sammie-coates
+209	Tyler Murphy	http://www.rotoworld.com/player/nfl/10750/tyler-murphy
+210	Shakim Phillips	http://www.rotoworld.com/player/nfl/11098/shakim-phillips
+211	Heath Miller	http://www.rotoworld.com/player/nfl/3145/heath-miller
+212	Matt Spaeth	http://www.rotoworld.com/player/nfl/4206/matt-spaeth
+213	Jesse James	http://www.rotoworld.com/player/nfl/10403/jesse-james
+214	Rob Blanchflower	http://www.rotoworld.com/player/nfl/9714/rob-blanchflower
+215	Michael Egnew	http://www.rotoworld.com/player/nfl/7505/michael-egnew
+216	Shaun Suisham	http://www.rotoworld.com/player/nfl/3529/shaun-suisham
+217	Matt Cassel	http://www.rotoworld.com/player/nfl/3237/matt-cassel
+218	E.J. Manuel	http://www.rotoworld.com/player/nfl/8331/ej-manuel
+219	Tyrod Taylor	http://www.rotoworld.com/player/nfl/6509/tyrod-taylor
+220	Matt Simms	http://www.rotoworld.com/player/nfl/8041/matt-simms
+221	LeSean McCoy	http://www.rotoworld.com/player/nfl/5168/lesean-mccoy
+222	Fred Jackson	http://www.rotoworld.com/player/nfl/4506/fred-jackson
+223	Anthony Dixon	http://www.rotoworld.com/player/nfl/5773/anthony-dixon
+224	Bryce Brown	http://www.rotoworld.com/player/nfl/7670/bryce-brown
+225	Karlos Williams	http://www.rotoworld.com/player/nfl/10532/karlos-williams
+226	Jerome Felton	http://www.rotoworld.com/player/nfl/4898/jerome-felton
+227	John Conner	http://www.rotoworld.com/player/nfl/5913/john-conner
+228	Sammy Watkins	http://www.rotoworld.com/player/nfl/9388/sammy-watkins
+229	Marquise Goodwin	http://www.rotoworld.com/player/nfl/8461/marquise-goodwin
+230	Marcus Easley	http://www.rotoworld.com/player/nfl/5843/marcus-easley
+231	Dezmin Lewis	http://www.rotoworld.com/player/nfl/10607/dezmin-lewis
+232	Marcus Thigpen	http://www.rotoworld.com/player/nfl/7467/marcus-thigpen
+233	Percy Harvin	http://www.rotoworld.com/player/nfl/5197/percy-harvin
+234	Robert Woods	http://www.rotoworld.com/player/nfl/8407/robert-woods
+235	Chris Hogan	http://www.rotoworld.com/player/nfl/6902/chris-hogan
+236	Deonte Thompson	http://www.rotoworld.com/player/nfl/8175/deonte-thompson
+237	Justin Brown	http://www.rotoworld.com/player/nfl/8589/justin-brown
+238	Charles Clay	http://www.rotoworld.com/player/nfl/6681/charles-clay
+239	Chris Gragg	http://www.rotoworld.com/player/nfl/8465/chris-gragg
+240	MarQueis Gray	http://www.rotoworld.com/player/nfl/8679/marqueis-gray
+241	Nick O'Leary	http://www.rotoworld.com/player/nfl/10568/nick-oleary
+242	Chris Manhertz	http://www.rotoworld.com/player/nfl/10295/chris-manhertz
+243	Dan Carpenter	http://www.rotoworld.com/player/nfl/5007/dan-carpenter
+244	Jordan Gay	http://www.rotoworld.com/player/nfl/9193/jordan-gay
+245	Ryan Tannehill	http://www.rotoworld.com/player/nfl/7417/ryan-tannehill
+246	Matt Moore	http://www.rotoworld.com/player/nfl/4535/matt-moore
+247	Josh Freeman	http://www.rotoworld.com/player/nfl/5121/josh-freeman
+248	McLeod Bethel-Thompson	http://www.rotoworld.com/player/nfl/7200/mcleod-bethel-thompson
+249	Lamar Miller	http://www.rotoworld.com/player/nfl/7408/lamar-miller
+250	Damien Williams	http://www.rotoworld.com/player/nfl/9570/damien-williams
+251	Jay Ajayi	http://www.rotoworld.com/player/nfl/10361/jay-ajayi
+252	LaMichael James	http://www.rotoworld.com/player/nfl/7409/lamichael-james
+253	Mike Gillislee	http://www.rotoworld.com/player/nfl/8396/mike-gillislee
+254	Jarvis Landry	http://www.rotoworld.com/player/nfl/9405/jarvis-landry
+255	Greg Jennings	http://www.rotoworld.com/player/nfl/3652/greg-jennings
+256	Matt Hazel	http://www.rotoworld.com/player/nfl/9688/matt-hazel
+257	Tyler McDonald	http://www.rotoworld.com/player/nfl/10245/tyler-mcdonald
+258	LaRon Byrd	http://www.rotoworld.com/player/nfl/7867/laron-byrd
+259	Kenny Stills	http://www.rotoworld.com/player/nfl/8482/kenny-stills
+260	DeVante Parker	http://www.rotoworld.com/player/nfl/10415/devante-parker
+261	Rishard Matthews	http://www.rotoworld.com/player/nfl/7667/rishard-matthews
+262	Michael Preston	http://www.rotoworld.com/player/nfl/6865/michael-preston
+263	Damarr Aultman	http://www.rotoworld.com/player/nfl/10659/damarr-aultman
+264	Jordan Cameron	http://www.rotoworld.com/player/nfl/6572/jordan-cameron
+265	Dion Sims	http://www.rotoworld.com/player/nfl/8532/dion-sims
+266	Arthur Lynch	http://www.rotoworld.com/player/nfl/9670/arthur-lynch
+267	Gerell Robinson	http://www.rotoworld.com/player/nfl/7721/gerell-robinson
+268	Jake Stoneburner	http://www.rotoworld.com/player/nfl/8657/jake-stoneburner
+269	Caleb Sturgis	http://www.rotoworld.com/player/nfl/8573/caleb-sturgis
+270	Andrew Franks	http://www.rotoworld.com/player/nfl/10983/andrew-franks
+271	Tom Brady	http://www.rotoworld.com/player/nfl/1163/tom-brady
+272	Jimmy Garoppolo	http://www.rotoworld.com/player/nfl/9360/jimmy-garoppolo
+273	Garrett Gilbert	http://www.rotoworld.com/player/nfl/9522/garrett-gilbert
+274	LeGarrette Blount	http://www.rotoworld.com/player/nfl/5854/legarrette-blount
+275	Brandon Bolden	http://www.rotoworld.com/player/nfl/8119/brandon-bolden
+276	Jonas Gray	http://www.rotoworld.com/player/nfl/7695/jonas-gray
+277	James White	http://www.rotoworld.com/player/nfl/9426/james-white
+278	Travaris Cadet	http://www.rotoworld.com/player/nfl/7758/travaris-cadet
+279	James Develin	http://www.rotoworld.com/player/nfl/6449/james-develin
+280	Julian Edelman	http://www.rotoworld.com/player/nfl/5440/julian-edelman
+281	Danny Amendola	http://www.rotoworld.com/player/nfl/4991/danny-amendola
+282	Brandon Gibson	http://www.rotoworld.com/player/nfl/5291/brandon-gibson
+283	Brian Tyms	http://www.rotoworld.com/player/nfl/7993/brian-tyms
+284	Jonathan Krause	http://www.rotoworld.com/player/nfl/9984/jonathan-krause
+285	Brandon LaFell	http://www.rotoworld.com/player/nfl/5188/brandon-lafell
+286	Aaron Dobson	http://www.rotoworld.com/player/nfl/8479/aaron-dobson
+287	Josh Boyce	http://www.rotoworld.com/player/nfl/8529/josh-boyce
+288	Matt Slater	http://www.rotoworld.com/player/nfl/4904/matt-slater
+289	Chris Harper	http://www.rotoworld.com/player/nfl/10967/chris-harper
+290	Rob Gronkowski	http://www.rotoworld.com/player/nfl/5729/rob-gronkowski
+291	Michael Hoomanawanui	http://www.rotoworld.com/player/nfl/5909/michael-hoomanawanui
+292	Tim Wright	http://www.rotoworld.com/player/nfl/8850/tim-wright
+293	Scott Chandler	http://www.rotoworld.com/player/nfl/4257/scott-chandler
+294	AJ Derby	http://www.rotoworld.com/player/nfl/10576/aj-derby
+295	Stephen Gostkowski	http://www.rotoworld.com/player/nfl/3937/stephen-gostkowski
+296	Geno Smith	http://www.rotoworld.com/player/nfl/8326/geno-smith
+297	Ryan Fitzpatrick	http://www.rotoworld.com/player/nfl/3240/ryan-fitzpatrick
+298	Bryce Petty	http://www.rotoworld.com/player/nfl/10419/bryce-petty
+299	Jake Heaps	http://www.rotoworld.com/player/nfl/11074/jake-heaps
+300	Chris Ivory	http://www.rotoworld.com/player/nfl/6168/chris-ivory
+301	Stevan Ridley	http://www.rotoworld.com/player/nfl/6487/stevan-ridley
+302	Bilal Powell	http://www.rotoworld.com/player/nfl/6594/bilal-powell
+303	Zac Stacy	http://www.rotoworld.com/player/nfl/8400/zac-stacy
+304	Daryl Richardson	http://www.rotoworld.com/player/nfl/7691/daryl-richardson
+305	Tommy Bohanon	http://www.rotoworld.com/player/nfl/8614/tommy-bohanon
+306	J.C. Copeland	http://www.rotoworld.com/player/nfl/9771/jc-copeland
+307	Brandon Marshall	http://www.rotoworld.com/player/nfl/3653/brandon-marshall
+308	Jeremy Kerley	http://www.rotoworld.com/player/nfl/6551/jeremy-kerley
+309	Chris Owusu	http://www.rotoworld.com/player/nfl/7495/chris-owusu
+310	Shaq Evans	http://www.rotoworld.com/player/nfl/9611/shaq-evans
+389	Marqise Lee	http://www.rotoworld.com/player/nfl/9402/marqise-lee
+311	Quincy Enunwa	http://www.rotoworld.com/player/nfl/9610/quincy-enunwa
+312	Eric Decker	http://www.rotoworld.com/player/nfl/5819/eric-decker
+313	Devin Smith	http://www.rotoworld.com/player/nfl/10423/devin-smith
+314	DeVier Posey	http://www.rotoworld.com/player/nfl/7540/devier-posey
+315	T.J. Graham	http://www.rotoworld.com/player/nfl/7542/tj-graham
+316	Saalim Hakim	http://www.rotoworld.com/player/nfl/7800/saalim-hakim
+317	Jace Amaro	http://www.rotoworld.com/player/nfl/9397/jace-amaro
+318	Jeff Cumberland	http://www.rotoworld.com/player/nfl/6078/jeff-cumberland
+319	Zach Sudfeld	http://www.rotoworld.com/player/nfl/9012/zach-sudfeld
+320	Kellen Davis	http://www.rotoworld.com/player/nfl/4825/kellen-davis
+321	Wes Saxton	http://www.rotoworld.com/player/nfl/10737/wes-saxton
+322	Nick Folk	http://www.rotoworld.com/player/nfl/4273/nick-folk
+323	Andrew Furney	http://www.rotoworld.com/player/nfl/10239/andrew-furney
+324	Ryan Mallett	http://www.rotoworld.com/player/nfl/6470/ryan-mallett
+325	Brian Hoyer	http://www.rotoworld.com/player/nfl/5463/brian-hoyer
+326	Tom Savage	http://www.rotoworld.com/player/nfl/9418/tom-savage
+327	Arian Foster	http://www.rotoworld.com/player/nfl/5469/arian-foster
+328	Alfred Blue	http://www.rotoworld.com/player/nfl/9685/alfred-blue
+329	Jonathan Grimes	http://www.rotoworld.com/player/nfl/8209/jonathan-grimes
+330	Chris Polk	http://www.rotoworld.com/player/nfl/7424/chris-polk
+331	Kenny Hilliard	http://www.rotoworld.com/player/nfl/10608/kenny-hilliard
+332	Jay Prosch	http://www.rotoworld.com/player/nfl/9701/jay-prosch
+333	DeAndre Hopkins	http://www.rotoworld.com/player/nfl/8404/deandre-hopkins
+334	Damaris Johnson	http://www.rotoworld.com/player/nfl/7739/damaris-johnson
+335	Keshawn Martin	http://www.rotoworld.com/player/nfl/7577/keshawn-martin
+336	Keith Mumphery	http://www.rotoworld.com/player/nfl/10550/keith-mumphery
+337	Travis Labhart	http://www.rotoworld.com/player/nfl/10127/travis-labhart
+338	Cecil Shorts	http://www.rotoworld.com/player/nfl/6602/cecil-shorts
+339	Jaelen Strong	http://www.rotoworld.com/player/nfl/10287/jaelen-strong
+340	Nate Washington	http://www.rotoworld.com/player/nfl/3446/nate-washington
+341	Alan Bonner	http://www.rotoworld.com/player/nfl/8596/alan-bonner
+342	Uzoma Nwachukwu	http://www.rotoworld.com/player/nfl/9087/uzoma-nwachukwu
+343	Garrett Graham	http://www.rotoworld.com/player/nfl/5900/garrett-graham
+344	C.J. Fiedorowicz	http://www.rotoworld.com/player/nfl/9613/cj-fiedorowicz
+345	Ryan Griffin	http://www.rotoworld.com/player/nfl/8600/ryan-griffin
+346	Anthony Denham	http://www.rotoworld.com/player/nfl/10121/anthony-denham
+347	Khari Lee	http://www.rotoworld.com/player/nfl/10723/khari-lee
+348	Randy Bullock	http://www.rotoworld.com/player/nfl/7610/randy-bullock
+349	Andrew Luck	http://www.rotoworld.com/player/nfl/6439/andrew-luck
+350	Matt Hasselbeck	http://www.rotoworld.com/player/nfl/519/matt-hasselbeck
+351	Bryan Bennett	http://www.rotoworld.com/player/nfl/10806/bryan-bennett
+352	Frank Gore	http://www.rotoworld.com/player/nfl/3205/frank-gore
+353	Dan Herron	http://www.rotoworld.com/player/nfl/7634/dan-herron
+354	Josh Robinson	http://www.rotoworld.com/player/nfl/10578/josh-robinson
+355	Zurlon Tipton	http://www.rotoworld.com/player/nfl/9897/zurlon-tipton
+356	Vick Ballard	http://www.rotoworld.com/player/nfl/7615/vick-ballard
+357	Tyler Varga	http://www.rotoworld.com/player/nfl/10425/tyler-varga
+358	T.Y. Hilton	http://www.rotoworld.com/player/nfl/7558/ty-hilton
+359	Phillip Dorsett	http://www.rotoworld.com/player/nfl/10381/phillip-dorsett
+360	Griff Whalen	http://www.rotoworld.com/player/nfl/7949/griff-whalen
+361	Vincent Brown	http://www.rotoworld.com/player/nfl/6535/vincent-brown
+362	Ezell Ruffin	http://www.rotoworld.com/player/nfl/10640/ezell-ruffin
+363	Andre Johnson	http://www.rotoworld.com/player/nfl/1575/andre-johnson
+364	Donte Moncrief	http://www.rotoworld.com/player/nfl/9427/donte-moncrief
+365	Duron Carter	http://www.rotoworld.com/player/nfl/10241/duron-carter
+366	Ryan Lankford	http://www.rotoworld.com/player/nfl/10046/ryan-lankford
+367	Quan Bray	http://www.rotoworld.com/player/nfl/10807/quan-bray
+368	Dwayne Allen	http://www.rotoworld.com/player/nfl/7452/dwayne-allen
+369	Coby Fleener	http://www.rotoworld.com/player/nfl/7418/coby-fleener
+370	Jack Doyle	http://www.rotoworld.com/player/nfl/9075/jack-doyle
+371	Erik Swoope	http://www.rotoworld.com/player/nfl/9792/erik-swoope
+372	Sean McGrath	http://www.rotoworld.com/player/nfl/7728/sean-mcgrath
+373	Adam Vinatieri	http://www.rotoworld.com/player/nfl/1152/adam-vinatieri
+374	Blake Bortles	http://www.rotoworld.com/player/nfl/9320/blake-bortles
+375	Chad Henne	http://www.rotoworld.com/player/nfl/4684/chad-henne
+376	Stephen Morris	http://www.rotoworld.com/player/nfl/9417/stephen-morris
+377	Jeff Tuel	http://www.rotoworld.com/player/nfl/8661/jeff-tuel
+378	T.J. Yeldon	http://www.rotoworld.com/player/nfl/10311/tj-yeldon
+379	Denard Robinson	http://www.rotoworld.com/player/nfl/8457/denard-robinson
+380	Storm Johnson	http://www.rotoworld.com/player/nfl/9706/storm-johnson
+381	Bernard Pierce	http://www.rotoworld.com/player/nfl/7427/bernard-pierce
+382	Corey Grant	http://www.rotoworld.com/player/nfl/10678/corey-grant
+383	Toby Gerhart	http://www.rotoworld.com/player/nfl/5730/toby-gerhart
+384	Allen Robinson	http://www.rotoworld.com/player/nfl/9297/allen-robinson
+385	Allen Hurns	http://www.rotoworld.com/player/nfl/9867/allen-hurns
+386	Arrelious Benn	http://www.rotoworld.com/player/nfl/5597/arrelious-benn
+387	Neal Sterling	http://www.rotoworld.com/player/nfl/10593/neal-sterling
+388	Tandon Doss	http://www.rotoworld.com/player/nfl/6452/tandon-doss
+390	Ace Sanders	http://www.rotoworld.com/player/nfl/8528/ace-sanders
+391	Rashad Greene	http://www.rotoworld.com/player/nfl/10397/rashad-greene
+392	Tony Washington	http://www.rotoworld.com/player/nfl/9899/tony-washington
+393	Bryan Walters	http://www.rotoworld.com/player/nfl/6201/bryan-walters
+394	Julius Thomas	http://www.rotoworld.com/player/nfl/6598/julius-thomas
+395	Marcedes Lewis	http://www.rotoworld.com/player/nfl/3615/marcedes-lewis
+396	Clay Harbor	http://www.rotoworld.com/player/nfl/5904/clay-harbor
+397	Ben Koyack	http://www.rotoworld.com/player/nfl/10601/ben-koyack
+398	Nic Jacobs	http://www.rotoworld.com/player/nfl/9907/nic-jacobs
+399	Josh Scobee	http://www.rotoworld.com/player/nfl/2842/josh-scobee
+400	Jason Myers	http://www.rotoworld.com/player/nfl/10436/jason-myers
+401	Marcus Mariota	http://www.rotoworld.com/player/nfl/9385/marcus-mariota
+402	Zach Mettenberger	http://www.rotoworld.com/player/nfl/9379/zach-mettenberger
+403	Charlie Whitehurst	http://www.rotoworld.com/player/nfl/3623/charlie-whitehurst
+404	Alex Tanney	http://www.rotoworld.com/player/nfl/8040/alex-tanney
+405	Bishop Sankey	http://www.rotoworld.com/player/nfl/9408/bishop-sankey
+406	David Cobb	http://www.rotoworld.com/player/nfl/10369/david-cobb
+407	Dexter McCluster	http://www.rotoworld.com/player/nfl/5780/dexter-mccluster
+408	Shonn Greene	http://www.rotoworld.com/player/nfl/5118/shonn-greene
+409	Antonio Andrews	http://www.rotoworld.com/player/nfl/9576/antonio-andrews
+410	Jalston Fowler	http://www.rotoworld.com/player/nfl/10499/jalston-fowler
+411	Connor Neighbors	http://www.rotoworld.com/player/nfl/10671/connor-neighbors
+412	Kendall Wright	http://www.rotoworld.com/player/nfl/7425/kendall-wright
+413	Harry Douglas	http://www.rotoworld.com/player/nfl/4863/harry-douglas
+414	Jacoby Ford	http://www.rotoworld.com/player/nfl/5789/jacoby-ford
+415	Rico Richardson	http://www.rotoworld.com/player/nfl/8964/rico-richardson
+416	Deon Long	http://www.rotoworld.com/player/nfl/10686/deon-long
+417	Dorial Green-Beckham	http://www.rotoworld.com/player/nfl/10395/dorial-green-beckham
+418	Justin Hunter	http://www.rotoworld.com/player/nfl/8415/justin-hunter
+419	Hakeem Nicks	http://www.rotoworld.com/player/nfl/5136/hakeem-nicks
+420	Tre McBride	http://www.rotoworld.com/player/nfl/10474/tre-mcbride
+421	Clyde Gates	http://www.rotoworld.com/player/nfl/6583/clyde-gates
+422	Delanie Walker	http://www.rotoworld.com/player/nfl/3976/delanie-walker
+423	Anthony Fasano	http://www.rotoworld.com/player/nfl/3604/anthony-fasano
+424	Taylor Thompson	http://www.rotoworld.com/player/nfl/7595/taylor-thompson
+425	Craig Stevens	http://www.rotoworld.com/player/nfl/4864/craig-stevens
+426	Dorin Dickerson	http://www.rotoworld.com/player/nfl/5839/dorin-dickerson
+427	Ryan Succop	http://www.rotoworld.com/player/nfl/5461/ryan-succop
+428	Tony Romo	http://www.rotoworld.com/player/nfl/2730/tony-romo
+429	Brandon Weeden	http://www.rotoworld.com/player/nfl/7480/brandon-weeden
+430	Dustin Vaughan	http://www.rotoworld.com/player/nfl/9749/dustin-vaughan
+431	Jameill Showers	http://www.rotoworld.com/player/nfl/10895/jameill-showers
+432	Joseph Randle	http://www.rotoworld.com/player/nfl/8395/joseph-randle
+433	Darren McFadden	http://www.rotoworld.com/player/nfl/4649/darren-mcfadden
+434	Lance Dunbar	http://www.rotoworld.com/player/nfl/7798/lance-dunbar
+435	Ryan Williams	http://www.rotoworld.com/player/nfl/6480/ryan-williams
+436	Synjyn Days	http://www.rotoworld.com/player/nfl/10736/synjyn-days
+437	Tyler Clutts	http://www.rotoworld.com/player/nfl/6461/tyler-clutts
+438	Ray Agnew	http://www.rotoworld.com/player/nfl/9977/ray-agnew
+439	Dez Bryant	http://www.rotoworld.com/player/nfl/5558/dez-bryant
+440	Devin Street	http://www.rotoworld.com/player/nfl/9557/devin-street
+441	Reggie Dunn	http://www.rotoworld.com/player/nfl/8725/reggie-dunn
+442	George Farmer	http://www.rotoworld.com/player/nfl/10866/george-farmer
+443	Antwan Goodley	http://www.rotoworld.com/player/nfl/10647/antwan-goodley
+444	Terrance Williams	http://www.rotoworld.com/player/nfl/8401/terrance-williams
+445	Cole Beasley	http://www.rotoworld.com/player/nfl/7794/cole-beasley
+446	A.J. Jenkins	http://www.rotoworld.com/player/nfl/7522/aj-jenkins
+447	Deontay Greenberry	http://www.rotoworld.com/player/nfl/10396/deontay-greenberry
+448	Lucky Whitehead	http://www.rotoworld.com/player/nfl/10897/lucky-whitehead
+449	Jason Witten	http://www.rotoworld.com/player/nfl/1990/jason-witten
+450	Gavin Escobar	http://www.rotoworld.com/player/nfl/8410/gavin-escobar
+451	James Hanna	http://www.rotoworld.com/player/nfl/7629/james-hanna
+452	Ray Hamilton	http://www.rotoworld.com/player/nfl/10893/ray-hamilton
+453	Geoff Swaim	http://www.rotoworld.com/player/nfl/10617/geoff-swaim
+454	Dan Bailey	http://www.rotoworld.com/player/nfl/7144/dan-bailey
+455	Eli Manning	http://www.rotoworld.com/player/nfl/1657/eli-manning
+456	Ryan Nassib	http://www.rotoworld.com/player/nfl/8370/ryan-nassib
+457	Ricky Stanzi	http://www.rotoworld.com/player/nfl/6550/ricky-stanzi
+458	Rashad Jennings	http://www.rotoworld.com/player/nfl/5273/rashad-jennings
+459	Shane Vereen	http://www.rotoworld.com/player/nfl/6445/shane-vereen
+460	Andre Williams	http://www.rotoworld.com/player/nfl/9407/andre-williams
+461	Orleans Darkwa	http://www.rotoworld.com/player/nfl/10102/orleans-darkwa
+462	Akeem Hunt	http://www.rotoworld.com/player/nfl/10724/akeem-hunt
+463	Henry Hynoski	http://www.rotoworld.com/player/nfl/7222/henry-hynoski
+464	Nikita Whitlock	http://www.rotoworld.com/player/nfl/9993/nikita-whitlock
+466	Victor Cruz	http://www.rotoworld.com/player/nfl/6313/victor-cruz
+700	C.J. Spiller	http://www.rotoworld.com/player/nfl/5566/cj-spiller
+467	Corey Washington	http://www.rotoworld.com/player/nfl/10057/corey-washington
+468	Marcus Harris	http://www.rotoworld.com/player/nfl/7210/marcus-harris
+469	Julian Talley	http://www.rotoworld.com/player/nfl/8124/julian-talley
+470	Rueben Randle	http://www.rotoworld.com/player/nfl/7468/rueben-randle
+471	Dwayne Harris	http://www.rotoworld.com/player/nfl/6683/dwayne-harris
+472	Preston Parker	http://www.rotoworld.com/player/nfl/6142/preston-parker
+473	Geremy Davis	http://www.rotoworld.com/player/nfl/10561/geremy-davis
+474	Juron Criner	http://www.rotoworld.com/player/nfl/7484/juron-criner
+475	Larry Donnell	http://www.rotoworld.com/player/nfl/7512/larry-donnell
+476	Daniel Fells	http://www.rotoworld.com/player/nfl/4074/daniel-fells
+477	Adrien Robinson	http://www.rotoworld.com/player/nfl/7579/adrien-robinson
+478	Jerome Cunningham	http://www.rotoworld.com/player/nfl/10270/jerome-cunningham
+479	Matt LaCosse	http://www.rotoworld.com/player/nfl/10980/matt-lacosse
+480	Josh Brown	http://www.rotoworld.com/player/nfl/525/josh-brown
+481	Chris Boswell	http://www.rotoworld.com/player/nfl/10118/chris-boswell
+482	Sam Bradford	http://www.rotoworld.com/player/nfl/5161/sam-bradford
+483	Mark Sanchez	http://www.rotoworld.com/player/nfl/5192/mark-sanchez
+484	Matt Barkley	http://www.rotoworld.com/player/nfl/7421/matt-barkley
+485	Tim Tebow	http://www.rotoworld.com/player/nfl/5096/tim-tebow
+486	DeMarco Murray	http://www.rotoworld.com/player/nfl/6585/demarco-murray
+487	Ryan Mathews	http://www.rotoworld.com/player/nfl/5603/ryan-mathews
+488	Darren Sproles	http://www.rotoworld.com/player/nfl/3221/darren-sproles
+489	Matthew Tucker	http://www.rotoworld.com/player/nfl/8487/matthew-tucker
+490	Kenjon Barner	http://www.rotoworld.com/player/nfl/8456/kenjon-barner
+491	Jordan Matthews	http://www.rotoworld.com/player/nfl/9420/jordan-matthews
+492	Josh Huff	http://www.rotoworld.com/player/nfl/9647/josh-huff
+493	Miles Austin	http://www.rotoworld.com/player/nfl/4059/miles-austin
+494	Seyi Ajirotutu	http://www.rotoworld.com/player/nfl/5754/seyi-ajirotutu
+495	G.J. Kinne	http://www.rotoworld.com/player/nfl/7886/gj-kinne
+496	Nelson Agholor	http://www.rotoworld.com/player/nfl/10360/nelson-agholor
+497	Riley Cooper	http://www.rotoworld.com/player/nfl/5929/riley-cooper
+498	Jeff Maehl	http://www.rotoworld.com/player/nfl/6896/jeff-maehl
+499	Devante Davis	http://www.rotoworld.com/player/nfl/10377/devante-davis
+500	Rasheed Bailey	http://www.rotoworld.com/player/nfl/10688/rasheed-bailey
+501	Brent Celek	http://www.rotoworld.com/player/nfl/4269/brent-celek
+502	Zach Ertz	http://www.rotoworld.com/player/nfl/8409/zach-ertz
+503	Trey Burton	http://www.rotoworld.com/player/nfl/9737/trey-burton
+504	Eric Tomlinson	http://www.rotoworld.com/player/nfl/10747/eric-tomlinson
+505	Andrew Gleichert	http://www.rotoworld.com/player/nfl/10741/andrew-gleichert
+506	Cody Parkey	http://www.rotoworld.com/player/nfl/9893/cody-parkey
+507	Robert Griffin III	http://www.rotoworld.com/player/nfl/7406/robert-griffin-iii
+508	Kirk Cousins	http://www.rotoworld.com/player/nfl/7486/kirk-cousins
+509	Colt McCoy	http://www.rotoworld.com/player/nfl/5699/colt-mccoy
+510	Alfred Morris	http://www.rotoworld.com/player/nfl/7618/alfred-morris
+511	Matt Jones	http://www.rotoworld.com/player/nfl/10493/matt-jones
+512	Silas Redd	http://www.rotoworld.com/player/nfl/9776/silas-redd
+513	Chris Thompson	http://www.rotoworld.com/player/nfl/8563/chris-thompson
+514	Trey Williams	http://www.rotoworld.com/player/nfl/10730/trey-williams
+515	Darrel Young	http://www.rotoworld.com/player/nfl/5678/darrel-young
+516	Jordan Moore	http://www.rotoworld.com/player/nfl/8949/jordan-moore
+517	DeSean Jackson	http://www.rotoworld.com/player/nfl/4659/desean-jackson
+518	Andre Roberts	http://www.rotoworld.com/player/nfl/5888/andre-roberts
+519	Jamison Crowder	http://www.rotoworld.com/player/nfl/10373/jamison-crowder
+520	Colin Lockett	http://www.rotoworld.com/player/nfl/9991/colin-lockett
+521	Quinton Dunbar	http://www.rotoworld.com/player/nfl/11078/quinton-dunbar
+522	Pierre Garcon	http://www.rotoworld.com/player/nfl/4945/pierre-garcon
+523	Ryan Grant	http://www.rotoworld.com/player/nfl/9666/ryan-grant
+524	Evan Spencer	http://www.rotoworld.com/player/nfl/10562/evan-spencer
+525	Rashad Ross	http://www.rotoworld.com/player/nfl/9080/rashad-ross
+526	Reggie Bell	http://www.rotoworld.com/player/nfl/10970/reggie-bell
+527	Jordan Reed	http://www.rotoworld.com/player/nfl/8412/jordan-reed
+528	Niles Paul	http://www.rotoworld.com/player/nfl/6661/niles-paul
+529	Logan Paulsen	http://www.rotoworld.com/player/nfl/6368/logan-paulsen
+530	Chase Dixon	http://www.rotoworld.com/player/nfl/9810/chase-dixon
+531	Je'Ron Hamm	http://www.rotoworld.com/player/nfl/9906/jeron-hamm
+532	Kai Forbath	http://www.rotoworld.com/player/nfl/7362/kai-forbath
+533	Peyton Manning	http://www.rotoworld.com/player/nfl/1493/peyton-manning
+534	Brock Osweiler	http://www.rotoworld.com/player/nfl/7450/brock-osweiler
+535	Zac Dysert	http://www.rotoworld.com/player/nfl/8377/zac-dysert
+536	Trevor Siemian	http://www.rotoworld.com/player/nfl/10622/trevor-siemian
+537	C.J. Anderson	http://www.rotoworld.com/player/nfl/8694/cj-anderson
+538	Montee Ball	http://www.rotoworld.com/player/nfl/7407/montee-ball
+539	Ronnie Hillman	http://www.rotoworld.com/player/nfl/7440/ronnie-hillman
+540	Juwan Thompson	http://www.rotoworld.com/player/nfl/9831/juwan-thompson
+541	Jeremy Stewart	http://www.rotoworld.com/player/nfl/7741/jeremy-stewart
+542	Joe Don Duncan	http://www.rotoworld.com/player/nfl/9762/joe-don-duncan
+543	James Casey	http://www.rotoworld.com/player/nfl/5138/james-casey
+544	Demaryius Thomas	http://www.rotoworld.com/player/nfl/5700/demaryius-thomas
+545	Andre Caldwell	http://www.rotoworld.com/player/nfl/4730/andre-caldwell
+546	Isaiah Burse	http://www.rotoworld.com/player/nfl/9823/isaiah-burse
+547	Solomon Patton	http://www.rotoworld.com/player/nfl/9735/solomon-patton
+548	Kyle Williams	http://www.rotoworld.com/player/nfl/5957/kyle-williams
+549	Emmanuel Sanders	http://www.rotoworld.com/player/nfl/5885/emmanuel-sanders
+550	Cody Latimer	http://www.rotoworld.com/player/nfl/9535/cody-latimer
+551	Jordan Norwood	http://www.rotoworld.com/player/nfl/5580/jordan-norwood
+552	Bennie Fowler	http://www.rotoworld.com/player/nfl/9826/bennie-fowler
+553	Nathan Palmer	http://www.rotoworld.com/player/nfl/7990/nathan-palmer
+554	Owen Daniels	http://www.rotoworld.com/player/nfl/3733/owen-daniels
+555	Virgil Green	http://www.rotoworld.com/player/nfl/6570/virgil-green
+556	Dominique Jones	http://www.rotoworld.com/player/nfl/7935/dominique-jones
+557	Marcel Jensen	http://www.rotoworld.com/player/nfl/9868/marcel-jensen
+558	Connor Barth	http://www.rotoworld.com/player/nfl/5048/connor-barth
+559	Brandon McManus	http://www.rotoworld.com/player/nfl/8912/brandon-mcmanus
+560	Alex Smith	http://www.rotoworld.com/player/nfl/3119/alex-smith
+561	Chase Daniel	http://www.rotoworld.com/player/nfl/5170/chase-daniel
+562	Aaron Murray	http://www.rotoworld.com/player/nfl/9411/aaron-murray
+563	Tyler Bray	http://www.rotoworld.com/player/nfl/8394/tyler-bray
+564	Jamaal Charles	http://www.rotoworld.com/player/nfl/4617/jamaal-charles
+565	Knile Davis	http://www.rotoworld.com/player/nfl/8467/knile-davis
+566	De'Anthony Thomas	http://www.rotoworld.com/player/nfl/9410/deanthony-thomas
+567	Cyrus Gray	http://www.rotoworld.com/player/nfl/7490/cyrus-gray
+568	Charcandrick West	http://www.rotoworld.com/player/nfl/10006/charcandrick-west
+569	Anthony Sherman	http://www.rotoworld.com/player/nfl/6650/anthony-sherman
+570	Spencer Ware	http://www.rotoworld.com/player/nfl/8594/spencer-ware
+571	Jeremy Maclin	http://www.rotoworld.com/player/nfl/5169/jeremy-maclin
+572	Chris Conley	http://www.rotoworld.com/player/nfl/10432/chris-conley
+573	Junior Hemingway	http://www.rotoworld.com/player/nfl/7678/junior-hemingway
+574	Da'Rick Rogers	http://www.rotoworld.com/player/nfl/8405/darick-rogers
+575	Armon Binns	http://www.rotoworld.com/player/nfl/6827/armon-binns
+576	Albert Wilson	http://www.rotoworld.com/player/nfl/9572/albert-wilson
+577	Jason Avant	http://www.rotoworld.com/player/nfl/3612/jason-avant
+578	Frankie Hammond	http://www.rotoworld.com/player/nfl/8957/frankie-hammond
+579	Da'Ron Brown	http://www.rotoworld.com/player/nfl/10606/daron-brown
+580	Fred Williams	http://www.rotoworld.com/player/nfl/9308/fred-williams
+581	Travis Kelce	http://www.rotoworld.com/player/nfl/8411/travis-kelce
+582	Demetrius Harris	http://www.rotoworld.com/player/nfl/8683/demetrius-harris
+583	Richard Gordon	http://www.rotoworld.com/player/nfl/6687/richard-gordon
+584	James O'Shaughnessy	http://www.rotoworld.com/player/nfl/10549/james-oshaughnessy
+585	Ryan Taylor	http://www.rotoworld.com/player/nfl/6720/ryan-taylor
+586	Cairo Santos	http://www.rotoworld.com/player/nfl/10155/cairo-santos
+587	Derek Carr	http://www.rotoworld.com/player/nfl/9349/derek-carr
+588	Matt McGloin	http://www.rotoworld.com/player/nfl/9194/matt-mcgloin
+589	Christian Ponder	http://www.rotoworld.com/player/nfl/6433/christian-ponder
+590	Cody Fajardo	http://www.rotoworld.com/player/nfl/10631/cody-fajardo
+591	Latavius Murray	http://www.rotoworld.com/player/nfl/8585/latavius-murray
+592	Roy Helu	http://www.rotoworld.com/player/nfl/6593/roy-helu
+593	Trent Richardson	http://www.rotoworld.com/player/nfl/7462/trent-richardson
+594	Gus Johnson	http://www.rotoworld.com/player/nfl/10405/gus-johnson
+595	Taiwan Jones	http://www.rotoworld.com/player/nfl/6499/taiwan-jones
+596	Marcel Reece	http://www.rotoworld.com/player/nfl/5094/marcel-reece
+597	Jamize Olawale	http://www.rotoworld.com/player/nfl/8256/jamize-olawale
+598	Amari Cooper	http://www.rotoworld.com/player/nfl/10310/amari-cooper
+599	Andre Holmes	http://www.rotoworld.com/player/nfl/6954/andre-holmes
+600	Seth Roberts	http://www.rotoworld.com/player/nfl/10142/seth-roberts
+601	Andre Debose	http://www.rotoworld.com/player/nfl/10594/andre-debose
+602	Josh Harper	http://www.rotoworld.com/player/nfl/10670/josh-harper
+603	Michael Crabtree	http://www.rotoworld.com/player/nfl/5135/michael-crabtree
+604	Rod Streater	http://www.rotoworld.com/player/nfl/8148/rod-streater
+605	Brice Butler	http://www.rotoworld.com/player/nfl/8608/brice-butler
+606	Kenbrell Thompkins	http://www.rotoworld.com/player/nfl/8647/kenbrell-thompkins
+607	Milton Williams III	http://www.rotoworld.com/player/nfl/11007/milton-williams-iii
+608	Mychal Rivera	http://www.rotoworld.com/player/nfl/8587/mychal-rivera
+609	Clive Walford	http://www.rotoworld.com/player/nfl/10471/clive-walford
+610	Lee Smith	http://www.rotoworld.com/player/nfl/6665/lee-smith
+611	Brian Leonhardt	http://www.rotoworld.com/player/nfl/8863/brian-leonhardt
+612	Scott Simonson	http://www.rotoworld.com/player/nfl/10143/scott-simonson
+613	Sebastian Janikowski	http://www.rotoworld.com/player/nfl/819/sebastian-janikowski
+614	Giorgio Tavecchio	http://www.rotoworld.com/player/nfl/7992/giorgio-tavecchio
+615	Philip Rivers	http://www.rotoworld.com/player/nfl/1813/philip-rivers
+616	Kellen Clemens	http://www.rotoworld.com/player/nfl/3688/kellen-clemens
+617	Brad Sorensen	http://www.rotoworld.com/player/nfl/8477/brad-sorensen
+618	Melvin Gordon	http://www.rotoworld.com/player/nfl/10284/melvin-gordon
+619	Danny Woodhead	http://www.rotoworld.com/player/nfl/5297/danny-woodhead
+620	Branden Oliver	http://www.rotoworld.com/player/nfl/10198/branden-oliver
+621	Donald Brown	http://www.rotoworld.com/player/nfl/5133/donald-brown
+622	Jahwan Edwards	http://www.rotoworld.com/player/nfl/10690/jahwan-edwards
+624	David Johnson (dup)	http://www.rotoworld.com/player/nfl/5449/david-johnson
+625	Keenan Allen	http://www.rotoworld.com/player/nfl/8379/keenan-allen
+627	Dontrelle Inman	http://www.rotoworld.com/player/nfl/6840/dontrelle-inman
+628	Torrence Allen	http://www.rotoworld.com/player/nfl/9840/torrence-allen
+629	Titus Davis	http://www.rotoworld.com/player/nfl/10691/titus-davis
+630	Malcom Floyd	http://www.rotoworld.com/player/nfl/3086/malcom-floyd
+631	Jacoby Jones	http://www.rotoworld.com/player/nfl/4239/jacoby-jones
+632	Austin Pettis	http://www.rotoworld.com/player/nfl/6623/austin-pettis
+633	Javontee Herndon	http://www.rotoworld.com/player/nfl/9847/javontee-herndon
+634	Demetrius Wilson	http://www.rotoworld.com/player/nfl/10765/demetrius-wilson
+635	Antonio Gates	http://www.rotoworld.com/player/nfl/611/antonio-gates
+636	Ladarius Green	http://www.rotoworld.com/player/nfl/7568/ladarius-green
+637	John Phillips	http://www.rotoworld.com/player/nfl/5419/john-phillips
+638	David Paulson	http://www.rotoworld.com/player/nfl/7681/david-paulson
+639	Kyle Miller	http://www.rotoworld.com/player/nfl/6845/kyle-miller
+640	Nick Novak	http://www.rotoworld.com/player/nfl/3504/nick-novak
+641	Josh Lambo	http://www.rotoworld.com/player/nfl/10708/josh-lambo
+643	Matt Ryan	http://www.rotoworld.com/player/nfl/4637/matt-ryan
+644	T.J. Yates	http://www.rotoworld.com/player/nfl/6603/tj-yates
+645	Sean Renfree	http://www.rotoworld.com/player/nfl/8478/sean-renfree
+646	Devonta Freeman	http://www.rotoworld.com/player/nfl/9423/devonta-freeman
+647	Tevin Coleman	http://www.rotoworld.com/player/nfl/10359/tevin-coleman
+648	Antone Smith	http://www.rotoworld.com/player/nfl/5643/antone-smith
+649	Jerome Smith	http://www.rotoworld.com/player/nfl/10026/jerome-smith
+650	Terron Ward	http://www.rotoworld.com/player/nfl/10925/terron-ward
+651	Patrick DiMarco	http://www.rotoworld.com/player/nfl/6880/patrick-dimarco
+652	Collin Mooney	http://www.rotoworld.com/player/nfl/7963/collin-mooney
+653	Julio Jones	http://www.rotoworld.com/player/nfl/6475/julio-jones
+654	Devin Hester	http://www.rotoworld.com/player/nfl/3675/devin-hester
+655	Leonard Hankerson	http://www.rotoworld.com/player/nfl/6425/leonard-hankerson
+656	Freddie Martino	http://www.rotoworld.com/player/nfl/10016/freddie-martino
+657	Marquez Clark	http://www.rotoworld.com/player/nfl/10845/marquez-clark
+658	Roddy White	http://www.rotoworld.com/player/nfl/3161/roddy-white
+659	Justin Hardy	http://www.rotoworld.com/player/nfl/10399/justin-hardy
+660	Eric Weems	http://www.rotoworld.com/player/nfl/4612/eric-weems
+661	Bernard Reedy	http://www.rotoworld.com/player/nfl/9783/bernard-reedy
+662	Nick Williams	http://www.rotoworld.com/player/nfl/8982/nick-williams
+663	Tony Moeaki	http://www.rotoworld.com/player/nfl/5841/tony-moeaki
+664	Jacob Tamme	http://www.rotoworld.com/player/nfl/4885/jacob-tamme
+665	Levine Toilolo	http://www.rotoworld.com/player/nfl/8414/levine-toilolo
+666	Mickey Shuler	http://www.rotoworld.com/player/nfl/5964/mickey-shuler
+667	Beau Gardner	http://www.rotoworld.com/player/nfl/10848/beau-gardner
+668	Matt Bryant	http://www.rotoworld.com/player/nfl/978/matt-bryant
+669	Cam Newton	http://www.rotoworld.com/player/nfl/6491/cam-newton
+670	Derek Anderson	http://www.rotoworld.com/player/nfl/3233/derek-anderson
+671	Joe Webb	http://www.rotoworld.com/player/nfl/5857/joe-webb
+672	Jonathan Stewart	http://www.rotoworld.com/player/nfl/4650/jonathan-stewart
+673	Fozzy Whittaker	http://www.rotoworld.com/player/nfl/8318/fozzy-whittaker
+674	Cameron Artis-Payne	http://www.rotoworld.com/player/nfl/10364/cameron-artis-payne
+675	Darrin Reaves	http://www.rotoworld.com/player/nfl/9920/darrin-reaves
+676	Jordan Todman	http://www.rotoworld.com/player/nfl/6446/jordan-todman
+677	Mike Tolbert	http://www.rotoworld.com/player/nfl/5009/mike-tolbert
+678	Richie Brockel	http://www.rotoworld.com/player/nfl/6197/richie-brockel
+679	Kelvin Benjamin	http://www.rotoworld.com/player/nfl/9321/kelvin-benjamin
+680	Philly Brown	http://www.rotoworld.com/player/nfl/9917/philly-brown
+681	Ted Ginn	http://www.rotoworld.com/player/nfl/4168/ted-ginn
+682	Jarrett Boykin	http://www.rotoworld.com/player/nfl/7817/jarrett-boykin
+683	Mike Brown	http://www.rotoworld.com/player/nfl/8058/mike-brown
+684	Devin Funchess	http://www.rotoworld.com/player/nfl/10391/devin-funchess
+685	Jerricho Cotchery	http://www.rotoworld.com/player/nfl/1618/jerricho-cotchery
+686	Brenton Bersin	http://www.rotoworld.com/player/nfl/7829/brenton-bersin
+687	Stephen Hill	http://www.rotoworld.com/player/nfl/7445/stephen-hill
+688	Marcus Lucas	http://www.rotoworld.com/player/nfl/9764/marcus-lucas
+689	Greg Olsen	http://www.rotoworld.com/player/nfl/4190/greg-olsen
+690	Ed Dickson	http://www.rotoworld.com/player/nfl/5840/ed-dickson
+691	Brandon Williams	http://www.rotoworld.com/player/nfl/8895/brandon-williams
+692	Jamie Childers	http://www.rotoworld.com/player/nfl/8254/jamie-childers
+693	Graham Gano	http://www.rotoworld.com/player/nfl/5468/graham-gano
+694	Drew Brees	http://www.rotoworld.com/player/nfl/591/drew-brees
+695	Luke McCown	http://www.rotoworld.com/player/nfl/13/luke-mccown
+697	Ryan Griffin (dup)	http://www.rotoworld.com/player/nfl/8507/ryan-griffin
+698	Garrett Grayson	http://www.rotoworld.com/player/nfl/10394/garrett-grayson
+699	Mark Ingram	http://www.rotoworld.com/player/nfl/6471/mark-ingram
+701	Khiry Robinson	http://www.rotoworld.com/player/nfl/9145/khiry-robinson
+702	Edwin Baker	http://www.rotoworld.com/player/nfl/7690/edwin-baker
+703	Marcus Murphy	http://www.rotoworld.com/player/nfl/10603/marcus-murphy
+704	Erik Lorig	http://www.rotoworld.com/player/nfl/6008/erik-lorig
+705	Austin Johnson	http://www.rotoworld.com/player/nfl/8319/austin-johnson
+706	Toben Opurum	http://www.rotoworld.com/player/nfl/9198/toben-opurum
+707	Brandin Cooks	http://www.rotoworld.com/player/nfl/9404/brandin-cooks
+708	Joe Morgan	http://www.rotoworld.com/player/nfl/7009/joe-morgan
+709	Jalen Saunders	http://www.rotoworld.com/player/nfl/9548/jalen-saunders
+710	R.J. Harris	http://www.rotoworld.com/player/nfl/10654/rj-harris
+711	Lance Lewis	http://www.rotoworld.com/player/nfl/8008/lance-lewis
+712	Marques Colston	http://www.rotoworld.com/player/nfl/4032/marques-colston
+713	Nick Toon	http://www.rotoworld.com/player/nfl/7458/nick-toon
+714	Seantavius Jones	http://www.rotoworld.com/player/nfl/9908/seantavius-jones
+715	Brandon Coleman	http://www.rotoworld.com/player/nfl/9412/brandon-coleman
+716	Josh Morgan	http://www.rotoworld.com/player/nfl/4919/josh-morgan
+717	Josh Hill	http://www.rotoworld.com/player/nfl/8764/josh-hill
+718	Ben Watson	http://www.rotoworld.com/player/nfl/48/ben-watson
+719	Orson Charles	http://www.rotoworld.com/player/nfl/7457/orson-charles
+720	Jack Tabb	http://www.rotoworld.com/player/nfl/10823/jack-tabb
+721	Dustin Hopkins	http://www.rotoworld.com/player/nfl/8581/dustin-hopkins
+722	Zach Hocker	http://www.rotoworld.com/player/nfl/9712/zach-hocker
+724	Jameis Winston	http://www.rotoworld.com/player/nfl/9376/jameis-winston
+725	Mike Glennon	http://www.rotoworld.com/player/nfl/8374/mike-glennon
+726	Seth Lobato	http://www.rotoworld.com/player/nfl/9888/seth-lobato
+727	Charles Sims	http://www.rotoworld.com/player/nfl/9425/charles-sims
+728	Doug Martin	http://www.rotoworld.com/player/nfl/7426/doug-martin
+729	Bobby Rainey	http://www.rotoworld.com/player/nfl/8173/bobby-rainey
+730	Mike James	http://www.rotoworld.com/player/nfl/8590/mike-james
+731	Dominique Brown	http://www.rotoworld.com/player/nfl/10696/dominique-brown
+732	Jorvorskie Lane	http://www.rotoworld.com/player/nfl/8269/jorvorskie-lane
+733	Joey Iosefa	http://www.rotoworld.com/player/nfl/10604/joey-iosefa
+734	Mike Evans	http://www.rotoworld.com/player/nfl/9296/mike-evans
+735	Kenny Bell	http://www.rotoworld.com/player/nfl/10538/kenny-bell
+736	Robert Herron	http://www.rotoworld.com/player/nfl/9363/robert-herron
+737	Tavarres King	http://www.rotoworld.com/player/nfl/8569/tavarres-king
+738	Donteea Dye	http://www.rotoworld.com/player/nfl/11050/donteea-dye
+739	Vincent Jackson	http://www.rotoworld.com/player/nfl/3202/vincent-jackson
+740	Louis Murphy	http://www.rotoworld.com/player/nfl/5214/louis-murphy
+741	Russell Shepard	http://www.rotoworld.com/player/nfl/7459/russell-shepard
+742	Kaelin Clay	http://www.rotoworld.com/player/nfl/10559/kaelin-clay
+743	Rannell Hall	http://www.rotoworld.com/player/nfl/10682/rannell-hall
+744	Austin Seferian-Jenkins	http://www.rotoworld.com/player/nfl/9400/austin-seferian-jenkins
+745	Brandon Myers	http://www.rotoworld.com/player/nfl/5413/brandon-myers
+746	Luke Stocker	http://www.rotoworld.com/player/nfl/6552/luke-stocker
+747	Cameron Brate	http://www.rotoworld.com/player/nfl/10193/cameron-brate
+748	Taylor Sloat	http://www.rotoworld.com/player/nfl/10301/taylor-sloat
+749	Patrick Murray	http://www.rotoworld.com/player/nfl/9306/patrick-murray
+750	Brandon Bogotay	http://www.rotoworld.com/player/nfl/8489/brandon-bogotay
+751	Jay Cutler	http://www.rotoworld.com/player/nfl/3608/jay-cutler
+752	Jimmy Clausen	http://www.rotoworld.com/player/nfl/5574/jimmy-clausen
+753	David Fales	http://www.rotoworld.com/player/nfl/9359/david-fales
+754	Shane Carden	http://www.rotoworld.com/player/nfl/10656/shane-carden
+755	Matt Forte	http://www.rotoworld.com/player/nfl/4685/matt-forte
+756	Ka'Deem Carey	http://www.rotoworld.com/player/nfl/9325/kadeem-carey
+757	Jeremy Langford	http://www.rotoworld.com/player/nfl/10473/jeremy-langford
+758	Jacquizz Rodgers	http://www.rotoworld.com/player/nfl/6482/jacquizz-rodgers
+759	Daniel Thomas	http://www.rotoworld.com/player/nfl/6522/daniel-thomas
+760	Alshon Jeffery	http://www.rotoworld.com/player/nfl/7441/alshon-jeffery
+761	Marquess Wilson	http://www.rotoworld.com/player/nfl/8629/marquess-wilson
+762	Marc Mariani	http://www.rotoworld.com/player/nfl/5973/marc-mariani
+763	John Chiles	http://www.rotoworld.com/player/nfl/6997/john-chiles
+764	Cameron Meredith	http://www.rotoworld.com/player/nfl/10770/cameron-meredith
+765	Eddie Royal	http://www.rotoworld.com/player/nfl/4853/eddie-royal
+766	Kevin White	http://www.rotoworld.com/player/nfl/10427/kevin-white
+767	Josh Bellamy	http://www.rotoworld.com/player/nfl/7841/josh-bellamy
+768	Rashad Lawrence	http://www.rotoworld.com/player/nfl/10106/rashad-lawrence
+769	Levi Norwood	http://www.rotoworld.com/player/nfl/10769/levi-norwood
+770	Martellus Bennett	http://www.rotoworld.com/player/nfl/4639/martellus-bennett
+771	Dante Rosario	http://www.rotoworld.com/player/nfl/4266/dante-rosario
+772	Zach Miller	http://www.rotoworld.com/player/nfl/5394/zach-miller
+773	Bear Pascoe	http://www.rotoworld.com/player/nfl/5398/bear-pascoe
+774	Blake Annen	http://www.rotoworld.com/player/nfl/9799/blake-annen
+775	Robbie Gould	http://www.rotoworld.com/player/nfl/3519/robbie-gould
+776	Matthew Stafford	http://www.rotoworld.com/player/nfl/5132/matthew-stafford
+777	Dan Orlovsky	http://www.rotoworld.com/player/nfl/3227/dan-orlovsky
+778	Kellen Moore	http://www.rotoworld.com/player/nfl/7479/kellen-moore
+779	Joique Bell	http://www.rotoworld.com/player/nfl/5986/joique-bell
+780	Ameer Abdullah	http://www.rotoworld.com/player/nfl/10338/ameer-abdullah
+781	Theo Riddick	http://www.rotoworld.com/player/nfl/8485/theo-riddick
+782	George Winn	http://www.rotoworld.com/player/nfl/8702/george-winn
+783	Zach Zenner	http://www.rotoworld.com/player/nfl/10429/zach-zenner
+784	Mike Burton	http://www.rotoworld.com/player/nfl/10544/mike-burton
+785	Emil Igwenagu	http://www.rotoworld.com/player/nfl/7737/emil-igwenagu
+786	Calvin Johnson	http://www.rotoworld.com/player/nfl/4153/calvin-johnson
+787	Corey Fuller	http://www.rotoworld.com/player/nfl/8578/corey-fuller
+788	T.J. Jones	http://www.rotoworld.com/player/nfl/9419/tj-jones
+789	Andrew Peacock	http://www.rotoworld.com/player/nfl/9974/andrew-peacock
+790	Vernon Johnson	http://www.rotoworld.com/player/nfl/10651/vernon-johnson
+791	Golden Tate	http://www.rotoworld.com/player/nfl/5583/golden-tate
+792	Jeremy Ross	http://www.rotoworld.com/player/nfl/7032/jeremy-ross
+793	Ryan Broyles	http://www.rotoworld.com/player/nfl/7405/ryan-broyles
+794	Lance Moore	http://www.rotoworld.com/player/nfl/3545/lance-moore
+795	Greg Salas	http://www.rotoworld.com/player/nfl/6607/greg-salas
+796	Eric Ebron	http://www.rotoworld.com/player/nfl/9390/eric-ebron
+797	Brandon Pettigrew	http://www.rotoworld.com/player/nfl/5219/brandon-pettigrew
+798	Joseph Fauria	http://www.rotoworld.com/player/nfl/8671/joseph-fauria
+799	Jordan Thompson	http://www.rotoworld.com/player/nfl/9538/jordan-thompson
+800	David Ausberry	http://www.rotoworld.com/player/nfl/6745/david-ausberry
+801	Matt Prater	http://www.rotoworld.com/player/nfl/4502/matt-prater
+802	Kyle Brindza	http://www.rotoworld.com/player/nfl/10900/kyle-brindza
+803	Aaron Rodgers	http://www.rotoworld.com/player/nfl/3118/aaron-rodgers
+804	Scott Tolzien	http://www.rotoworld.com/player/nfl/6893/scott-tolzien
+805	Brett Hundley	http://www.rotoworld.com/player/nfl/10402/brett-hundley
+806	Matt Blanchard	http://www.rotoworld.com/player/nfl/8182/matt-blanchard
+807	Eddie Lacy	http://www.rotoworld.com/player/nfl/8382/eddie-lacy
+808	James Starks	http://www.rotoworld.com/player/nfl/5823/james-starks
+809	Rajion Neal	http://www.rotoworld.com/player/nfl/9746/rajion-neal
+810	John Crockett	http://www.rotoworld.com/player/nfl/10644/john-crockett
+811	Alonzo Harris	http://www.rotoworld.com/player/nfl/10910/alonzo-harris
+812	John Kuhn	http://www.rotoworld.com/player/nfl/4050/john-kuhn
+813	Aaron Ripkowski	http://www.rotoworld.com/player/nfl/10579/aaron-ripkowski
+814	Jordy Nelson	http://www.rotoworld.com/player/nfl/4731/jordy-nelson
+815	Jeff Janis	http://www.rotoworld.com/player/nfl/9719/jeff-janis
+816	Jared Abbrederis	http://www.rotoworld.com/player/nfl/9574/jared-abbrederis
+817	Ricky Collins	http://www.rotoworld.com/player/nfl/10653/ricky-collins
+818	Javess Blue	http://www.rotoworld.com/player/nfl/10906/javess-blue
+819	Randall Cobb	http://www.rotoworld.com/player/nfl/6497/randall-cobb
+820	Davante Adams	http://www.rotoworld.com/player/nfl/9273/davante-adams
+821	Ty Montgomery	http://www.rotoworld.com/player/nfl/10413/ty-montgomery
+822	Myles White	http://www.rotoworld.com/player/nfl/9128/myles-white
+823	Jimmie Hunt	http://www.rotoworld.com/player/nfl/10989/jimmie-hunt
+824	Andrew Quarless	http://www.rotoworld.com/player/nfl/5926/andrew-quarless
+825	Richard Rodgers	http://www.rotoworld.com/player/nfl/9547/richard-rodgers
+826	Justin Perillo	http://www.rotoworld.com/player/nfl/10032/justin-perillo
+827	Kennard Backman	http://www.rotoworld.com/player/nfl/10586/kennard-backman
+828	Harold Spears	http://www.rotoworld.com/player/nfl/10822/harold-spears
+829	Mitchell Henry	http://www.rotoworld.com/player/nfl/10911/mitchell-henry
+830	Mason Crosby	http://www.rotoworld.com/player/nfl/4182/mason-crosby
+831	Teddy Bridgewater	http://www.rotoworld.com/player/nfl/9274/teddy-bridgewater
+832	Shaun Hill	http://www.rotoworld.com/player/nfl/1216/shaun-hill
+833	Mike Kafka	http://www.rotoworld.com/player/nfl/5855/mike-kafka
+834	Taylor Heinicke	http://www.rotoworld.com/player/nfl/10665/taylor-heinicke
+835	Adrian Peterson	http://www.rotoworld.com/player/nfl/4169/adrian-peterson
+836	Jerick McKinnon	http://www.rotoworld.com/player/nfl/9651/jerick-mckinnon
+837	Matt Asiata	http://www.rotoworld.com/player/nfl/6958/matt-asiata
+838	Joe Banyard	http://www.rotoworld.com/player/nfl/7813/joe-banyard
+839	DuJuan Harris	http://www.rotoworld.com/player/nfl/6837/dujuan-harris
+840	Zach Line	http://www.rotoworld.com/player/nfl/8672/zach-line
+841	Charles Johnson	http://www.rotoworld.com/player/nfl/8615/charles-johnson
+842	Jarius Wright	http://www.rotoworld.com/player/nfl/7574/jarius-wright
+843	Stefon Diggs	http://www.rotoworld.com/player/nfl/10380/stefon-diggs
+844	DaVaris Daniels	http://www.rotoworld.com/player/nfl/10374/davaris-daniels
+845	Donte Foster	http://www.rotoworld.com/player/nfl/9882/donte-foster
+846	Mike Wallace	http://www.rotoworld.com/player/nfl/5329/mike-wallace
+847	Cordarrelle Patterson	http://www.rotoworld.com/player/nfl/8327/cordarrelle-patterson
+848	Adam Thielen	http://www.rotoworld.com/player/nfl/9054/adam-thielen
+849	Jordan Leslie	http://www.rotoworld.com/player/nfl/10929/jordan-leslie
+850	Gavin Lutman	http://www.rotoworld.com/player/nfl/10930/gavin-lutman
+851	Kyle Rudolph	http://www.rotoworld.com/player/nfl/6459/kyle-rudolph
+852	Rhett Ellison	http://www.rotoworld.com/player/nfl/7580/rhett-ellison
+853	MyCole Pruitt	http://www.rotoworld.com/player/nfl/10522/mycole-pruitt
+854	Chase Ford	http://www.rotoworld.com/player/nfl/7735/chase-ford
+855	Brandon Bostick	http://www.rotoworld.com/player/nfl/8259/brandon-bostick
+856	Blair Walsh	http://www.rotoworld.com/player/nfl/7620/blair-walsh
+465	Odell Beckham Jr.	http://www.rotoworld.com/player/nfl/9403/odell-beckham
+120	Steve Smith	http://www.rotoworld.com/player/nfl/2386/steve-smith-sr
+626	Steve Johnson	http://www.rotoworld.com/player/nfl/4962/stevie-johnson
+\.
+
+
+--
+-- Name: tiersheet_rotoworld_url_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tom
+--
+
+SELECT pg_catalog.setval('tiersheet_rotoworld_url_id_seq', 860, true);
+
+
+--
+-- Name: api_fantasyprorank_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_fantasyprorank
+    ADD CONSTRAINT api_fantasyprorank_name_key UNIQUE (name);
+
+
+--
+-- Name: api_fantasyprorank_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_fantasyprorank
+    ADD CONSTRAINT api_fantasyprorank_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_player_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_player
+    ADD CONSTRAINT api_player_name_key UNIQUE (name);
+
+
+--
+-- Name: api_player_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_player
+    ADD CONSTRAINT api_player_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_rotoworld_url_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_rotoworld_url
+    ADD CONSTRAINT api_rotoworld_url_name_key UNIQUE (name);
+
+
+--
+-- Name: api_rotoworld_url_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY api_rotoworld_url
+    ADD CONSTRAINT api_rotoworld_url_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_model_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_key UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: south_migrationhistory_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY south_migrationhistory
+    ADD CONSTRAINT south_migrationhistory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tiersheet_fantasyprorank_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_fantasyprorank
+    ADD CONSTRAINT tiersheet_fantasyprorank_name_key UNIQUE (name);
+
+
+--
+-- Name: tiersheet_fantasyprorank_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_fantasyprorank
+    ADD CONSTRAINT tiersheet_fantasyprorank_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tiersheet_player_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_player
+    ADD CONSTRAINT tiersheet_player_name_key UNIQUE (name);
+
+
+--
+-- Name: tiersheet_player_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_player
+    ADD CONSTRAINT tiersheet_player_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tiersheet_rotoworld_url_name_key; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_rotoworld_url
+    ADD CONSTRAINT tiersheet_rotoworld_url_name_key UNIQUE (name);
+
+
+--
+-- Name: tiersheet_rotoworld_url_pkey; Type: CONSTRAINT; Schema: public; Owner: tom; Tablespace: 
+--
+
+ALTER TABLE ONLY tiersheet_rotoworld_url
+    ADD CONSTRAINT tiersheet_rotoworld_url_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_fantasyprorank_name_3da8fe585b9b4bec_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX api_fantasyprorank_name_3da8fe585b9b4bec_like ON api_fantasyprorank USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: api_player_name_2d95e23194208ea0_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX api_player_name_2d95e23194208ea0_like ON api_player USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: api_rotoworld_url_name_27594ac93ff34b04_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX api_rotoworld_url_name_27594ac93ff34b04_like ON api_rotoworld_url USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_name_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_group_name_like ON auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_group_id ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_permission_id ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_permission_content_type_id ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_group_id ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_user_id ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_user_id ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX auth_user_username_like ON auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_content_type_id ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_user_id ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX django_session_expire_date ON django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX django_session_session_key_like ON django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: tiersheet_fantasyprorank_name_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX tiersheet_fantasyprorank_name_like ON tiersheet_fantasyprorank USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: tiersheet_player_name_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX tiersheet_player_name_like ON tiersheet_player USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: tiersheet_rotoworld_url_name_like; Type: INDEX; Schema: public; Owner: tom; Tablespace: 
+--
+
+CREATE INDEX tiersheet_rotoworld_url_name_like ON tiersheet_rotoworld_url USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: content_type_id_refs_id_d043b34a; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT content_type_id_refs_id_d043b34a FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_content_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_fkey FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: group_id_refs_id_f4b32aac; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT group_id_refs_id_f4b32aac FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_40c41112; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT user_id_refs_id_40c41112 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_4dc23c39; Type: FK CONSTRAINT; Schema: public; Owner: tom
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT user_id_refs_id_4dc23c39 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -22,15 +22,15 @@ def bsoup(soup_file, position):
             for row in tbody.findAll('tr'):
                 col = row.findAll('td')
                 rank = col[0].text
-                #bye = col[2].text
-                #if bye == "":
-                #    bye = 0
-                team = col[1].small.text
+                bye = col[2].text
+                if bye == ''
+                    bye == 0
+                team= col[1].small.text
                 for link in row.findAll('a'):
                     if hasNflPrefix(link.get('href')) and link.text != 'FA':
                         name = link.text
-                        print "%s, %s, %s" % (rank, name, team)
-                        add_player(name,position,team,rank)
+                        print "%s, %s, %s, %s" % (rank, name, team, bye)
+                        add_player(name,position,bye,team,rank)
                 #print rank
                 #div =td_list[1].findAll('div')
                 #for element in div.findAll('tr',{"class":""}):
@@ -66,8 +66,8 @@ def add_fantasy_rank(fantasy_name, fantasy_rank):
     except IntegrityError:
         return False
 
-def add_player(name,position,team,rank):
-    c = Player.objects.get_or_create(name=name,position=position,team=team,rank=rank)
+def add_player(name,position,bye,team,rank):
+    c = Player.objects.get_or_create(name=name,position=position,bye=bye,team=team,rank=rank)
     return c
 
 if __name__== '__main__':
