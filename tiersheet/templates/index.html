@@ -2,20 +2,27 @@
 {% load static %}
 {% block content %}
 <div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<ul class="nav nav-tabs">
-				<li class="active">
-					<a href="#">Home</a>
-				</li>	
-		</ul>
-		</div>
-	</div>
+
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+            <div class="fixedMenu visible-xs visible-sm visible-md">
+                  <ul class="nav nav-stacked" id="sidebar">
+                  <li><a href="#QBs">QB</a></li>
+                  <li><a href="#RBs">RB</a></li>
+                  <li><a href="#WRs">WR</a></li>
+                  <li><a href="#TEs">TE</a></li>
+                  <li><a href="#DEFs">DEF</a></li>
+                  <li><a href="#Ks">K</a></li>
+                  </ul>
+            </div>  
+        </div>  
+    </div>
     <br/>
+    <div class="col-md-12 column">
     <div class="row clearfix" align="center">
 		<div class="col-md-2 column">
-            <h5>QBs</h5>
             <div class="connectedSortable" id="QBs">
+            <h5>QB</h5>
                 {% if qb_list  %}                 <!-- removed custom | filters -->
                     {% for player in qb_list %} 
                     {% if player.bye != None %}
@@ -51,8 +58,8 @@
                 </div>
 		</div>
 		<div class="col-md-2 column">
-            <h5>RBs</h5>
             <div class="connectedSortable" id="RBs">
+            <h5>RB</h5>
                 {% if rb_list %}
                     {% for player in rb_list %}
                     {% if player.bye != None %}
@@ -87,8 +94,8 @@
             </div>
         </div>
         <div class="col-md-2 column">
-            <h5>WRs</h5>
             <div class="connectedSortable" id="WRs">
+            <h5>WR</h5>
                 {% if wr_list %}
                     {% for player in wr_list %}
                        {% if player.bye != None %}
@@ -122,8 +129,8 @@
                     </div>
         </div>
         <div class="col-md-2 column">
-            <h5>TEs</h5>
             <div class="connectedSortable" id="TEs">
+            <h5>TE</h5>
                 {% if te_list %}
                     {% for player in te_list %}
                      {% if player.bye != None %}
@@ -157,8 +164,8 @@
             </div>
 		</div>
 		<div class="col-md-2 column">
-			<h5>DEFs</h5>
             <div class="connectedSortable" id="DEFs">
+			<h5>DEF</h5>
                 {% if def_list %}
                     {% for player in def_list %}
                     {% if player.bye != None %}
@@ -192,8 +199,8 @@
                     <ul><em> No entries yet. Add some!</em></ul>
                 {% endif %}
             </div>
-		<h5>Ks</h5>
         <div class="connectedSortable" id="Ks">
+		<h5>K</h5>
                 {% if k_list %}
                     {% for player in k_list %}
                     {% if player.bye != None %}
@@ -226,7 +233,9 @@
                     <ul><em> No entries yet. Add some!</em></ul>
                 {% endif %}
                 </div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
