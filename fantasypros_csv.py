@@ -10,15 +10,15 @@ def loop():
 def populate(position):
     path = '/home/tom/dev_projects/python/tiersheet/parse_urls/csv/'
     filename = path + position + '.csv'
-    with open(filename, 'rb') as players:
+    with open(filename) as players:
         player_reader = csv.reader(players)
-        hello = csv.excel_tab
+        #hello = csv.excel_tab
         try:
-            player_reader.next()
+            next(player_reader)
             for row in player_reader:
                 rank = row[0]
                 name = row[1]
-                position = position
+                position = position.upper()
                 bye = row[3]
                 if bye == '':
                     bye = 0

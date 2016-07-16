@@ -16,3 +16,5 @@ UPDATE tiersheet_player SET name = 'LeVeon Bell' WHERE name = 'Le''Veon Bell';
 UPDATE tiersheet_player SET name = 'Le''Veon Bell' WHERE name = 'LeVeon Bell';
 UPDATE tiersheet_player SET name = 'C.J. Anderson' WHERE name = 'CJ Anderson';
 UPDATE tiersheet_player SET name = 'Odell Beckham Jr.' WHERE name = 'Odell Beckham Jr';
+
+UPDATE tiersheet_player SET url='http://www.rotoworld.com/player/nfl/5469/arian-foster' WHERE name = 'Arian Foster';

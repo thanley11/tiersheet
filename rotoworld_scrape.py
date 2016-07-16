@@ -5,20 +5,20 @@ from bs4 import BeautifulSoup
 def loop_dir():
     rootdir = '/parse_urls/'
     for file in os.walk(rootdir):
-        print file
+        print (file)
         scraped = BeautifulSoup(file)
         for table in scraped.findAll('table', id='cp1_tblDepthCharts'):
             for row in table.findAll('td'):
                 for atag in row.findAll('a'):
                     prefix = "http://www.rotoworld.com"
-                    print "%s, %s" % (atag.text, prefix + atag.get('href'))
+                    print ("%s, %s") % (atag.text, prefix + atag.get('href'))
 
 def populate(scraped):
     for table in scraped.findAll('table', id='cp1_tblDepthCharts'):
         for row in table.findAll('td'):
             for atag in row.findAll('a'):
                 prefix = "http://www.rotoworld.com"
-                print "%s, %s" % (atag.text, prefix + atag.get('href'))
+                print ("%s, %s") % (atag.text, prefix + atag.get('href'))
 
 def scrape(file):
     hdr = {'User-Agent': 'Mozilla/5.0'}
@@ -28,11 +28,12 @@ def scrape(file):
     return rotoworld
 
 def add_roto_url(name,url):
-    c = Player.objects.get_or_create(name=name,position=position,bye=bye,url=url,team=team)
+    c = Player.objects.get_or_create(name=name, position=position, bye=bye,
+                                     url=url, team=team)
     return c
 
 if __name__== '__main__':
-    print "Starting populate script"
+    print ("Starting populate script")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'sortable.settings')
     from tiersheet.models import Player
     loop_dir()

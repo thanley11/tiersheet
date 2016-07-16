@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from django.db import IntegrityError
 
 html_to_parse = ""
-html_dir ="/home/tom/dev_projects/python/tiersheet/parse_urls/"
+html_dir ="/home/tom/dev_projects/python/tiersheet/parse_urls/rotoworld/"
 
 def bsoup():
     for root, dirs, files in os.walk(html_dir):
@@ -18,7 +18,7 @@ def bsoup():
                             prefix = "http://www.rotoworld.com"
                         else:
                             prefix = ""
-                        print "%s, %s" % (atag.text, prefix + atag.get('href'))
+                        print ("%s, %s" % (atag.text, prefix + atag.get('href')))
                         try:
                             add_roto_url(atag.text, prefix + atag.get('href'))
                         except IntegrityError:
@@ -34,7 +34,7 @@ def add_roto_url(name,roto_url):
     return c
 
 if __name__== '__main__':
-    print "Starting populate script"
+    print ("Starting populate script")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'sortable.settings')
     import django
     django.setup()
