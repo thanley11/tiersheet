@@ -48,6 +48,12 @@
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
                             {% endif %}
+                            {% if not player.isStarred %}
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-star-empty"></span></a>
+                            {% else %}
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-star"></span></a>
+                            {% endif %}
+
                         </span>
                            
                     </ul>

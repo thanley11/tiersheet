@@ -12,12 +12,13 @@ class Player(models.Model):
         ('K', 'Kicker'),
     )
 
-    name     = models.CharField(max_length=64, unique=True)
-    position = models.CharField(max_length=3, choices=POSITION_CHOICES)
-    bye      = models.IntegerField(null=True)
-    url      = models.URLField(null=True,blank=True)
-    rank     = models.IntegerField(default=0)
-    team     = models.CharField(max_length=3, null=True, default=None, blank=True)
+    name      = models.CharField(max_length=64, unique=True)
+    position  = models.CharField(max_length=3, choices=POSITION_CHOICES)
+    bye       = models.IntegerField(null=True)
+    url       = models.URLField(null=True,blank=True)
+    rank      = models.IntegerField(default=0)
+    team      = models.CharField(max_length=3, null=True, default=None, blank=True)
+    isStarred = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['rank']
