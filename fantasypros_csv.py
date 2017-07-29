@@ -2,7 +2,8 @@ import os, sys
 import csv
 from django.db import IntegrityError
 
-POSITIONS = ['qb', 'rb', 'wr', 'te', 'k', 'dst']
+# POSITIONS = ['qb','rb','wr', 'te', 'k', 'dst']
+POSITIONS = ['dst']
 def loop():
     for position in POSITIONS:
         populate(position)

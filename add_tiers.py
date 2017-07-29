@@ -3,10 +3,10 @@ import sys
 
 
 def populate_tiers():
-    #positions = ['QB','RB', 'WR', 'TE']
-    positions = ['RB']
+    # positions = ['QB','TE']
+    positions = ['DST']
     for i in positions:
-        for j in range(7,17):
+        for j in range(5,9):
             tier_name = '%s Tier %s' % (i, j)
             add_player(tier_name,i,None,None)
 
