@@ -24,3 +24,12 @@ def index(request):
     context = {'qb_list': qb_list, 'rb_list': rb_list, 'wr_list': wr_list, 'te_list': te_list, 'def_list': def_list, 'k_list': k_list}
 
     return render_to_response('index.html', context, context_instance=RequestContext(request))
+
+def toggleStar(request):
+
+    if request.method == 'POST':
+        player_id = request.GET.get('player_id', None)
+        player = Player.objects.get(id=player_id)
+        player.isStarred = not player.isStarred
+        player.save()
+    return HttpResponse(status=200)

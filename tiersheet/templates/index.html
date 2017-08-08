@@ -48,10 +48,10 @@
                             <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                             {% else %}
                             {% endif %}
-                            {% if not player.isStarred %}
-                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-star-empty"></span></a>
+                            {% if not player.isStarred and player.bye != None %}
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
                             {% else %}
-                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-star"></span></a>
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star"></span>
                             {% endif %}
 
                         </span>
