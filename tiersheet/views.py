@@ -26,10 +26,10 @@ def index(request):
     return render_to_response('index.html', context, context_instance=RequestContext(request))
 
 def toggleStar(request):
-
     if request.method == 'POST':
-        player_id = request.GET.get('player_id', None)
+        player_id = request.POST.get('player_id', None)
         player = Player.objects.get(id=player_id)
         player.isStarred = not player.isStarred
         player.save()
-    return HttpResponse(status=200)
+
+    return render_to_response('index.html', {}, RequestContext(request))
