@@ -44,14 +44,14 @@
                               <!-- None -->
                               {% endif %}
                              </span>
-                              {% if player.url %}
-                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
-                            {% else %}
-                            {% endif %}
-                            {% if not player.isStarred and player.bye != None %}
-                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
-                            {% else %}
+                            {% if player.url %}
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                {% if player.isStarred %} 
                                 <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+                            {% else %}
                             {% endif %}
 
                         </span>
@@ -88,9 +88,14 @@
                               {% endif %}
                               </span>
                               {% if player.url %}
-                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                {% if player.isStarred %} 
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
                             {% else %}
-                            {% endif %}
+                            {% endif %} 
                         </span>       
                     </ul> 
                     {% endfor %}
@@ -122,11 +127,16 @@
                               <!-- None -->
                               {% endif %}
                             </span>
-                              {% if player.url %}
-                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                             {% if player.url %}
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                {% if player.isStarred %} 
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
                             {% else %}
-                            {% endif %} 
-                        </span>       
+                            {% endif %}
+                    </span>       
                     </ul> 
                     {% endfor %}
                 {% else %}
@@ -157,10 +167,16 @@
                               <!-- None -->
                               {% endif %}
                             </span>
-                              {% if player.url %}
-                            <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                            {% if player.url %}
+                                <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                {% if player.isStarred %} 
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                <span data-playerid="{{player.id}}" id="toggleStar" class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
                             {% else %}
-                            {% endif %} 
+                            {% endif %}
+ 
                         </span>       
                     </ul>
                     {% endfor %}
