@@ -22,10 +22,16 @@
 }
 .player_text{
  float: left;   
-font-size: 0.9em;
+font-size: 0.8em;
 }
 
 .glyphicon-info-sign{
+float:right;
+}
+.glyphicon-star{
+float:right;
+}
+.glyphicon-star-empty{
 float:right;
 }
 *,
