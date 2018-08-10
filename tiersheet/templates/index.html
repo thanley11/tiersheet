@@ -30,8 +30,10 @@
                     {% else %}
                      <ul id="player_{{ player.id }}" class="highlighted">
                     {% endif %}
+                     <div>
+
                         <span class="btn btn-primary btn-success" >
-                            <span class="player_text">
+                            <span class="playerButton">
                               {{ player.name }}
                               {% if player.team %}
                                 ({{ player.team|upper}})
@@ -44,6 +46,7 @@
                               <!-- None -->
                               {% endif %}
                              </span>
+                             <span class="icons">
                             {% if player.url %}
                                 <a href="{{player.url}}" target="_blank"><span class="glyphicon glyphicon-info-sign"></span></a>
                                 {% if player.isStarred %} 
@@ -53,9 +56,10 @@
                                 {% endif %}
                             {% else %}
                             {% endif %}
+                            </span>
 
                         </span>
-                           
+                    </div>                          
                     </ul>
                     {% endfor %}
                 {% else %}

@@ -2,8 +2,8 @@ import os, sys
 import csv
 from django.db import IntegrityError
 
-# POSITIONS = ['qb','rb','wr', 'te', 'k', 'dst']
-POSITIONS = ['dst']
+POSITIONS = ['qb','rb','wr', 'te', 'k', 'dst']
+# POSITIONS = ['dst']
 def loop():
     for position in POSITIONS:
         populate(position)
@@ -18,13 +18,13 @@ def populate(position):
             next(player_reader)
             for row in player_reader:
                 rank = row[0]
-                name = row[1]
+                name = row[2]
                 position = position.upper()
-                bye = row[3]
+                bye = row[4]
                 if bye == '':
                     bye = 0
                 url = None
-                team = row[2]
+                team = row[3]
                 print ("%s, %s, %s, %s, %s" % (position,bye,rank, name, team))
                 add_player(name, position, bye, url, team, rank)
         except csv.Error as e:

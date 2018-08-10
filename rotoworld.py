@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from django.db import IntegrityError
 
 html_to_parse = ""
-html_dir ="/home/tom/dev_projects/python/tiersheet/rotoworld/2017/"
+html_dir ="/home/tom/dev_projects/python/tiersheet/rotoworld/2018/"
 
 def bsoup():
     for root, dirs, files in os.walk(html_dir):
